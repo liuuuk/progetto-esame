@@ -14,14 +14,15 @@ namespace progetto_esame
 
         List<List<double>> array = new List<List<double>>(); // salvataggio dati
 
-        // double[,,] test;
+        List<List<Data>> sampwin = new List<List<Data>>();
+       
 
-        List<Data> l = new List<Data>();
+        
 
         public Parser()
         {
             maxSensori = 10;
-           // test = new double[5, 9, 500]; //sensori, dati, finestra
+            
         }
 
         public void Parse(BinaryReader bin)
@@ -93,13 +94,15 @@ namespace progetto_esame
             #endregion
 
             float valore;
-            
-            while (true)
+            int dim = 0;
+            while (dim < 500)
             {
                 #region reading
+                List<Data> l = new List<Data>();
                 for (int i = 0; i < numSensori; i++)
                 {
                     byte[] temp = new byte[4];
+                   
                     for (int tr = 0; tr < 13; tr++)// 13 campi, 3 * 3 + 4
                     {
                         if (numSensori < 5)
@@ -118,12 +121,14 @@ namespace progetto_esame
                         }
                         valore = BitConverter.ToSingle(temp, 0); // conversione
                         array[i].Add(valore); // memorizzazione
+
                         t[i] += 4;
 
-                        
+
                     }
                     l.Add(new Data(array[i])); //AGGIUNGO ALLA MIA LISTA
                 }
+                sampwin.Add(l); //Per il tempo
                 for (int x = 0; x < numSensori; x++)
                 {
                     t[x] = 5 + (52 * x);
@@ -131,16 +136,19 @@ namespace progetto_esame
                 #endregion
 
                 #region output
+
+
                 
+                /* Stampo
                 for (int j = 0; j < numSensori; j++)
                 {
                     Console.WriteLine("Sensor: #" + j + " " + l[j].ToString());
                     Console.WriteLine();
                     array[j].RemoveRange(0, 13); // cancellazione dati
                 }
-               
-                Console.WriteLine("-------------NEW");
-
+                Console.Write("Dimensione " + dim);
+                Console.WriteLine("");
+                */
                 #endregion
 
                 #region next-data
@@ -153,10 +161,12 @@ namespace progetto_esame
                     pacchetto = bin.ReadBytes(byteToRead + 6);
                 }
                 #endregion
-                
+               
+                dim++;
                 
             }
             #endregion
+            Console.WriteLine("Finito");
         }
     }
 }
