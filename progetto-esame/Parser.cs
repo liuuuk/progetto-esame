@@ -124,13 +124,13 @@ namespace progetto_esame
                 #region output
                 for (int j = 0; j < numSensori; j++)
                 {
-                    for (int tr = 0; tr < 13; tr++)
+                    for (int tr = 0; tr < 9; tr++) //9 perchè con 13 vedo anche i quaternioni
                     {
                         // esempio output su console
                         Console.Write(array[j][tr] + "; ");
                     }
                     Console.WriteLine();
-                    array[j].RemoveRange(0, 13); // cancellazione dati
+                    array[j].RemoveRange(0, 9); // cancellazione dati
                 }
 
                 Console.WriteLine();
