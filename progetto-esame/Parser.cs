@@ -14,9 +14,14 @@ namespace progetto_esame
 
         List<List<double>> array = new List<List<double>>(); // salvataggio dati
 
+        // double[,,] test;
+
+        List<Sensor> l = new List<Sensor>();
+
         public Parser()
         {
             maxSensori = 10;
+           // test = new double[5, 9, 500]; //sensori, dati, finestra
         }
 
         public void Parse(BinaryReader bin)
@@ -82,6 +87,7 @@ namespace progetto_esame
             for (int x = 0; x < numSensori; x++)
             {
                 array.Add(new List<double>()); // una lista per ogni sensore
+                
                 t[x] = 5 + (52 * x);
             } 
             #endregion
@@ -113,7 +119,10 @@ namespace progetto_esame
                         valore = BitConverter.ToSingle(temp, 0); // conversione
                         array[i].Add(valore); // memorizzazione
                         t[i] += 4;
+
+                        
                     }
+                    l.Add(new Sensor(array[i])); //AGGIUNGO ALLA MIA LISTA
                 }
                 for (int x = 0; x < numSensori; x++)
                 {
@@ -122,18 +131,16 @@ namespace progetto_esame
                 #endregion
 
                 #region output
+                
                 for (int j = 0; j < numSensori; j++)
                 {
-                    for (int tr = 0; tr < 9; tr++) //9 perchè con 13 vedo anche i quaternioni
-                    {
-                        // esempio output su console
-                        Console.Write(array[j][tr] + "; ");
-                    }
+                    Console.WriteLine("Sensor: #" + j + " " + l[j].ToString());
                     Console.WriteLine();
-                    array[j].RemoveRange(0, 9); // cancellazione dati
+                    array[j].RemoveRange(0, 13); // cancellazione dati
                 }
+               
+                Console.WriteLine("-------------NEW");
 
-                Console.WriteLine();
                 #endregion
 
                 #region next-data
@@ -146,7 +153,8 @@ namespace progetto_esame
                     pacchetto = bin.ReadBytes(byteToRead + 6);
                 }
                 #endregion
-    
+                
+                
             }
             #endregion
         }
