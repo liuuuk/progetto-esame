@@ -149,6 +149,7 @@ namespace progetto_esame
                 Console.Write("Dimensione " + dim);
                 Console.WriteLine("");
                 */
+
                 #endregion
 
                 #region next-data
@@ -166,7 +167,7 @@ namespace progetto_esame
                 
             }
             #endregion
-            Console.WriteLine("Finito");
+            Console.WriteLine("First Window sent.");
         }
     }
 }
