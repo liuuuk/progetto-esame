@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace progetto_esame
 {
-    class Sensor
+    class Data
     { 
         List<double> accelerometer;
         List<double> gyroscope;
         List<double> magnetometer;
         List<double> quaternion;
-        public Sensor()
+        public Data()
         { //non testato, non utile
             accelerometer = new List<double>(3); //x y z
             gyroscope = new List<double>(3); //x y z
@@ -20,7 +20,7 @@ namespace progetto_esame
             quaternion = new List<double>(4); //x y z
         }
 
-        public Sensor(List<double> a, List<double> g, List<double> m, List<double> q)
+        public Data(List<double> a, List<double> g, List<double> m, List<double> q)
         {// non testato, forse non serve nemmeno
 
             if (a.Count == 3 && g.Count == 3 && m.Count == 3 && q.Count == 4)
@@ -32,7 +32,7 @@ namespace progetto_esame
             }
         }
         
-        public Sensor(List<double> data)
+        public Data(List<double> data)
         {
             int c = data.Count;
             accelerometer = new List<double>(data.GetRange(0, 3));

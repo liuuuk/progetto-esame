@@ -16,7 +16,7 @@ namespace progetto_esame
 
         // double[,,] test;
 
-        List<Sensor> l = new List<Sensor>();
+        List<Data> l = new List<Data>();
 
         public Parser()
         {
@@ -122,7 +122,7 @@ namespace progetto_esame
 
                         
                     }
-                    l.Add(new Sensor(array[i])); //AGGIUNGO ALLA MIA LISTA
+                    l.Add(new Data(array[i])); //AGGIUNGO ALLA MIA LISTA
                 }
                 for (int x = 0; x < numSensori; x++)
                 {
