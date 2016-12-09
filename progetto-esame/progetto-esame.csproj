@@ -61,7 +61,6 @@
     <Compile Include="Instant.cs" />
     <Compile Include="Sensor.cs" />
     <Compile Include="Server.cs" />
-    <Compile Include="Triaxial.cs" />
     <Compile Include="Window.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

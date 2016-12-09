@@ -8,55 +8,38 @@ namespace progetto_esame
 {
     class Sensor
     {
-        Triaxial accelerometer;
-        Triaxial gyroscope;
-        Triaxial magnetometer;
-        //Sensor quaternion; //Non usati
+        //Ripenso con lista di double
+        List<double> data;
 
         public Sensor(List<double> data)
         {
-            accelerometer = new Triaxial(data.GetRange(0, 3));
-            gyroscope = new Triaxial(data.GetRange(3, 3));
-            magnetometer = new Triaxial(data.GetRange(6, 3));
-            //quaternion = new Sensor(data.GetRange(9, 3)); //Non usati
+            this.data = data;
         }
 
-        public Triaxial GetAcc()
+        public double GetValue(int i)
         {
-            return accelerometer;
+            return data[i];
         }
-        public Triaxial GetGryo()
+        
+        public double GetModuloAcc()
         {
-            return gyroscope;
-        }
-        public Triaxial GetMagn()
-        {
-            return magnetometer;
-        }
-        /*
-        public Triaxial GetQuat()
-        {
-            return quaternion;
-        }
-        */
-        public override string ToString()
-        {
-            string s = "";
-            s = "Acc(x,y,z): " + accelerometer.ToString();
-            s += " Gyr(x, y, z): " + gyroscope.ToString();
-            s += " Mag(x, y, z):" + magnetometer.ToString();
-            //s += " Qua(q1,q2,q2,q)3ac:" + quaternion.ToString(); //Non usati
-            return s;
+            double sum = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                sum += data[i] * data[i];
+            }
+            return Math.Sqrt(sum);
         }
 
-        public double GetModAcc()
+        public double GetModuloGyro()
         {
-            return accelerometer.Modulo();
+            double sum = 0;
+            for (int i = 3; i < 6; i++)
+            {
+                sum += data[i] * data[i];
+            }
+            return Math.Sqrt(sum);
         }
 
-        public double GetModGyro()
-        {
-            return gyroscope.Modulo();
-        }
     }
 }
