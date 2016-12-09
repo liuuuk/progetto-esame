@@ -57,6 +57,54 @@ namespace progetto_esame
 
             return result;
         }
-        
+
+        public void Smooth(int k)
+        {
+
+            Window smooth = new Window();
+            for (int i = 0; i < w.Count; i++)
+            {
+                int end, start;
+                if (i - k < 0)
+                    start = 0;
+                else
+                    start = i - k;
+                if (i + k > w.Count)
+                    end = w.Count;
+                else
+                    end = i + k;
+                for (int j = start; j <= end; j++)
+                {
+                    smooth.Add(w.GetInstant(j));
+                }
+                w[i] = smooth.Mean();
+            }
+        }
+
+
+        private Instant Mean()
+        {
+            int numSensori = 9;
+            List<List<double>> m = w.GetInstant(0);
+            for (int i = 1; i < w.Count; i++)
+            {
+                for (int j = 0; j < w.GetInstant(i).Count; j++)
+                {
+                    for (int k = 0; k < numSensori; k++)
+                    {
+                        m[j][k] += w.GetInstant(i).GetSensor(j).GetValue(k);
+                    }
+
+                }
+            }
+            for (int j = 0; j < w.GetInstant(i).Count; j++)
+            {
+                for (int k = 0; k < numSensori; k++)
+                {
+                    m[j][k] = m[j][k] / (w.Count);
+                }
+
+            }
+        }
     }
 }
