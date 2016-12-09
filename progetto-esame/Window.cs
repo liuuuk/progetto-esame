@@ -107,5 +107,25 @@ namespace progetto_esame
             }
             return m; 
         }
+
+        public List<double> ModAcc(int s)
+        {
+            List<double> result = new List<double>();
+            for (int i = 0; i < w.Count; i++)
+            {
+                result.Add(w.GetInstance(i).GetSensor(s).GetModuloAcc());
+            }
+            return result;
+        }
+
+        public List<double> ModGyro(int s)
+        {
+            List<double> result = new List<double>();
+            for (int i = 0; i < w.Count; i++)
+            {
+                result.Add(w.GetInstance(i).GetSensor(s).GetModuloGyro());
+            }
+            return result;
+        }
     }
 }
