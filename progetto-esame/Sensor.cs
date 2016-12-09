@@ -21,8 +21,24 @@ namespace progetto_esame
             //quaternion = new Sensor(data.GetRange(9, 3)); //Non usati
         }
 
-
-
+        public Triaxial GetAcc()
+        {
+            return accelerometer;
+        }
+        public Triaxial GetGryo()
+        {
+            return gyroscope;
+        }
+        public Triaxial GetMang()
+        {
+            return magnetometer;
+        }
+        /*
+        public Triaxial GetQuat()
+        {
+            return quaternion;
+        }
+        */
         public override string ToString()
         {
             string s = "";

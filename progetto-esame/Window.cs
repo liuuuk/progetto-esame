@@ -19,7 +19,11 @@ namespace progetto_esame
             return w[i];
         }
 
-        //we ciccio
+        public void Add(Instant i)
+        {
+            w.Add(i);
+        }
+
         public override string ToString()
         {
             string s = "";
