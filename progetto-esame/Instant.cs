@@ -16,10 +16,10 @@ namespace progetto_esame
         }
         public override string ToString()
         {
-            string str;
+            string str = "";
             foreach (var item in i)
             {
-                str += item.ToSTring()+System.Environment.NewLine;
+                str += item.ToString()+System.Environment.NewLine;
             }
             return str;
         }
