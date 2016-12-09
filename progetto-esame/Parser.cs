@@ -98,7 +98,9 @@ namespace progetto_esame
             while (dim < 500)
             {
                 #region reading
+                //Nuovo istante
                 Instant ins = new Instant();
+
                 for (int i = 0; i < numSensori; i++)
                 {
                     byte[] temp = new byte[4];
@@ -124,10 +126,10 @@ namespace progetto_esame
                         t[i] += 4;
 
 
-                    }//Triaxial
+                    }
                     //Creo il sensore i-esimo lo faccio per numSensori volte
                     ins.Add(new Sensor(array[i]));
-                }//sensor
+                }
                 //Aggiungo istante alla finestra
                 sampWin.Add(ins); //Per il tempo
 

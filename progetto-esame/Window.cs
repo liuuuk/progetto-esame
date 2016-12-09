@@ -18,7 +18,12 @@ namespace progetto_esame
         {
             return w[i];
         }
-        
+
+        public void Add(Instant i)
+        {
+            w.Add(i);
+        }
+
         public override string ToString()
         {
             string s = "";
@@ -52,7 +57,6 @@ namespace progetto_esame
 
             return result;
         }
-
         
     }
 }
