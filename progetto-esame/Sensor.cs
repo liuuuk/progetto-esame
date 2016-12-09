@@ -29,7 +29,7 @@ namespace progetto_esame
         {
             return gyroscope;
         }
-        public Triaxial GetMang()
+        public Triaxial GetMagn()
         {
             return magnetometer;
         }
