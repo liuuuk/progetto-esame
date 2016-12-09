@@ -19,8 +19,7 @@ namespace progetto_esame
             return w[i];
         }
 
-        //Prova Pane
-
+        //we ciccio
         public override string ToString()
         {
             string s = "";
@@ -54,5 +53,6 @@ namespace progetto_esame
 
             return result;
         }
+        
     }
 }
