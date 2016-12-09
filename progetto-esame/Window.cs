@@ -19,6 +19,7 @@ namespace progetto_esame
             return w[i];
         }
 
+        //we ciccio
         public override string ToString()
         {
             string s = "";
@@ -52,5 +53,6 @@ namespace progetto_esame
 
             return result;
         }
+        
     }
 }
