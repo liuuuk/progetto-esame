@@ -14,9 +14,9 @@ namespace progetto_esame
 
         List<List<double>> array = new List<List<double>>(); // salvataggio dati
 
-        List<List<Data>> sampwin = new List<List<Data>>();
+        Window sampWin = new Window();
        
-
+        
         
 
         public Parser()
@@ -98,7 +98,7 @@ namespace progetto_esame
             while (dim < 500)
             {
                 #region reading
-                List<Data> l = new List<Data>();
+                List<Sensor> l = new List<Sensor>();
                 for (int i = 0; i < numSensori; i++)
                 {
                     byte[] temp = new byte[4];
@@ -126,7 +126,7 @@ namespace progetto_esame
 
 
                     }
-                    l.Add(new Data(array[i])); //AGGIUNGO ALLA MIA LISTA
+                    l.Add(new Instant(array[i])); //AGGIUNGO ALLA MIA LISTA
                 }
                 sampwin.Add(l); //Per il tempo
                 for (int x = 0; x < numSensori; x++)
