@@ -19,6 +19,8 @@ namespace progetto_esame
             return w[i];
         }
 
+        //Prova Pane
+
         public override string ToString()
         {
             string s = "";
