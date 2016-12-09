@@ -11,7 +11,7 @@ namespace progetto_esame
         List<Sensor> i;
 
         public Instant() { i = new List<Sensor>(); }
-        public Sensor getSensor(int index) {
+        public Sensor GetSensor(int index) {
             return i[index];
         }
         public override string ToString()
