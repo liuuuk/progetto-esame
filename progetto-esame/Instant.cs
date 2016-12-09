@@ -11,9 +11,16 @@ namespace progetto_esame
         List<Sensor> i;
 
         public Instant() { i = new List<Sensor>(); }
+
+        public void Add(Sensor s)
+        {
+            i.Add(s);
+        }
+
         public Sensor GetSensor(int index) {
             return i[index];
         }
+
         public override string ToString()
         {
             string str = "";

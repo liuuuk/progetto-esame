@@ -98,7 +98,7 @@ namespace progetto_esame
             while (dim < 500)
             {
                 #region reading
-                List<Sensor> l = new List<Sensor>();
+                Instant ins = new Instant();
                 for (int i = 0; i < numSensori; i++)
                 {
                     byte[] temp = new byte[4];
@@ -121,14 +121,16 @@ namespace progetto_esame
                         }
                         valore = BitConverter.ToSingle(temp, 0); // conversione
                         array[i].Add(valore); // memorizzazione
-
                         t[i] += 4;
 
 
-                    }
-                    l.Add(new Instant(array[i])); //AGGIUNGO ALLA MIA LISTA
-                }
-                sampwin.Add(l); //Per il tempo
+                    }//Triaxial
+                    //Creo il sensore i-esimo lo faccio per numSensori volte
+                    ins.Add(new Sensor(array[i]));
+                }//sensor
+                //Aggiungo istante alla finestra
+                sampWin.Add(ins); //Per il tempo
+
                 for (int x = 0; x < numSensori; x++)
                 {
                     t[x] = 5 + (52 * x);

@@ -22,6 +22,7 @@ namespace progetto_esame
         }
 
 
+
         public override string ToString()
         {
             string s = "";
@@ -31,10 +32,12 @@ namespace progetto_esame
             //s += " Qua(q1,q2,q2,q)3ac:" + quaternion.ToString(); //Non usati
             return s;
         }
+
         public double GetModAcc()
         {
             return accelerometer.Modulo();
         }
+
         public double GetModGyro()
         {
             return gyroscope.Modulo();
