@@ -127,5 +127,24 @@ namespace progetto_esame
             }
             return result;
         }
+
+        //rapporto incrementale per calcolo derivata funzione 3
+        //per ogni punto i si calcola il rapporto incrementale tra i e i+1 
+        //e lo si scrive in un vettore RI[] nel posto i
+        //???DILEMMA ????
+        //C'è scritto di usare i e i+1 del vettore in ingresso come valori
+        //la funzione del RI però è f(x+h)-f(x)/h
+        //h nel mio caso + 1 quindi ho omesso(GIUSTO??)
+         
+        public List<double> RIfunc(List<double> valori)
+        {
+            List<double> RI;
+            for (int i = 0; i < valori.Count-1; i++)
+            {
+                double result = valori[i + 1] - valori[i];
+                RI.Add(result);
+            }
+            return RI;
+        }
     }
 }
