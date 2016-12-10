@@ -41,7 +41,7 @@ namespace progetto_esame
             List<double> result = new List<double>();
             foreach (var item in w)
             {
-                result.Add(item.GetSensor(sensor).GetModAcc());
+                result.Add(item.GetSensor(sensor).GetModuloAcc());
             }
 
             return result;
@@ -52,7 +52,7 @@ namespace progetto_esame
             List<double> result = new List<double>();
             foreach (var item in w)
             {
-                result.Add(item.GetSensor(sensor).GetModGyro());
+                result.Add(item.GetSensor(sensor).GetModuloGyro());
             }
 
             return result;
@@ -75,7 +75,9 @@ namespace progetto_esame
                     end = i + k;
                 for (int j = start; j <= end; j++)
                 {
-                    smooth.Add(w.GetInstant(j));
+                    //Volevi fare:
+                    //smooth.Add(GetInstant(j);
+                    smooth.Add(w.GetInstant(j)); //Cosi da errore perche' w è un membro di questa classe, ed e' di tipo List<Instant>
                 }
                 w[i] = smooth.Mean();
             }
@@ -85,19 +87,23 @@ namespace progetto_esame
         private Instant Mean()
         {
             int numSensori = 9;
-            List<List<double>> m = w.GetInstant(0);
+            //List<List<double>> m = GetInstant(0);
+            List<List<double>> m = w.GetInstant(0);  //Cosi da errore perche' w è un membro di questa classe, ed e' di tipo List<Instant>
             for (int i = 1; i < w.Count; i++)
             {
-                for (int j = 0; j < w.GetInstant(i).Count; j++)
+                //for (int j = 0; j < GetInstant(i).Count; j++)
+                for (int j = 0; j < w.GetInstant(i).Count; j++) //Cosi da errore perche' w è un membro di questa classe, ed e' di tipo List<Instant>
                 {
                     for (int k = 0; k < numSensori; k++)
                     {
-                        m[j][k] += w.GetInstant(i).GetSensor(j).GetValue(k);
+                        //m[j][k] += GetInstant(i).GetSensor(j).GetValue(k);
+                        m[j][k] += w.GetInstant(i).GetSensor(j).GetValue(k); //Cosi da errore perche' w è un membro di questa classe, ed e' di tipo List<Instant>
                     }
 
                 }
             }
-            for (int j = 0; j < w.GetInstant(i).Count; j++)
+            //for (int j = 0; j < GetInstant(i).Count; j++)
+            for (int j = 0; j < w.GetInstant(i).Count; j++) //Cosi da errore perche' w è un membro di questa classe, ed e' di tipo List<Instant>
             {
                 for (int k = 0; k < numSensori; k++)
                 {
@@ -113,7 +119,8 @@ namespace progetto_esame
             List<double> result = new List<double>();
             for (int i = 0; i < w.Count; i++)
             {
-                result.Add(w.GetInstance(i).GetSensor(s).GetModuloAcc());
+                //result.Add(GetInstance(i).GetSensor(s).GetModuloAcc());
+                result.Add(w.GetInstance(i).GetSensor(s).GetModuloAcc()); //Cosi da errore perche' w è un membro di questa classe, ed e' di tipo List<Instant>
             }
             return result;
         }
@@ -123,6 +130,7 @@ namespace progetto_esame
             List<double> result = new List<double>();
             for (int i = 0; i < w.Count; i++)
             {
+                //result.Add(GetInstance(i).GetSensor(s).GetModuloGyro());
                 result.Add(w.GetInstance(i).GetSensor(s).GetModuloGyro());
             }
             return result;
@@ -142,7 +150,7 @@ namespace progetto_esame
             for (int i = 0; i < valori.Count-1; i++)
             {
                 double result = valori[i + 1] - valori[i];
-                RI.Add(result);
+                RI.Add(result); //Errore da vedere
             }
             return RI;
         }
