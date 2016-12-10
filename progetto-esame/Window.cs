@@ -103,17 +103,16 @@ namespace progetto_esame
                 }
             }
 
-            for (int i = 0; i < w.Count; i++) //Per ogni istante
-            {
-                for (int j = 0; j < GetInstant(i).Count(); j++) //Per ogni sensore
+                
+                for (int k = 0; k < numDati; k++) //Per ogni valore
                 {
-                    for (int k = 0; k < numDati; k++) //Per ogni valore
-                    {
+
+                    for (int j = 0; j < tmp.GetLenght(0); j++) //Per ogni sensore
+                    { 
                         tmp[j][k] = m.GetSensor(j).GetValue(k) / (w.Count);
                     }
 
                 } 
-            }
 
             //convertire la matrice in Instant e ritornarlo
             Instant r = new Instant(tmp);
