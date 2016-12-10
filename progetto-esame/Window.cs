@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -41,7 +42,7 @@ namespace progetto_esame
             List<double> result = new List<double>();
             foreach (var item in w)
             {
-                result.Add(item.GetSensor(sensor).GetModAcc());
+                result.Add(item.GetSensor(sensor).GetModuloAcc());
             }
 
             return result;
@@ -52,7 +53,7 @@ namespace progetto_esame
             List<double> result = new List<double>();
             foreach (var item in w)
             {
-                result.Add(item.GetSensor(sensor).GetModGyro());
+                result.Add(item.GetSensor(sensor).GetModuloGyro());
             }
 
             return result;
@@ -75,7 +76,7 @@ namespace progetto_esame
                     end = i + k;
                 for (int j = start; j <= end; j++)
                 {
-                    smooth.Add(w.GetInstant(j));
+                    smooth.Add(GetInstant(j));
                 }
                 w[i] = smooth.Mean();
             }
@@ -84,28 +85,40 @@ namespace progetto_esame
 
         private Instant Mean()
         {
-            int numSensori = 9;
-            List<List<double>> m = w.GetInstant(0);
-            for (int i = 1; i < w.Count; i++)
+            int numDati = 13; //9 o 13 dipende se si usano i quaternioni
+            Instant m = GetInstant(0);
+            List<List<double>> tmp = new List<List<double>>();
+
+            tmp = m.InstantToMatrix();
+
+            for (int i = 1; i < w.Count; i++) //Per ogni istante
             {
-                for (int j = 0; j < w.GetInstant(i).Count; j++)
+                for (int j = 0; j < GetInstant(i).Count(); j++) //Per ogni sensore
                 {
-                    for (int k = 0; k < numSensori; k++)
+                    for (int k = 0; k < numDati; k++) //Per ogni dato
                     {
-                        m[j][k] += w.GetInstant(i).GetSensor(j).GetValue(k);
+                        tmp[j][k] += GetInstant(i).GetSensor(j).GetValue(k); 
                     }
 
                 }
             }
-            for (int j = 0; j < w.GetInstant(i).Count; j++)
-            {
-                for (int k = 0; k < numSensori; k++)
-                {
-                    m[j][k] = m[j][k] / (w.Count);
-                }
 
+            for (int i = 0; i < w.Count; i++) //Per ogni istante
+            {
+                for (int j = 0; j < GetInstant(i).Count(); j++) //Per ogni sensore
+                {
+                    for (int k = 0; k < numDati; k++) //Per ogni valore
+                    {
+                        tmp[j][k] = m.GetSensor(j).GetValue(k) / (w.Count);
+                    }
+
+                } 
             }
-            return m; 
+
+            //convertire la matrice in Instant e ritornarlo
+            Instant r = new Instant(tmp);
+
+            return r; 
         }
 
         public List<double> ModAcc(int s)
@@ -113,7 +126,7 @@ namespace progetto_esame
             List<double> result = new List<double>();
             for (int i = 0; i < w.Count; i++)
             {
-                result.Add(w.GetInstance(i).GetSensor(s).GetModuloAcc());
+                result.Add(GetInstant(i).GetSensor(s).GetModuloAcc());
             }
             return result;
         }
@@ -123,7 +136,7 @@ namespace progetto_esame
             List<double> result = new List<double>();
             for (int i = 0; i < w.Count; i++)
             {
-                result.Add(w.GetInstance(i).GetSensor(s).GetModuloGyro());
+                result.Add(GetInstant(i).GetSensor(s).GetModuloGyro());
             }
             return result;
         }
@@ -142,7 +155,7 @@ namespace progetto_esame
             for (int i = 0; i < valori.Count-1; i++)
             {
                 double result = valori[i + 1] - valori[i];
-                RI.Add(result);
+                RI.Add(result); //Errore da vedere
             }
             return RI;
         }
