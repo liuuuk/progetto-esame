@@ -97,7 +97,7 @@ namespace progetto_esame
 
                 }
             }
-            for (int j = 0; j < w.GetInstant(1).Count; j++)
+            for (int j = 0; j < w.GetInstant(i).Count; j++)
             {
                 for (int k = 0; k < numSensori; k++)
                 {
