@@ -16,6 +16,11 @@ namespace progetto_esame
             this.data = data;
         }
 
+        public List<double> SensorToList()
+        {
+            return data;
+        }
+
         public double GetValue(int i)
         {
             return data[i];

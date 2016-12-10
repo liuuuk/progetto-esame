@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -84,33 +85,40 @@ namespace progetto_esame
 
         private Instant Mean()
         {
-            int numSensori = 9;
+            int numDati = 13; //9 o 13 dipende se si usano i quaternioni
             Instant m = GetInstant(0);
-            
+            List<List<double>> tmp = new List<List<double>>();
 
-            for (int i = 1; i < w.Count; i++)
+            tmp = m.InstantToMatrix();
+
+            for (int i = 1; i < w.Count; i++) //Per ogni istante
             {
-                for (int j = 0; j < GetInstant(i).Count; j++) //Count non esiste nella classe Instant. Cosa volevi contare?
+                for (int j = 0; j < GetInstant(i).Count(); j++) //Per ogni sensore
                 {
-                    for (int k = 0; k < numSensori; k++)
+                    for (int k = 0; k < numDati; k++) //Per ogni dato
                     {
-                        //m è un Instant non ha gli operatori [][]. è una matrice solo concettualmente.
-                        //m[j][k] += GetInstant(i).GetSensor(j).GetValue(k); 
+                        tmp[j][k] += GetInstant(i).GetSensor(j).GetValue(k); 
                     }
 
                 }
             }
-            
-            for (int j = 0; j < GetInstant(i).Count; j++) //GetInstant i? i non esiste
-            {
-                for (int k = 0; k < numSensori; k++)
-                {
-                    //m è un Instant non ha gli operatori [][]. è una matrice solo concettualmente. 
-                    //m[j][k] = m.GetSensor(j).GetValue(k) / (w.Count);
-                }
 
+            for (int i = 0; i < w.Count; i++) //Per ogni istante
+            {
+                for (int j = 0; j < GetInstant(i).Count(); j++) //Per ogni sensore
+                {
+                    for (int k = 0; k < numDati; k++) //Per ogni valore
+                    {
+                        tmp[j][k] = m.GetSensor(j).GetValue(k) / (w.Count);
+                    }
+
+                } 
             }
-            return m; 
+
+            //convertire la matrice in Instant e ritornarlo
+            Instant r = new Instant(tmp);
+
+            return r; 
         }
 
         public List<double> ModAcc(int s)
