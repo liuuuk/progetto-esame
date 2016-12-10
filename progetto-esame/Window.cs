@@ -93,23 +93,25 @@ namespace progetto_esame
 
             for (int i = 1; i < w.Count; i++) //Per ogni istante
             {
-                for (int j = 0; j < GetInstant(i).Count(); j++) //Per ogni sensore
+                // for (int j = 0; j < GetInstant(i).Count(); j++) //Per ogni sensore
+                for (int j = 0; j < tmp.GetLength(0); j++)
                 {
-                    for (int k = 0; k < numDati; k++) //Per ogni dato
+                    //  for (int k = 0; k < numDati; k++) //Per ogni dato
+                    for (int k = 0; k < tmp.GetLength(1); k++)
                     {
                         tmp[j][k] += GetInstant(i).GetSensor(j).GetValue(k);
                     }
 
                 }
             }
-            for (int k = 0; k < numDati; k++) //Per ogni valore
-            {
 
-                for (int j = 0; j < tmp.GetLength(0); j++) //Per ogni sensore
+
+            for (int j = 0; j < tmp.GetLength(0); j++) //Per ogni sensore
+            {
+                for (int k = 0; k < tmp.GetLength(1); k++) //Per ogni valore
                 {
                     tmp[j][k] = m.GetSensor(j).GetValue(k) / (w.Count);
                 }
-
             }
 
             //convertire la matrice in Instant e ritornarlo
