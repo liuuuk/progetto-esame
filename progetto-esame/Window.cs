@@ -110,7 +110,7 @@ namespace progetto_esame
             {
                 for (int k = 0; k < tmp.GetLength(1); k++) //Per ogni valore
                 {
-                    tmp[j][k] = m.GetSensor(j).GetValue(k) / (w.Count);
+                    tmp[j][k] = tmp[j][k] / (w.Count);
                 }
             }
 
