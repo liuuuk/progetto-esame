@@ -68,7 +68,7 @@ namespace progetto_esame
 
             NetworkStream stream = client.GetStream();
             BinaryReader bin = new BinaryReader(stream);
-
+            
             p.Parse(bin);
         }
     }

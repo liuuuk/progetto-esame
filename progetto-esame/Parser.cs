@@ -9,7 +9,7 @@ namespace progetto_esame
 {
     class Parser
     {
-
+        
         int maxSensori;
 
         List<List<double>> array; // salvataggio dati
@@ -26,7 +26,7 @@ namespace progetto_esame
             array = new List<List<double>>(); // Del prof
             mat = new List<List<List<double>>>(); // Aggiunto
         }
-
+        
         public void Parse(BinaryReader bin)
         {
             #region Parser
