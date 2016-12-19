@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace progetto_esame
 {
+    public delegate void MatriceEventHandler(object sender, MatriceEventArgs e);
+
     class Parser
     {
-        
+
         int maxSensori;
 
         List<List<double>> array; // salvataggio dati
@@ -21,12 +24,15 @@ namespace progetto_esame
         public Parser()
         {
             maxSensori = 10;
-            dimensioneFinestra = 50; // 500 da specifiche di progetto
+            dimensioneFinestra = 500; // 500 da specifiche di progetto
 
             array = new List<List<double>>(); // Del prof
             mat = new List<List<List<double>>>(); // Aggiunto
         }
-        
+
+        public event MatriceEventHandler FinestraPiena;
+        protected virtual void OnFinestraPiena(MatriceEventArgs e) { if (FinestraPiena != null) FinestraPiena(this, e); }
+
         public void Parse(BinaryReader bin)
         {
             #region Parser
@@ -99,7 +105,7 @@ namespace progetto_esame
 
             float valore;
             int n = 0; //Dimensione della finestra
-            while (n<dimensioneFinestra)
+            while (pacchetto.Length != 0) //finche' ci sono dati
             {
                 mat.Add(new List<List<double>>()); //Matrice 3d
 
@@ -170,18 +176,26 @@ namespace progetto_esame
                 #endregion
 
                 n++; //incremento per il numero di campioni
+                if (n > dimensioneFinestra)
+                {
                     
+                    //Console.WriteLine("Evento"); //Debug
+                    OnFinestraPiena(new MatriceEventArgs(mat, 0)); //Lancia l'evento
+                    mat.RemoveRange(0, n); // non so se serve
+                    n = 0; // non so se serve
+
+                }
+                   
             }
-
-
+            
 
 
             #endregion
-
+            //QUESTA PARTE DI CODICE NON SERVE PIU' IN QUESTO PUNTO
             //Chiama funzioni passando la mat
-            List<List<double>> primoSensore = FissaSensore(mat, 0); //Fisso il sensore 0
+            //List<List<double>> primoSensore = FissaSensore(mat, 0); //Fisso il sensore 0
 
-            /* Testato
+            /* Testato 
             Console.WriteLine("Visualizzazione primo sensore.");
             Visualizza(primoSensore);
             */
@@ -195,8 +209,8 @@ namespace progetto_esame
             */
         }
 
-        //non è il posto adatto 
-        //I seguenti metodi bisogna capire dove metterli
+        //I SEGUENTI METODI SONO STATI SPOSTATI NELLA CLASSE MatriceEventArgs.cs 
+        //E' ANCORA DA CAPIRE SE QUELLO SIA IL POSTO GIUSTO
 
         //funzioni di debug
         private void Visualizza(List<List<List<double>>> m)

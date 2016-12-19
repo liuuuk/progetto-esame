@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace progetto_esame
 {
@@ -50,8 +51,12 @@ namespace progetto_esame
                     client = l.AcceptTcpClient();
                     count_client++;
 
-                    Thread t = new Thread(new ParameterizedThreadStart(Connect));
-                    t.Start("#" + count_client); //New connection
+                    //Creo un thread per la form
+                    Thread tForm = new Thread(new ParameterizedThreadStart(View));
+                    tForm.Start("Form"); //new Form
+                    Thread tConnect = new Thread(new ParameterizedThreadStart(Connect));
+                    tConnect.Start("#" + count_client); //New connection
+                    
                     
                 }
             }
@@ -60,6 +65,20 @@ namespace progetto_esame
                 Console.WriteLine("Error " + e.Data);
                
             }
+        }
+
+        public void View(object sender)
+        {
+            //preparo la form
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Form1 myForm = new Form1();
+
+            //Sottoscrivo l'evento finestra piena del parser al metodo test(che scrive sulle zedgraph)
+            p.FinestraPiena += new MatriceEventHandler(myForm.test);
+
+            //Lancio la form
+            Application.Run(myForm);
         }
 
         public void Connect(object sender)
