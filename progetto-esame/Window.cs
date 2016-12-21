@@ -20,6 +20,7 @@ namespace progetto_esame
         {
             matrice = FissaSensore(m, sensore);
             matrice = Smooth(matrice);//AGGIUNTO
+            
         }
         //ATTENZIONE: ALCUNI DEI SEGUENTI METODI VANNO NELLA CLASSE DI ANALISI (ANCORA DA FARE)
 
@@ -165,13 +166,31 @@ namespace progetto_esame
         {
             List<List<double>> result = new List<List<double>>();
             int nRighe = m.Count;
-            int nColonne = m[0].Count;
-            int k = 10; // Da specifiche di progetto k=10
-            //Per ogni riga
-            for (int i = 0; i < nRighe; i++)
+           
+            int k = 2; // Da specifiche di progetto k=10
+            /*Smooth su una finestra più piccola(da k a nRighe-k)
+            *Idea di aggiornare la finestra di continuo
+            *!!!!DUBBIO!!!!
+            *La prima volta partiamo da k per avere una finestra di 2k+1
+            *su cui fare la media,va bene??
+            * Di conseguenza i k valori iniziali e finali che non subiscono smooth
+            * li copio semplicemente?
+            */
+            int i;
+            for ( i = 0; i < k; i++)
+            {
+                result.Add(m[i]);
+            }
+
+            /*Ragioniamo modificando direttamente la matrice o su una 
+            * d'appoggio(nostra soluzione)?
+            *Es se alla prima iterazione modifico la i-esima pos
+            *al passo dopo per la media avrò la media in pos i o il vecchio valore?
+            */
+            for ( i = k; i < nRighe-k; i++)
             {
                 //Calcola gli indici
-                int start, end;
+                /*int start, end;
                 if (i - k < 0)
                     start = 0;
                 else
@@ -180,14 +199,17 @@ namespace progetto_esame
                     end = nRighe;
                 else
                     end = i + k;
-
+                    
                 //Calcola la media sulla sotto matrice di righe da start ad end
-                List<double> media = Media(m.GetRange(start, end - start));
-
+                List<double> media = Media(m.GetRange(start, end - start));*/
+                List<double> media = Media(m.GetRange(i-k, 2*k));
                 //aggiungi il vettore media in posizione i
                 result.Add(media);
             }
-
+            for (; i < nRighe; i++)
+            {
+                result.Add(m[i]);
+            }
             return result;
         }
 
