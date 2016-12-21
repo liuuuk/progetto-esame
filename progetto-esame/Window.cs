@@ -16,11 +16,11 @@ namespace progetto_esame
          * Da capire se è giusto lasciare i metodi i questa classe.
          */
         public List<List<double>> matrice;
-        public List<List<double>> matriceSmooth;
+        
         public Window(List<List<List<double>>> m, int sensore)
         {
             matrice = FissaSensore(m, sensore);
-            matriceSmooth = Smooth(matrice);//AGGIUNTO
+            matrice = Smooth(matrice);//AGGIUNTO
             
         }
         //ATTENZIONE: ALCUNI DEI SEGUENTI METODI VANNO NELLA CLASSE DI ANALISI (ANCORA DA FARE)
@@ -173,10 +173,10 @@ namespace progetto_esame
             *Idea di aggiornare la finestra di continuo
             */
             int i;
-            /*for ( i = 0; i < k; i++)
+            for ( i = 0; i < k; i++)
             {
                 result.Add(m[i]);
-            }*/
+            }
             
             for ( i = k; i < nRighe-k; i++)
             {
@@ -184,11 +184,11 @@ namespace progetto_esame
                 //aggiungi il vettore media in posizione i
                 result.Add(media);
             }
-            /*
+            
             for (; i < nRighe; i++)
             {
                 result.Add(m[i]);
-            }*/
+            }
             return result;
         }
 
