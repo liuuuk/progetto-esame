@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace progetto_esame
 {
-    public delegate void MatriceEventHandler(object sender, MatriceEventArgs e);
+    public delegate void MatriceEventHandler(object sender, Window e);
 
     class Parser
     {
@@ -24,14 +24,14 @@ namespace progetto_esame
         public Parser()
         {
             maxSensori = 10;
-            dimensioneFinestra = 500; // 500 da specifiche di progetto
+            dimensioneFinestra = 10; // 500 da specifiche di progetto
 
             array = new List<List<double>>(); // Del prof
             mat = new List<List<List<double>>>(); // Aggiunto
         }
 
         public event MatriceEventHandler FinestraPiena;
-        protected virtual void OnFinestraPiena(MatriceEventArgs e) { if (FinestraPiena != null) FinestraPiena(this, e); }
+        protected virtual void OnFinestraPiena(Window e) { if (FinestraPiena != null) FinestraPiena(this, e); }
 
         public void Parse(BinaryReader bin)
         {
@@ -180,7 +180,7 @@ namespace progetto_esame
                 {
                     
                     //Console.WriteLine("Evento"); //Debug
-                    OnFinestraPiena(new MatriceEventArgs(mat, 0)); //Lancia l'evento
+                    OnFinestraPiena(new Window(mat, 0)); //Lancia l'evento
                     mat.RemoveRange(0, n); // non so se serve
                     n = 0; // non so se serve
 

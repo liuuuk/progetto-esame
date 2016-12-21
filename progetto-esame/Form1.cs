@@ -37,7 +37,7 @@ namespace progetto_esame
 
 
         //Per scrivere sulle zedgraph
-        public void test(object sender, MatriceEventArgs e)
+        public void test(object sender, Window e)
         {
             
             List<double> modacc = new List<double>();
@@ -52,7 +52,7 @@ namespace progetto_esame
                 pointP2.Add(2*i, modgir[i]);
             }
             zedGraphAccelerometro.AxisChange();
-            //zedGraphAccelerometro.Refresh();  //Da problemi di cross-threading
+           // zedGraphAccelerometro.Refresh();  //Da problemi di cross-threading
             zedGraphAccelerometro.Invalidate();
 
             zedGraphGiroscopio.AxisChange();

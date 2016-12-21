@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace progetto_esame
 {
-    public class MatriceEventArgs : EventArgs
+    public class Window : EventArgs
     {
         /*
          * Questa classe è stata creata per risolvere il problema degli eventi.
@@ -16,10 +16,13 @@ namespace progetto_esame
          * Da capire se è giusto lasciare i metodi i questa classe.
          */
         public List<List<double>> matrice;
-        public MatriceEventArgs(List<List<List<double>>> m, int sensore)
+        public Window(List<List<List<double>>> m, int sensore)
         {
             matrice = FissaSensore(m, sensore);
+            matrice = Smooth(matrice);//AGGIUNTO
         }
+        //ATTENZIONE: ALCUNI DEI SEGUENTI METODI VANNO NELLA CLASSE DI ANALISI (ANCORA DA FARE)
+
 
         /*
          * FissaSensore: Data una matrice a 3 dimensioni restituisce 
