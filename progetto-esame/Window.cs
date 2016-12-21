@@ -173,7 +173,7 @@ namespace progetto_esame
             *!!!!DUBBIO!!!!
             *La prima volta partiamo da k per avere una finestra di 2k+1
             *su cui fare la media,va bene??
-            * Di conseguenza i k valori iniziali e finali che non subiscono smooth
+            * Di conseguenza i k valori iniziali che non subiscono smooth
             * li copio semplicemente?
             */
             int i;

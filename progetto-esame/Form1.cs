@@ -17,13 +17,9 @@ namespace progetto_esame
 
     public partial class Form1 : Form
     {
-
-        
-
-       
-        private PointPairList pointPl = new PointPairList(); //per accelerometro
-        private PointPairList pointP2 = new PointPairList(); //per giroscopio
-        private int time;
+        private PointPairList pointAcc = new PointPairList(); //per accelerometro
+        private PointPairList pointGiro = new PointPairList(); //per giroscopio
+        private int time; //asse x
 
         public Form1()
         {
@@ -33,15 +29,12 @@ namespace progetto_esame
             zedGraphAccelerometro_Load(this, e);
             zedGraphOrientamento_Load(this, e);
             zedGraphGiroscopio_Load(this, e);
-
         }
 
 
         //Per scrivere sulle zedgraph
         public void Disegna(object sender, Window e)
         {
-           
-
             if (this.zedGraphAccelerometro.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(Disegna);
@@ -58,10 +51,10 @@ namespace progetto_esame
         {
             List<double> modacc = new List<double>();
             modacc = e.ModuloAccelerometro(e.matrice);
-            time = pointPl.Count;
+            time = pointAcc.Count;
             for (int i = 0; i < modacc.Count; i++, time++)
             {
-                pointPl.Add(2 * time, modacc[i]);
+                pointAcc.Add(2 * time, modacc[i]);
             }
             zedGraphAccelerometro.AxisChange();
             zedGraphAccelerometro.Refresh();
@@ -71,15 +64,12 @@ namespace progetto_esame
         private void DisegnaModuloGiro(Window e)
         {
             List<double> modgir = new List<double>();
-
             modgir = e.ModuloGiroscopio(e.matrice);
-            
-            time = pointP2.Count;
+            time = pointGiro.Count;
             for (int i = 0; i < modgir.Count; i++, time++)
             {
-                pointP2.Add(2 * time, modgir[i]);
+                pointGiro.Add(2 * time, modgir[i]);
             }
-
             zedGraphGiroscopio.AxisChange();
             zedGraphAccelerometro.Refresh();
             zedGraphGiroscopio.Invalidate();
@@ -93,19 +83,12 @@ namespace progetto_esame
             myPane.Title.Text = "Modulo Accelerometro";
             myPane.XAxis.Title.Text = "Time(ms)";
             myPane.YAxis.Title.Text = "g(m/sec^2)";
-
             
-
-            // myPane.YAxis.Scale.MagAuto = false;
-            // PointPairList holds the data for plotting, X and Y arrays
-
-            // RollingPointPairList aaa = new RollingPointPairList(i);
             // Add curves to myPane object
-            LineItem myCurve = myPane.AddCurve("ADC", pointPl, Color.Red, SymbolType.None);
-            //myCurve.Line.IsVisible = false;
+            LineItem myCurve = myPane.AddCurve("ADC", pointAcc, Color.Red, SymbolType.None);
+           
             myCurve.Line.Width = 1.0F;
-            // LineItem myCurve = myPane.AddCurve("ADC", aaa, Color.Blue, SymbolType.None);
-            // BarItem mybar = myPane.AddBar("plotting", x , y, Color.Red);
+            
             // I add all three functions just to be sure it refeshes the plot. 
             zedGraphAccelerometro.AxisChange();
             zedGraphAccelerometro.Refresh();
@@ -121,17 +104,12 @@ namespace progetto_esame
             myPane.Title.Text = "Orientamento";
             myPane.XAxis.Title.Text = "Time(ms)";
             myPane.YAxis.Title.Text = "Degree";
-
-            // myPane.YAxis.Scale.MagAuto = false;
-            // PointPairList holds the data for plotting, X and Y arrays
-
-            // RollingPointPairList aaa = new RollingPointPairList(i);
+            
             // Add curves to myPane object
-            LineItem myCurve = myPane.AddCurve("ADC", pointPl, Color.Green, SymbolType.None);
-            //myCurve.Line.IsVisible = false;
-            myCurve.Line.Width = 1.0F;
-            // LineItem myCurve = myPane.AddCurve("ADC", aaa, Color.Blue, SymbolType.None);
-            // BarItem mybar = myPane.AddBar("plotting", x , y, Color.Red);
+            //LineItem myCurve = myPane.AddCurve("ADC", point, Color.Green, SymbolType.None);
+           
+            //myCurve.Line.Width = 1.0F;
+            
             // I add all three functions just to be sure it refeshes the plot. 
             zedGraphAccelerometro.AxisChange();
             zedGraphAccelerometro.Refresh();
@@ -147,16 +125,11 @@ namespace progetto_esame
             myPane.XAxis.Title.Text = "Time(ms)";
             myPane.YAxis.Title.Text = "g(rad/sec)";
 
-            // myPane.YAxis.Scale.MagAuto = false;
-            // PointPairList holds the data for plotting, X and Y arrays
-
-            // RollingPointPairList aaa = new RollingPointPairList(i);
             // Add curves to myPane object
-            LineItem myCurve = myPane.AddCurve("ADC", pointP2, Color.Blue, SymbolType.None);
+            LineItem myCurve = myPane.AddCurve("ADC", pointGiro, Color.Blue, SymbolType.None);
             //myCurve.Line.IsVisible = false;
             myCurve.Line.Width = 1.0F;
-            // LineItem myCurve = myPane.AddCurve("ADC", aaa, Color.Blue, SymbolType.None);
-            // BarItem mybar = myPane.AddBar("plotting", x , y, Color.Red);
+            
             // I add all three functions just to be sure it refeshes the plot. 
             zedGraphAccelerometro.AxisChange();
             zedGraphAccelerometro.Refresh();
