@@ -11,8 +11,9 @@ using ZedGraph;
 
 namespace progetto_esame
 {
-    
 
+
+    delegate void SetTextCallback(object sender, Window e);
 
     public partial class Form1 : Form
     {
@@ -22,13 +23,13 @@ namespace progetto_esame
        
         private PointPairList pointPl = new PointPairList(); //per accelerometro
         private PointPairList pointP2 = new PointPairList(); //per giroscopio
-       
+        private int time;
 
         public Form1()
         {
             InitializeComponent();
             EventArgs e = new EventArgs();
-
+            time = 0;
             zedGraphAccelerometro_Load(this, e);
             zedGraphOrientamento_Load(this, e);
             zedGraphGiroscopio_Load(this, e);
@@ -37,30 +38,53 @@ namespace progetto_esame
 
 
         //Per scrivere sulle zedgraph
-        public void test(object sender, Window e)
+        public void Disegna(object sender, Window e)
         {
-            
+           
+
+            if (this.zedGraphAccelerometro.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(Disegna);
+                this.Invoke(d, new object[] { sender, e });
+            }
+            else
+            {
+                DisegnaModuloAcc(e);
+                DisegnaModuloGiro(e);
+            }   
+        }
+
+        private void DisegnaModuloAcc(Window e)
+        {
             List<double> modacc = new List<double>();
+            modacc = e.ModuloAccelerometro(e.matrice);
+            time = pointPl.Count;
+            for (int i = 0; i < modacc.Count; i++, time++)
+            {
+                pointPl.Add(2 * time, modacc[i]);
+            }
+            zedGraphAccelerometro.AxisChange();
+            zedGraphAccelerometro.Refresh();
+            zedGraphAccelerometro.Invalidate();
+        }
+
+        private void DisegnaModuloGiro(Window e)
+        {
             List<double> modgir = new List<double>();
 
             modgir = e.ModuloGiroscopio(e.matrice);
-            modacc = e.ModuloAccelerometro(e.matrice);
-
-            for (int i = 0; i < modacc.Count; i++)
+            
+            time = pointP2.Count;
+            for (int i = 0; i < modgir.Count; i++, time++)
             {
-                pointPl.Add(2*i, modacc[i]);
-                pointP2.Add(2*i, modgir[i]);
+                pointP2.Add(2 * time, modgir[i]);
             }
-            zedGraphAccelerometro.AxisChange();
-           // zedGraphAccelerometro.Refresh();  //Da problemi di cross-threading
-            zedGraphAccelerometro.Invalidate();
 
             zedGraphGiroscopio.AxisChange();
-            //zedGraphAccelerometro.Refresh(); 
+            zedGraphAccelerometro.Refresh();
             zedGraphGiroscopio.Invalidate();
         }
 
-       
         private void zedGraphAccelerometro_Load(object sender, EventArgs e)
         {
             zedGraphAccelerometro.GraphPane.CurveList.Clear();

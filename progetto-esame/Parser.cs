@@ -24,7 +24,7 @@ namespace progetto_esame
         public Parser()
         {
             maxSensori = 10;
-            dimensioneFinestra = 10; // 500 da specifiche di progetto
+            dimensioneFinestra = 25; // 500 da specifiche di progetto
 
             array = new List<List<double>>(); // Del prof
             mat = new List<List<List<double>>>(); // Aggiunto
@@ -180,6 +180,8 @@ namespace progetto_esame
                 {
                     
                     //Console.WriteLine("Evento"); //Debug
+
+
                     OnFinestraPiena(new Window(mat, 0)); //Lancia l'evento
                     mat.RemoveRange(0, n); // non so se serve
                     n = 0; // non so se serve
