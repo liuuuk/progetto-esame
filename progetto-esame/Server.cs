@@ -37,15 +37,14 @@ namespace progetto_esame
         }
 
         public void Listen(object caller)
-        {
-            
-            Console.WriteLine("Listening...");
+        {  
+            Console.WriteLine("Listening..."); //Status
             try
             {
                 while (true)
                 {
                     l.Start(); //Listening
-                    Console.WriteLine("Active connections: " + count_client);
+                    Console.WriteLine("Active connections: " + count_client); //Status
                     Console.Write("Waiting for a connection... "); //Status
 
                     client = l.AcceptTcpClient();
@@ -53,25 +52,34 @@ namespace progetto_esame
                     Console.WriteLine("Connected with " + count_client); //Status
 
                     Parser p = new Parser(); //Creo il parser
-                    //Creo un thread per la form
+
+                    //Creo un thread per la form (VIEW)
                     Thread tForm = new Thread(new ParameterizedThreadStart(View));
-                    tForm.Start(p); //new Form Passando il parser
+                    tForm.Start(p); //new Form passando il parser
+
+                    //Creo un thread per la connessione (PARSING)
                     Thread tConnect = new Thread(new ParameterizedThreadStart(Connect));
-                    tConnect.Start(p); //New connection Passando il parser
+                    tConnect.Start(p); //New connection passando il parser
                     
+                    //Creo un thread per l'analisi
+                    //Codice...
                     
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error " + e.Data);
-               
             }
         }
 
+        /*
+         * View è il thread responsabile della visualizzazione dei dati.
+         * Si occupa di creare la Form la quale gestisce tutta la grafica.
+         */
         public void View(object sender)
         {
             Parser p = (Parser)sender;
+
             //preparo la form
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -87,7 +95,6 @@ namespace progetto_esame
         public void Connect(object sender)
         {
             Parser p = (Parser)sender;
-            //Console.WriteLine("Connected with " + (string)sender); //Status
 
             NetworkStream stream = client.GetStream();
             BinaryReader bin = new BinaryReader(stream);
