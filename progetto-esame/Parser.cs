@@ -183,8 +183,10 @@ namespace progetto_esame
 
 
                     OnFinestraPiena(new Window(mat, 0)); //Lancia l'evento
-                    mat.RemoveRange(0, n); // non so se serve
-                    n = 0; // non so se serve
+
+                    mat.Reverse(); // inverto la posizione dei dati
+                    mat.RemoveRange(n / 2, n / 2); // cancello la seconda parte della matrice
+                    n = n / 2; // leggo solamente i prossimi 250 dati (nelle 250 caselle precedenti ho gli ultimi 250 dati della lettura precedente)
 
                 }
                    
