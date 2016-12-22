@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analisi.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
