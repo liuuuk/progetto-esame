@@ -16,11 +16,12 @@ namespace progetto_esame
          * Da capire se è giusto lasciare i metodi i questa classe.
          */
         public List<List<double>> matrice;
-        
+        public List<List<double>> matriceSmooth;
+
         public Window(List<List<List<double>>> m, int sensore)
         {
             matrice = FissaSensore(m, sensore);
-            matrice = Smooth(matrice);//AGGIUNTO
+            matriceSmooth = Smooth(matrice);//AGGIUNTO
             
         }
         //ATTENZIONE: ALCUNI DEI SEGUENTI METODI VANNO NELLA CLASSE DI ANALISI (ANCORA DA FARE)
