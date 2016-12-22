@@ -85,6 +85,14 @@ namespace progetto_esame
             Application.SetCompatibleTextRenderingDefault(false);
             Form1 myForm = new Form1();
 
+            //Credo che vada fatto qui dentro perchè ho bisogno dell oggetto myForm
+
+            //Creo un oggetto Analisi
+            //Sottoscrivo i vari eventi generati dall'analisi dei dati
+            //Codice...
+            //Preparo il thread di analisi (metodo che analizza)
+            //Lancio il thread
+
             //Sottoscrivo l'evento finestra piena del parser al metodo test(che scrive sulle zedgraph)
             p.FinestraPiena += new WindowEventHandler(myForm.Disegna);
 
@@ -92,6 +100,9 @@ namespace progetto_esame
             Application.Run(myForm);
         }
 
+        /*
+         * Connect è il thread responsabile del parsing dei dati.
+         */
         public void Connect(object sender)
         {
             Parser p = (Parser)sender;
