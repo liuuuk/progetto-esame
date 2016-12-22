@@ -78,7 +78,7 @@ namespace progetto_esame
             Form1 myForm = new Form1();
 
             //Sottoscrivo l'evento finestra piena del parser al metodo test(che scrive sulle zedgraph)
-            p.FinestraPiena += new MatriceEventHandler(myForm.Disegna);
+            p.FinestraPiena += new WindowEventHandler(myForm.Disegna);
 
             //Lancio la form
             Application.Run(myForm);

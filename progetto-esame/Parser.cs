@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace progetto_esame
 {
-    public delegate void MatriceEventHandler(object sender, Window e);
+    public delegate void WindowEventHandler(object sender, Window e);
 
     class Parser
     {
