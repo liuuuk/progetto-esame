@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace progetto_esame
 {
-    public delegate void MatriceEventHandler(object sender, Window e);
+    public delegate void WindowEventHandler(object sender, Window e);
 
     class Parser
     {
@@ -30,7 +30,7 @@ namespace progetto_esame
             mat = new List<List<List<double>>>(); // Aggiunto
         }
 
-        public event MatriceEventHandler FinestraPiena;
+        public event WindowEventHandler FinestraPiena;
         protected virtual void OnFinestraPiena(Window e) { if (FinestraPiena != null) FinestraPiena(this, e); }
 
         public void Parse(BinaryReader bin)
