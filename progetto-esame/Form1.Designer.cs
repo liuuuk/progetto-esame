@@ -32,6 +32,8 @@
             this.zedGraphAccelerometro = new ZedGraph.ZedGraphControl();
             this.zedGraphGiroscopio = new ZedGraph.ZedGraphControl();
             this.zedGraphOrientamento = new ZedGraph.ZedGraphControl();
+            this.SmoothAcc = new System.Windows.Forms.CheckBox();
+            this.SmoothGiro = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // zedGraphAccelerometro
@@ -51,7 +53,7 @@
             // 
             // zedGraphGiroscopio
             // 
-            this.zedGraphGiroscopio.Location = new System.Drawing.Point(12, 356);
+            this.zedGraphGiroscopio.Location = new System.Drawing.Point(12, 365);
             this.zedGraphGiroscopio.Name = "zedGraphGiroscopio";
             this.zedGraphGiroscopio.ScrollGrace = 0D;
             this.zedGraphGiroscopio.ScrollMaxX = 0D;
@@ -79,11 +81,35 @@
             this.zedGraphOrientamento.TabIndex = 2;
             this.zedGraphOrientamento.Load += new System.EventHandler(this.zedGraphOrientamento_Load);
             // 
+            // SmoothAcc
+            // 
+            this.SmoothAcc.AutoSize = true;
+            this.SmoothAcc.Location = new System.Drawing.Point(507, 22);
+            this.SmoothAcc.Name = "SmoothAcc";
+            this.SmoothAcc.Size = new System.Drawing.Size(134, 17);
+            this.SmoothAcc.TabIndex = 3;
+            this.SmoothAcc.Text = "Visualizza Non Smooth";
+            this.SmoothAcc.UseVisualStyleBackColor = true;
+            this.SmoothAcc.CheckedChanged += new System.EventHandler(this.SmoothAcc_CheckedChanged);
+            // 
+            // SmoothGiro
+            // 
+            this.SmoothGiro.AutoSize = true;
+            this.SmoothGiro.Location = new System.Drawing.Point(507, 376);
+            this.SmoothGiro.Name = "SmoothGiro";
+            this.SmoothGiro.Size = new System.Drawing.Size(134, 17);
+            this.SmoothGiro.TabIndex = 4;
+            this.SmoothGiro.Text = "Visualizza Non Smooth";
+            this.SmoothGiro.UseVisualStyleBackColor = true;
+            this.SmoothGiro.CheckedChanged += new System.EventHandler(this.SmoothGiro_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1344, 697);
+            this.Controls.Add(this.SmoothGiro);
+            this.Controls.Add(this.SmoothAcc);
             this.Controls.Add(this.zedGraphOrientamento);
             this.Controls.Add(this.zedGraphGiroscopio);
             this.Controls.Add(this.zedGraphAccelerometro);
@@ -92,6 +118,7 @@
             this.Text = "Progetto";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -100,6 +127,8 @@
         private ZedGraph.ZedGraphControl zedGraphAccelerometro;
         private ZedGraph.ZedGraphControl zedGraphGiroscopio;
         private ZedGraph.ZedGraphControl zedGraphOrientamento;
+        private System.Windows.Forms.CheckBox SmoothAcc;
+        private System.Windows.Forms.CheckBox SmoothGiro;
     }
 }
 
