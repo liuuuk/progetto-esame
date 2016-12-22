@@ -20,7 +20,7 @@ namespace progetto_esame
         TcpListener l; 
         TcpClient client;
 
-        Parser p;
+        //Parser p;
         int count_client; //Number of client
         #endregion
 
@@ -31,7 +31,7 @@ namespace progetto_esame
             this.count_client = 0;
 
             l = new TcpListener(this.address, this.port);
-            p = new Parser();
+            //p = new Parser();
 
             Console.WriteLine("Server Created.");
         }
@@ -50,12 +50,14 @@ namespace progetto_esame
 
                     client = l.AcceptTcpClient();
                     count_client++;
+                    Console.WriteLine("Connected with " + count_client); //Status
 
+                    Parser p = new Parser(); //Creo il parser
                     //Creo un thread per la form
                     Thread tForm = new Thread(new ParameterizedThreadStart(View));
-                    tForm.Start("Form"); //new Form
+                    tForm.Start(p); //new Form Passando il parser
                     Thread tConnect = new Thread(new ParameterizedThreadStart(Connect));
-                    tConnect.Start("#" + count_client); //New connection
+                    tConnect.Start(p); //New connection Passando il parser
                     
                     
                 }
@@ -69,6 +71,7 @@ namespace progetto_esame
 
         public void View(object sender)
         {
+            Parser p = (Parser)sender;
             //preparo la form
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -83,7 +86,8 @@ namespace progetto_esame
 
         public void Connect(object sender)
         {
-            Console.WriteLine("Connected with " + (string)sender); //Status
+            Parser p = (Parser)sender;
+            //Console.WriteLine("Connected with " + (string)sender); //Status
 
             NetworkStream stream = client.GetStream();
             BinaryReader bin = new BinaryReader(stream);
