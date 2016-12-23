@@ -30,7 +30,10 @@ namespace progetto_esame
         public List<List<double>> GetMagnetometro(List<List<double>> m)
         {//Presa la matrice restituisce la matrice( magnx magny magnz )x Campioni
             List<List<double>> result = new List<List<double>>();
-            // DA IMPLEMENTARE
+            foreach (var item in m)
+            {
+                result.Add(item.GetRange(6,3));
+            }
             throw new NotImplementedException();
             return result;
         }
