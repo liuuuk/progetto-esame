@@ -173,11 +173,11 @@ namespace progetto_esame
             /*Smooth su una finestra più piccola(da k a nRighe-k)
             *Idea di aggiornare la finestra di continuo
             */
-            int i;
+            int i;/*
             for ( i = 0; i < k; i++)
             {
                 result.Add(m[i]);
-            }
+            }*/
             
             for ( i = k; i < nRighe-k; i++)
             {
@@ -185,11 +185,11 @@ namespace progetto_esame
                 //aggiungi il vettore media in posizione i
                 result.Add(media);
             }
-            
+            /*
             for (; i < nRighe; i++)
             {
                 result.Add(m[i]);
-            }
+            }*/
             return result;
         }
 
@@ -208,6 +208,7 @@ namespace progetto_esame
             int nColonne = m[0].Count;
 
             List<double> result = new List<double>();
+            
             for (int i = 0; i < nColonne; i++)
             {
                 result.Add(0);
