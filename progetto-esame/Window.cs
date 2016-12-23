@@ -24,9 +24,18 @@ namespace progetto_esame
             matriceSmooth = Smooth(matrice);//AGGIUNTO
             
         }
+
+        //ATTENZIONE: ancora da implementare
+        //Creata da liuuuk per fare la girata
+        public List<List<double>> GetMagnetometro(List<List<double>> m)
+        {//Presa la matrice restituisce la matrice( magnx magny magnz )x Campioni
+            List<List<double>> result = new List<List<double>>();
+            // DA IMPLEMENTARE
+            throw new NotImplementedException();
+            return result;
+        }
+
         //ATTENZIONE: ALCUNI DEI SEGUENTI METODI VANNO NELLA CLASSE DI ANALISI (ANCORA DA FARE)
-
-
         /*
          * FissaSensore: Data una matrice a 3 dimensioni restituisce 
          * la matrice a due dimensioni fissata una colonna (sensore)

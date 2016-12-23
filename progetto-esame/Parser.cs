@@ -14,12 +14,10 @@ namespace progetto_esame
     {
 
         int maxSensori;
-
         List<List<double>> array; // salvataggio dati
-
         List<List<List<double>>> mat;
-
-        int dimensioneFinestra; 
+        int dimensioneFinestra;
+        public event WindowEventHandler FinestraPiena;
 
         public Parser()
         {
@@ -30,7 +28,7 @@ namespace progetto_esame
             mat = new List<List<List<double>>>(); // Aggiunto
         }
 
-        public event WindowEventHandler FinestraPiena;
+        
         protected virtual void OnFinestraPiena(Window e) { if (FinestraPiena != null) FinestraPiena(this, e); }
 
         public void Parse(BinaryReader bin)
