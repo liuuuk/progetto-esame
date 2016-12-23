@@ -20,12 +20,15 @@ namespace progetto_esame
 
         private bool _isNonSmoothAcc = false;
         private bool _isNonSmoothGiro = false;
+        private bool _isNonSmoothTheta = false;
 
         private PointPairList _pointAcc = new PointPairList(); //per accelerometro
         private PointPairList _pointGiro = new PointPairList(); //per giroscopio
+        private PointPairList _pointTheta = new PointPairList(); //per orientamento
         //Per non Smooth
         private PointPairList _pointAccNoSmooth = new PointPairList(); //per accelerometro
         private PointPairList _pointGiroNoSmooth = new PointPairList(); //per giroscopio
+        private PointPairList _pointThetaNoSmooth = new PointPairList(); //per orientamento
 
         private int _time; //asse x
 
@@ -52,7 +55,31 @@ namespace progetto_esame
             {
                 DisegnaModuloAcc(e);
                 DisegnaModuloGiro(e);
+                DisegnaModuloTheta(e);
             }   
+        }
+
+        private void DisegnaModuloTheta(Window e)
+        {
+            List<double> y = e.GetMagnetometro(e.matriceSmooth)[1];
+            List<double> z = e.GetMagnetometro(e.matriceSmooth)[2];
+
+            List<double> yNoSmooth = e.GetMagnetometro(e.matrice)[1];
+            List<double> zNoSmooth = e.GetMagnetometro(e.matrice)[2];
+
+            _time = _pointTheta.Count;
+            for (int i = 0; i < y.Count; i++, _time++)
+            {
+                _pointTheta.Add(2* _time, Math.Atan(y[i] / z[i]));
+                _pointThetaNoSmooth.Add(2 * _time, Math.Atan(yNoSmooth[i] / zNoSmooth[i]));
+            }
+
+            
+
+            zedGraphOrientamento.AxisChange();
+            zedGraphOrientamento.Refresh();
+            zedGraphOrientamento.Invalidate();
+
         }
 
         private void DisegnaModuloAcc(Window e)
@@ -70,7 +97,7 @@ namespace progetto_esame
                 _pointAccNoSmooth.Add(2 * _time, modaccNoSmooth[i]); //Dati Smoothati
             }
 
-            zedGraphAccelerometro.GraphPane.CurveList[1].IsVisible = _isNonSmoothAcc;
+            
             
             zedGraphAccelerometro.AxisChange();
             zedGraphAccelerometro.Refresh();
@@ -92,7 +119,7 @@ namespace progetto_esame
                 _pointGiroNoSmooth.Add(2 * _time, modgirNoSmooth[i]); //Dati Smoothati
             }
             
-            zedGraphGiroscopio.GraphPane.CurveList[1].IsVisible = _isNonSmoothGiro;
+            
 
             zedGraphGiroscopio.AxisChange();
             zedGraphAccelerometro.Refresh();
@@ -128,19 +155,22 @@ namespace progetto_esame
             zedGraphOrientamento.GraphPane.CurveList.Clear();
             // GraphPane object holds one or more Curve objects (or plots)
             GraphPane myPane = zedGraphOrientamento.GraphPane;
-            myPane.Title.Text = "Orientamento";
+            myPane.Title.Text = "Theta";
             myPane.XAxis.Title.Text = "Time(ms)";
             myPane.YAxis.Title.Text = "Degree";
             
             // Add curves to myPane object
-            //LineItem myCurve = myPane.AddCurve("ADC", point, Color.Green, SymbolType.None);
-           
-            //myCurve.Line.Width = 1.0F;
-            
+            LineItem myCurve = myPane.AddCurve("Smooth", _pointTheta, Color.Red, SymbolType.None);
+            LineItem myCurveNoSmooth = myPane.AddCurve("No Smooth", _pointThetaNoSmooth, Color.Blue, SymbolType.None);
+
+            myCurveNoSmooth.IsVisible = _isNonSmoothTheta;
+
+            myCurve.Line.Width = 1.0F;
+
             // I add all three functions just to be sure it refeshes the plot. 
-            zedGraphAccelerometro.AxisChange();
-            zedGraphAccelerometro.Refresh();
-            zedGraphAccelerometro.Invalidate();
+            zedGraphOrientamento.AxisChange();
+            zedGraphOrientamento.Refresh();
+            zedGraphOrientamento.Invalidate();
         }
 
         private void zedGraphGiroscopio_Load(object sender, EventArgs e)
@@ -171,6 +201,8 @@ namespace progetto_esame
                 _isNonSmoothAcc = false;
             else
                 _isNonSmoothAcc = true;
+
+            zedGraphAccelerometro.GraphPane.CurveList[1].IsVisible = _isNonSmoothAcc;
         }
 
         private void SmoothGiro_CheckedChanged(object sender, EventArgs e)
@@ -179,6 +211,18 @@ namespace progetto_esame
                 _isNonSmoothGiro = false;
             else
                 _isNonSmoothGiro = true;
+
+            zedGraphGiroscopio.GraphPane.CurveList[1].IsVisible = _isNonSmoothGiro;
+        }
+
+        private void SmoothTheta_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_isNonSmoothTheta)
+                _isNonSmoothTheta = false;
+            else
+                _isNonSmoothTheta = true;
+
+            zedGraphOrientamento.GraphPane.CurveList[1].IsVisible = _isNonSmoothTheta;
         }
     }
 }

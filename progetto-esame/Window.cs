@@ -25,7 +25,6 @@ namespace progetto_esame
             
         }
 
-        //ATTENZIONE: ancora da implementare
         //Creata da liuuuk per fare la girata
         public List<List<double>> GetMagnetometro(List<List<double>> m)
         {//Presa la matrice restituisce la matrice( magnx magny magnz )x Campioni
@@ -34,7 +33,6 @@ namespace progetto_esame
             {
                 result.Add(item.GetRange(6,3));
             }
-            throw new NotImplementedException();
             return result;
         }
 
