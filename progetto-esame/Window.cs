@@ -229,6 +229,38 @@ namespace progetto_esame
         }
 
 
+        private List<double> DeviazioneStandard(List<double> l) /* MIA */
+        {
+            List<double> result = new List<double>(l.Count());
+            List<double> appoggio;
+            int t = 10; // dimensione finestra
+            int s = 0, e = 0;
+            double sum = 0, media = 0;
+
+            for (int i = 0; i < l.Count(); i++)
+            {
+                sum = 0;
+                s = i - t;
+                if (s < 0)
+                    s = 0;
+                e = i + t;
+                if (e >= l.Count())
+                    e = l.Count() - 1;
+                appoggio = l.GetRange(s, e);
+
+                for(int j = 0; j < appoggio.Count(); j++)
+                {
+                    media = Media(appoggio);
+                    sum += (appoggio[j] - media) * (appoggio[j] - media);
+                }
+
+                result[i] = Math.Sqrt(sum / l.Count);
+            }
+
+            return result;
+        }
+
+
         /*
          * Media
          * Input: Lista di double

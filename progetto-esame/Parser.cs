@@ -335,6 +335,36 @@ namespace progetto_esame
             return Math.Sqrt(sum / l.Count);
         }
 
+        private List<List<double>> Smooth(List<List<double>> m)
+        {
+            List<List<double>> result = new List<List<double>>();
+            int nRighe = m.Count;
+            int nColonne = m[0].Count;
+            int k = 10; // Da specifiche di progetto k=10
+            //Per ogni riga
+            for (int i = 0; i < nRighe; i++)
+            {
+                //Calcola gli indici
+                int start, end;
+                if (i - k < 0)
+                    start = 0;
+                else
+                    start = i - k;
+                if (i + k > nRighe)
+                    end = nRighe;
+                else
+                    end = i + k;
+
+                //Calcola la media sulla sotto matrice di righe da start ad end
+                List<double> media = Media(m.GetRange(start, end - start));
+
+                //aggiungi il vettore media in posizione i
+                result.Add(media);
+            }
+
+            return result;
+        }
+
         /*
          * RIFunc (Rapporto incrementale)
          * Input: Una lista di double.
