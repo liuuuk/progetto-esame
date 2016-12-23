@@ -34,6 +34,7 @@
             this.zedGraphOrientamento = new ZedGraph.ZedGraphControl();
             this.SmoothAcc = new System.Windows.Forms.CheckBox();
             this.SmoothGiro = new System.Windows.Forms.CheckBox();
+            this.SmoothTheta = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // zedGraphAccelerometro
@@ -103,11 +104,23 @@
             this.SmoothGiro.UseVisualStyleBackColor = true;
             this.SmoothGiro.CheckedChanged += new System.EventHandler(this.SmoothGiro_CheckedChanged);
             // 
+            // SmoothTheta
+            // 
+            this.SmoothTheta.AutoSize = true;
+            this.SmoothTheta.Location = new System.Drawing.Point(1179, 22);
+            this.SmoothTheta.Name = "SmoothTheta";
+            this.SmoothTheta.Size = new System.Drawing.Size(134, 17);
+            this.SmoothTheta.TabIndex = 5;
+            this.SmoothTheta.Text = "Visualizza Non Smooth";
+            this.SmoothTheta.UseVisualStyleBackColor = true;
+            this.SmoothTheta.CheckedChanged += new System.EventHandler(this.SmoothTheta_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1344, 697);
+            this.Controls.Add(this.SmoothTheta);
             this.Controls.Add(this.SmoothGiro);
             this.Controls.Add(this.SmoothAcc);
             this.Controls.Add(this.zedGraphOrientamento);
@@ -129,6 +142,7 @@
         private ZedGraph.ZedGraphControl zedGraphOrientamento;
         private System.Windows.Forms.CheckBox SmoothAcc;
         private System.Windows.Forms.CheckBox SmoothGiro;
+        private System.Windows.Forms.CheckBox SmoothTheta;
     }
 }
 

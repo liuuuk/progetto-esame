@@ -88,13 +88,17 @@ namespace progetto_esame
             //Credo che vada fatto qui dentro perchè ho bisogno dell oggetto myForm
 
             //Creo un oggetto Analisi
+            Analyzer a = new Analyzer();
+
+            //Decommentare quando la classe analyzer è finita
+            // p.FinestraPiena += new WindowEventHandler(a.Run);
+
             //Sottoscrivo i vari eventi generati dall'analisi dei dati
-            //Codice...
-            //Preparo il thread di analisi (metodo che analizza)
-            //Lancio il thread
+            
+            
 
             //Sottoscrivo l'evento finestra piena del parser al metodo test(che scrive sulle zedgraph)
-            p.FinestraPiena += new WindowEventHandler(myForm.Disegna);
+            p.FinestraPiena += new WindowEventHandler(myForm.DisegnaGrafici);
 
             //Lancio la form
             Application.Run(myForm);
