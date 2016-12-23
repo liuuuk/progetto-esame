@@ -85,33 +85,33 @@
             // SmoothAcc
             // 
             this.SmoothAcc.AutoSize = true;
-            this.SmoothAcc.Location = new System.Drawing.Point(507, 22);
+            this.SmoothAcc.Location = new System.Drawing.Point(562, 22);
             this.SmoothAcc.Name = "SmoothAcc";
-            this.SmoothAcc.Size = new System.Drawing.Size(134, 17);
+            this.SmoothAcc.Size = new System.Drawing.Size(79, 17);
             this.SmoothAcc.TabIndex = 3;
-            this.SmoothAcc.Text = "Visualizza Non Smooth";
+            this.SmoothAcc.Text = "No Smooth";
             this.SmoothAcc.UseVisualStyleBackColor = true;
             this.SmoothAcc.CheckedChanged += new System.EventHandler(this.SmoothAcc_CheckedChanged);
             // 
             // SmoothGiro
             // 
             this.SmoothGiro.AutoSize = true;
-            this.SmoothGiro.Location = new System.Drawing.Point(507, 376);
+            this.SmoothGiro.Location = new System.Drawing.Point(562, 375);
             this.SmoothGiro.Name = "SmoothGiro";
-            this.SmoothGiro.Size = new System.Drawing.Size(134, 17);
+            this.SmoothGiro.Size = new System.Drawing.Size(79, 17);
             this.SmoothGiro.TabIndex = 4;
-            this.SmoothGiro.Text = "Visualizza Non Smooth";
+            this.SmoothGiro.Text = "No Smooth";
             this.SmoothGiro.UseVisualStyleBackColor = true;
             this.SmoothGiro.CheckedChanged += new System.EventHandler(this.SmoothGiro_CheckedChanged);
             // 
             // SmoothTheta
             // 
             this.SmoothTheta.AutoSize = true;
-            this.SmoothTheta.Location = new System.Drawing.Point(1179, 22);
+            this.SmoothTheta.Location = new System.Drawing.Point(1231, 22);
             this.SmoothTheta.Name = "SmoothTheta";
-            this.SmoothTheta.Size = new System.Drawing.Size(134, 17);
+            this.SmoothTheta.Size = new System.Drawing.Size(79, 17);
             this.SmoothTheta.TabIndex = 5;
-            this.SmoothTheta.Text = "Visualizza Non Smooth";
+            this.SmoothTheta.Text = "No Smooth";
             this.SmoothTheta.UseVisualStyleBackColor = true;
             this.SmoothTheta.CheckedChanged += new System.EventHandler(this.SmoothTheta_CheckedChanged);
             // 

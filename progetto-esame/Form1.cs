@@ -61,11 +61,21 @@ namespace progetto_esame
 
         private void DisegnaModuloTheta(Window e)
         {
-            List<double> y = e.GetMagnetometro(e.matriceSmooth)[1];
-            List<double> z = e.GetMagnetometro(e.matriceSmooth)[2];
+            List<double> y = new List<double>();
+            List<double> z = new List<double>();
+            foreach (var item in e.GetMagnetometro(e.matriceSmooth))
+            {
+                y.Add(item[1]);
+                z.Add(item[2]);
+            }
 
-            List<double> yNoSmooth = e.GetMagnetometro(e.matrice)[1];
-            List<double> zNoSmooth = e.GetMagnetometro(e.matrice)[2];
+            List<double> yNoSmooth = new List<double>();
+            List<double> zNoSmooth = new List<double>();
+            foreach (var item in e.GetMagnetometro(e.matrice))
+            {
+                yNoSmooth.Add(item[1]);
+                zNoSmooth.Add(item[2]);
+            }
 
             _time = _pointTheta.Count;
             for (int i = 0; i < y.Count; i++, _time++)
@@ -203,6 +213,7 @@ namespace progetto_esame
                 _isNonSmoothAcc = true;
 
             zedGraphAccelerometro.GraphPane.CurveList[1].IsVisible = _isNonSmoothAcc;
+            zedGraphAccelerometro.Refresh();
         }
 
         private void SmoothGiro_CheckedChanged(object sender, EventArgs e)
@@ -213,6 +224,7 @@ namespace progetto_esame
                 _isNonSmoothGiro = true;
 
             zedGraphGiroscopio.GraphPane.CurveList[1].IsVisible = _isNonSmoothGiro;
+            zedGraphGiroscopio.Refresh();
         }
 
         private void SmoothTheta_CheckedChanged(object sender, EventArgs e)
@@ -223,6 +235,7 @@ namespace progetto_esame
                 _isNonSmoothTheta = true;
 
             zedGraphOrientamento.GraphPane.CurveList[1].IsVisible = _isNonSmoothTheta;
+            zedGraphOrientamento.Refresh();
         }
     }
 }
