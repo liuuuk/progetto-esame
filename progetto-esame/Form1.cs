@@ -101,9 +101,9 @@ namespace progetto_esame
 
 
                 delta = next - value;
-               
 
-                
+
+
 
                 if (_isUp)
                     value -= 3.14;

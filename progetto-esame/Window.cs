@@ -106,7 +106,7 @@ namespace progetto_esame
          * Input: Una lista di double
          * Output: una lista di double in cui in ogni posizione c'è la dev.std. dell' i-esimo intorno
          */
-        private List<double> DeviazioneStandard(List<double> l) /* MIA */
+        private List<double> DeviazioneStandard(List<double> l)
         {
             List<double> result = new List<double>(l.Count());
             List<double> appoggio;
