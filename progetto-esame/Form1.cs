@@ -94,13 +94,14 @@ namespace progetto_esame
             {
                 //double value = Math.Atan(y[i] / z[i]);
                 //double next = Math.Atan(y[i+1] / z[i+1]);
-                theta[i]= y[i] / z[i];
+                theta.Add(Math.Atan(y[i] / z[i]));
+                //theta[i]= Math.Atan(y[i] / z[i]);
                 _pointThetaDEBUG.Add(2*_time, theta[i]);
 
                 
                
                 double valueNoSmooth = Math.Atan(yNoSmooth[i] / zNoSmooth[i]);
-                delta = theta[i] - y[i + 1] / z[i + 1];
+                delta = theta[i] - Math.Atan(y[i + 1] / z[i + 1]);
                 /*
                 delta = next - value;
                
@@ -115,13 +116,15 @@ namespace progetto_esame
 
                 if (delta >= 2.8)
                 {
-                    theta[i+1]=y[i + 1]/z[i+1] + 3.14;
+                    theta.Add(y[i + 1] / z[i + 1] + 3.14);
+                    i++;
                     //_isUp = true;
                 }
 
                 if (delta <= -2.8)
                 {
-                    theta[i + 1] = y[i + 1] / z[i + 1] - 3.14;
+                    theta.Add(y[i + 1] / z[i + 1] - 3.14);
+                    i++;
                     //_isDown = true;
                 }
               
@@ -287,6 +290,11 @@ namespace progetto_esame
 
             zedGraphOrientamento.GraphPane.CurveList[1].IsVisible = _isNonSmoothTheta;
             zedGraphOrientamento.Refresh();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
        
