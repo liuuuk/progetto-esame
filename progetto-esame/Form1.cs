@@ -88,35 +88,44 @@ namespace progetto_esame
 
 
             double delta = 0.0;
-            
+            List<double> theta = new List<double>();
+
             for (int i = 0; i < y.Count-1; i++, _time++)
             {
-                double value = Math.Atan(y[i] / z[i]);
-                double next = Math.Atan(y[i+1] / z[i+1]);
-
-                _pointThetaDEBUG.Add(2*_time, value);
-                double valueNoSmooth = Math.Atan(yNoSmooth[i] / zNoSmooth[i]);
+                //double value = Math.Atan(y[i] / z[i]);
+                //double next = Math.Atan(y[i+1] / z[i+1]);
+                theta[i]= y[i] / z[i];
+                _pointThetaDEBUG.Add(2*_time, theta[i]);
 
                 
+               
+                double valueNoSmooth = Math.Atan(yNoSmooth[i] / zNoSmooth[i]);
+                delta = theta[i] - y[i + 1] / z[i + 1];
+                /*
                 delta = next - value;
                
-
+                
                 if (_isUp)
                     value -= 3.14;
                 if (_isDown)
                     value += 3.14;
-
+                    */
                 if (delta >= 2.8 || delta <= -2.8)
                     richTextBox1.AppendText("DELTA: " + delta + " Time: " + 2 * _time + Environment.NewLine);
-               
+
                 if (delta >= 2.8)
-                    _isUp = true;
+                {
+                    theta[i+1]=y[i + 1]/z[i+1] + 3.14;
+                    //_isUp = true;
+                }
 
                 if (delta <= -2.8)
-                    _isDown = true;
-
+                {
+                    theta[i + 1] = y[i + 1] / z[i + 1] - 3.14;
+                    //_isDown = true;
+                }
               
-                _pointTheta.Add(2 * _time, value);
+                _pointTheta.Add(2 * _time, theta[i]);
                 _pointThetaNoSmooth.Add(2 * _time, valueNoSmooth);
             }
 
