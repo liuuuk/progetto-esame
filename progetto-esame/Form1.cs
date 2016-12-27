@@ -19,7 +19,7 @@ namespace progetto_esame
     {
 
 
-        
+        int molt = 1;
         bool _isUp = false;
         bool _isDown = false;
 
@@ -89,8 +89,6 @@ namespace progetto_esame
 
             double delta = 0.0;
 
-           
-
             for (int i = 0; i < y.Count-1; i++, _time++)
             {
                 double value = Math.Atan(y[i] / z[i]);
@@ -101,13 +99,23 @@ namespace progetto_esame
                 double valueNoSmooth = Math.Atan(yNoSmooth[i] / zNoSmooth[i]);
 
 
-                delta = next - value;
+
+                
 
 
                 if (_isUp)
+                {
                     value -= 3.14;
+                }
+                    
                 if (_isDown)
+                {
                     value += 3.14;
+                }
+                    
+
+                delta = next - value;
+                
 
                 if (delta >= 2.5)
                 {
