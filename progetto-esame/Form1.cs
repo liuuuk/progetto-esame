@@ -97,13 +97,12 @@ namespace progetto_esame
                 double next = Math.Atan(y[i+1] / z[i+1]);
                 
                 _pointThetaDEBUG.Add(2*_time, value);
+
                 double valueNoSmooth = Math.Atan(yNoSmooth[i] / zNoSmooth[i]);
 
 
                 delta = next - value;
-               
 
-                
 
                 if (_isUp)
                     value -= 3.14;
