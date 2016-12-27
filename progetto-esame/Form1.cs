@@ -19,7 +19,7 @@ namespace progetto_esame
     {
 
 
-        int molt = 1;
+        double precedente = 0.0;
         bool _isUp = false;
         bool _isDown = false;
 
@@ -31,6 +31,8 @@ namespace progetto_esame
         private PointPairList _pointGiro = new PointPairList(); //per giroscopio
         private PointPairList _pointTheta = new PointPairList(); //per orientamento
         private PointPairList _pointThetaDEBUG = new PointPairList();
+        private PointPairList _pointLinea = new PointPairList();
+
         //Per non Smooth
         private PointPairList _pointAccNoSmooth = new PointPairList(); //per accelerometro
         private PointPairList _pointGiroNoSmooth = new PointPairList(); //per giroscopio
@@ -88,47 +90,62 @@ namespace progetto_esame
 
 
             double delta = 0.0;
-
-            for (int i = 0; i < y.Count-1; i++, _time++)
+            
+            for (int i = -1; i < y.Count-1; i++, _time++)
             {
-                double value = Math.Atan(y[i] / z[i]);
+                double value = 0.0;
+                if (i == -1)
+                    value = precedente;
+                else
+                    value = Math.Atan(y[i] / z[i]);
+
                 double next = Math.Atan(y[i+1] / z[i+1]);
-                
                 _pointThetaDEBUG.Add(2*_time, value);
 
-                double valueNoSmooth = Math.Atan(yNoSmooth[i] / zNoSmooth[i]);
+                //double valueNoSmooth = Math.Atan(yNoSmooth[i] / zNoSmooth[i]);
 
-
-
-                
-
+                if (i == 4)
+                {
+                    precedente = next;
+                }
+                if (i == -1)
+                {
+                    delta = next - precedente;
+                }
+                else
+                {
+                    delta = next - value; 
+                }
 
                 if (_isUp)
                 {
                     value -= 3.14;
                 }
-                    
+
                 if (_isDown)
                 {
                     value += 3.14;
                 }
-                    
-
-                delta = next - value;
-                
 
                 if (delta >= 2.5)
                 {
                     _isUp = true;
+                    richTextBox1.AppendText("Find up " + 2 * _time + "D " + delta + Environment.NewLine);
                 }
                 if (delta <= -2.5)
                 {
                     _isDown = true;
+                    richTextBox1.AppendText("Find down " + 2 * _time + "D " + delta + Environment.NewLine);
                 }
-               
-              
+
+                if (_isUp && _isDown)
+                {
+                    _isDown = false;
+                    _isUp = false;
+                }
+                
                 _pointTheta.Add(2 * _time, value);
-                _pointThetaNoSmooth.Add(2 * _time, valueNoSmooth);
+               // _pointThetaNoSmooth.Add(2 * _time, valueNoSmooth);
             }
 
             
@@ -224,7 +241,7 @@ namespace progetto_esame
             LineItem myCurveNoSmooth = myPane.AddCurve("No Smooth", _pointThetaNoSmooth, Color.Blue, SymbolType.None);
 
             LineItem myCurveDebug = myPane.AddCurve("No Smooth", _pointThetaDEBUG, Color.Black, SymbolType.None);
-
+            LineItem myLine = myPane.AddCurve("", _pointLinea, Color.Blue, SymbolType.None);
             
             myCurveNoSmooth.IsVisible = _isNonSmoothTheta;
 
