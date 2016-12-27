@@ -35,6 +35,7 @@
             this.SmoothAcc = new System.Windows.Forms.CheckBox();
             this.SmoothGiro = new System.Windows.Forms.CheckBox();
             this.SmoothTheta = new System.Windows.Forms.CheckBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // zedGraphAccelerometro
@@ -115,11 +116,20 @@
             this.SmoothTheta.UseVisualStyleBackColor = true;
             this.SmoothTheta.CheckedChanged += new System.EventHandler(this.SmoothTheta_CheckedChanged);
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(679, 365);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(319, 338);
+            this.richTextBox1.TabIndex = 6;
+            this.richTextBox1.Text = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1344, 697);
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.SmoothTheta);
             this.Controls.Add(this.SmoothGiro);
             this.Controls.Add(this.SmoothAcc);
@@ -143,6 +153,7 @@
         private System.Windows.Forms.CheckBox SmoothAcc;
         private System.Windows.Forms.CheckBox SmoothGiro;
         private System.Windows.Forms.CheckBox SmoothTheta;
+        private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }
 

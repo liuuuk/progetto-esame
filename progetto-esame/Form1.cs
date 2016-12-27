@@ -18,6 +18,11 @@ namespace progetto_esame
     public partial class Form1 : Form
     {
 
+
+        
+        bool _isUp = false;
+        bool _isDown = false;
+
         private bool _isNonSmoothAcc = false;
         private bool _isNonSmoothGiro = false;
         private bool _isNonSmoothTheta = false;
@@ -25,6 +30,7 @@ namespace progetto_esame
         private PointPairList _pointAcc = new PointPairList(); //per accelerometro
         private PointPairList _pointGiro = new PointPairList(); //per giroscopio
         private PointPairList _pointTheta = new PointPairList(); //per orientamento
+        private PointPairList _pointThetaDEBUG = new PointPairList();
         //Per non Smooth
         private PointPairList _pointAccNoSmooth = new PointPairList(); //per accelerometro
         private PointPairList _pointGiroNoSmooth = new PointPairList(); //per giroscopio
@@ -56,8 +62,9 @@ namespace progetto_esame
                 DisegnaModuloAcc(e);
                 DisegnaModuloGiro(e);
                 DisegnaModuloTheta(e);
-            }   
+            }
         }
+
 
         private void DisegnaModuloTheta(Window e)
         {
@@ -78,10 +85,42 @@ namespace progetto_esame
             }
 
             _time = _pointTheta.Count;
-            for (int i = 0; i < y.Count; i++, _time++)
+
+
+            double delta = 0.0;
+
+            for (int i = 0; i < y.Count-1; i++, _time++)
             {
-                _pointTheta.Add(2* _time, Math.Atan(y[i] / z[i]));
-                _pointThetaNoSmooth.Add(2 * _time, Math.Atan(yNoSmooth[i] / zNoSmooth[i]));
+                double value = Math.Atan(y[i] / z[i]);
+                double next = Math.Atan(y[i+1] / z[i+1]);
+
+                _pointThetaDEBUG.Add(2*_time, value);
+
+                
+               
+                double valueNoSmooth = Math.Atan(yNoSmooth[i] / zNoSmooth[i]);
+
+                
+                delta = next - value;
+               
+
+                if (_isUp)
+                    value -= 3.14;
+                if (_isDown)
+                    value += 3.14;
+
+                if (delta >= 2.8 || delta <= -2.8)
+                    richTextBox1.AppendText("DELTA: " + delta + " Time: " + 2 * _time + Environment.NewLine);
+               
+                if (delta >= 2.8)
+                    _isUp = true;
+
+                if (delta <= -2.8)
+                    _isDown = true;
+
+              
+                _pointTheta.Add(2 * _time, value);
+                _pointThetaNoSmooth.Add(2 * _time, valueNoSmooth);
             }
 
             
@@ -107,8 +146,8 @@ namespace progetto_esame
                 _pointAccNoSmooth.Add(2 * _time, modaccNoSmooth[i]); //Dati Smoothati
             }
 
-            
-            
+
+
             zedGraphAccelerometro.AxisChange();
             zedGraphAccelerometro.Refresh();
             zedGraphAccelerometro.Invalidate();
@@ -117,19 +156,19 @@ namespace progetto_esame
         private void DisegnaModuloGiro(Window e)
         {
             List<double> modgir = new List<double>(); //Dati Smoothati
-            List<double> modgirNoSmooth = new List<double>(); 
+            List<double> modgirNoSmooth = new List<double>();
 
             modgir = e.ModuloGiroscopio(e.matriceSmooth); //Dati Smoothati
             modgirNoSmooth = e.ModuloGiroscopio(e.matrice);
-            
+
             _time = _pointGiro.Count;
             for (int i = 0; i < modgir.Count; i++, _time++)
             {
                 _pointGiro.Add(2 * _time, modgir[i]);
                 _pointGiroNoSmooth.Add(2 * _time, modgirNoSmooth[i]); //Dati Smoothati
             }
-            
-            
+
+
 
             zedGraphGiroscopio.AxisChange();
             zedGraphAccelerometro.Refresh();
@@ -145,14 +184,14 @@ namespace progetto_esame
             myPane.Title.Text = "Modulo Accelerometro";
             myPane.XAxis.Title.Text = "Time(ms)";
             myPane.YAxis.Title.Text = "g(m/sec^2)";
-            
+
             // Add curves to myPane object
             LineItem myCurve = myPane.AddCurve("Smooth", _pointAcc, Color.Red, SymbolType.None);
             LineItem myCurveNoSmooth = myPane.AddCurve("No Smooth", _pointAccNoSmooth, Color.Blue, SymbolType.None);
             myCurveNoSmooth.IsVisible = _isNonSmoothAcc;
 
             myCurve.Line.Width = 1.0F;
-            
+
             // I add all three functions just to be sure it refeshes the plot. 
             zedGraphAccelerometro.AxisChange();
             zedGraphAccelerometro.Refresh();
@@ -168,11 +207,17 @@ namespace progetto_esame
             myPane.Title.Text = "Theta";
             myPane.XAxis.Title.Text = "Time(ms)";
             myPane.YAxis.Title.Text = "Degree";
-            
+
+           
+
             // Add curves to myPane object
+            
             LineItem myCurve = myPane.AddCurve("Smooth", _pointTheta, Color.Red, SymbolType.None);
             LineItem myCurveNoSmooth = myPane.AddCurve("No Smooth", _pointThetaNoSmooth, Color.Blue, SymbolType.None);
 
+            LineItem myCurveDebug = myPane.AddCurve("No Smooth", _pointThetaDEBUG, Color.Black, SymbolType.None);
+
+            
             myCurveNoSmooth.IsVisible = _isNonSmoothTheta;
 
             myCurve.Line.Width = 1.0F;
@@ -198,7 +243,7 @@ namespace progetto_esame
             myCurveNoSmooth.IsVisible = _isNonSmoothAcc;
             //myCurve.Line.IsVisible = false;
             myCurve.Line.Width = 1.0F;
-            
+
             // I add all three functions just to be sure it refeshes the plot. 
             zedGraphAccelerometro.AxisChange();
             zedGraphAccelerometro.Refresh();
@@ -238,4 +283,5 @@ namespace progetto_esame
             zedGraphOrientamento.Refresh();
         }
     }
+       
 }
