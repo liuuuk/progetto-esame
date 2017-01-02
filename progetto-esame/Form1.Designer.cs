@@ -34,8 +34,14 @@
             this.zedGraphOrientamento = new ZedGraph.ZedGraphControl();
             this.SmoothAcc = new System.Windows.Forms.CheckBox();
             this.SmoothGiro = new System.Windows.Forms.CheckBox();
-            this.SmoothTheta = new System.Windows.Forms.CheckBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.pictureAzione = new System.Windows.Forms.PictureBox();
+            this.LabelMoto = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.LabelPosizione = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureAzione)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // zedGraphAccelerometro
@@ -105,32 +111,77 @@
             this.SmoothGiro.UseVisualStyleBackColor = true;
             this.SmoothGiro.CheckedChanged += new System.EventHandler(this.SmoothGiro_CheckedChanged);
             // 
-            // SmoothTheta
+            // pictureAzione
             // 
-            this.SmoothTheta.AutoSize = true;
-            this.SmoothTheta.Location = new System.Drawing.Point(1231, 22);
-            this.SmoothTheta.Name = "SmoothTheta";
-            this.SmoothTheta.Size = new System.Drawing.Size(79, 17);
-            this.SmoothTheta.TabIndex = 5;
-            this.SmoothTheta.Text = "No Smooth";
-            this.SmoothTheta.UseVisualStyleBackColor = true;
-            this.SmoothTheta.CheckedChanged += new System.EventHandler(this.SmoothTheta_CheckedChanged);
+            this.pictureAzione.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureAzione.Image = global::progetto_esame.Properties.Resources.stickman_no_walk;
+            this.pictureAzione.Location = new System.Drawing.Point(762, 365);
+            this.pictureAzione.Name = "pictureAzione";
+            this.pictureAzione.Size = new System.Drawing.Size(50, 50);
+            this.pictureAzione.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureAzione.TabIndex = 5;
+            this.pictureAzione.TabStop = false;
             // 
-            // richTextBox1
+            // LabelMoto
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(679, 365);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(319, 338);
-            this.richTextBox1.TabIndex = 6;
-            this.richTextBox1.Text = "";
+            this.LabelMoto.AutoSize = true;
+            this.LabelMoto.Location = new System.Drawing.Point(679, 385);
+            this.LabelMoto.Name = "LabelMoto";
+            this.LabelMoto.Size = new System.Drawing.Size(77, 13);
+            this.LabelMoto.TabIndex = 6;
+            this.LabelMoto.Text = "Stazionamento";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(679, 372);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(49, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Azione:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(679, 440);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(65, 13);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "Posizione:";
+            // 
+            // LabelPosizione
+            // 
+            this.LabelPosizione.AutoSize = true;
+            this.LabelPosizione.Location = new System.Drawing.Point(679, 453);
+            this.LabelPosizione.Name = "LabelPosizione";
+            this.LabelPosizione.Size = new System.Drawing.Size(41, 13);
+            this.LabelPosizione.TabIndex = 9;
+            this.LabelPosizione.Text = "In piedi";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::progetto_esame.Properties.Resources.stickman_no_walk;
+            this.pictureBox1.Location = new System.Drawing.Point(762, 440);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 10;
+            this.pictureBox1.TabStop = false;
+            
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1020, 697);
-            this.Controls.Add(this.richTextBox1);
-            this.Controls.Add(this.SmoothTheta);
+            this.ClientSize = new System.Drawing.Size(1344, 717);
+            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.LabelPosizione);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.LabelMoto);
+            this.Controls.Add(this.pictureAzione);
             this.Controls.Add(this.SmoothGiro);
             this.Controls.Add(this.SmoothAcc);
             this.Controls.Add(this.zedGraphOrientamento);
@@ -140,6 +191,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Progetto";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            ((System.ComponentModel.ISupportInitialize)(this.pictureAzione)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -152,8 +205,12 @@
         private ZedGraph.ZedGraphControl zedGraphOrientamento;
         private System.Windows.Forms.CheckBox SmoothAcc;
         private System.Windows.Forms.CheckBox SmoothGiro;
-        private System.Windows.Forms.CheckBox SmoothTheta;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.PictureBox pictureAzione;
+        private System.Windows.Forms.Label LabelMoto;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label LabelPosizione;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

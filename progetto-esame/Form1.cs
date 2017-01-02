@@ -18,6 +18,7 @@ namespace progetto_esame
     public partial class Form1 : Form
     {
 
+        double angolo = 0.0;
 
         double precedente = 0.0;
         bool _isUp = false;
@@ -31,12 +32,10 @@ namespace progetto_esame
         private PointPairList _pointGiro = new PointPairList(); //per giroscopio
         private PointPairList _pointTheta = new PointPairList(); //per orientamento
         private PointPairList _pointThetaDEBUG = new PointPairList();
-        private PointPairList _pointLinea = new PointPairList();
 
         //Per non Smooth
         private PointPairList _pointAccNoSmooth = new PointPairList(); //per accelerometro
         private PointPairList _pointGiroNoSmooth = new PointPairList(); //per giroscopio
-        private PointPairList _pointThetaNoSmooth = new PointPairList(); //per orientamento
 
         private int _time; //asse x
 
@@ -67,7 +66,6 @@ namespace progetto_esame
             }
         }
 
-
         private void DisegnaModuloTheta(Window e)
         {
             List<double> y = new List<double>();
@@ -93,16 +91,16 @@ namespace progetto_esame
             
             for (int i = -1; i < y.Count-1; i++, _time++)
             {
+                #region Rimuovi-Discontinuita'
                 double value = 0.0;
                 if (i == -1)
                     value = precedente;
                 else
                     value = Math.Atan(y[i] / z[i]);
 
-                double next = Math.Atan(y[i+1] / z[i+1]);
-                _pointThetaDEBUG.Add(2*_time, value);
+                double next = Math.Atan(y[i + 1] / z[i + 1]);
 
-                //double valueNoSmooth = Math.Atan(yNoSmooth[i] / zNoSmooth[i]);
+                _pointThetaDEBUG.Add(2 * _time, value);
 
                 if (i == 4)
                 {
@@ -114,42 +112,34 @@ namespace progetto_esame
                 }
                 else
                 {
-                    delta = next - value; 
+                    delta = next - value;
                 }
-
                 if (_isUp)
                 {
                     value -= 3.14;
                 }
-
                 if (_isDown)
                 {
                     value += 3.14;
                 }
-
                 if (delta >= 2.5)
                 {
                     _isUp = true;
-                    richTextBox1.AppendText("Find up " + 2 * _time + "D " + delta + Environment.NewLine);
                 }
                 if (delta <= -2.5)
                 {
                     _isDown = true;
-                    richTextBox1.AppendText("Find down " + 2 * _time + "D " + delta + Environment.NewLine);
                 }
-
                 if (_isUp && _isDown)
                 {
                     _isDown = false;
                     _isUp = false;
-                }
-                
+                } 
+                #endregion
+
                 _pointTheta.Add(2 * _time, value);
-               // _pointThetaNoSmooth.Add(2 * _time, valueNoSmooth);
             }
-
             
-
             zedGraphOrientamento.AxisChange();
             zedGraphOrientamento.Refresh();
             zedGraphOrientamento.Invalidate();
@@ -200,7 +190,6 @@ namespace progetto_esame
             zedGraphGiroscopio.Invalidate();
         }
 
-
         private void zedGraphAccelerometro_Load(object sender, EventArgs e)
         {
             zedGraphAccelerometro.GraphPane.CurveList.Clear();
@@ -238,12 +227,9 @@ namespace progetto_esame
             // Add curves to myPane object
             
             LineItem myCurve = myPane.AddCurve("Smooth", _pointTheta, Color.Red, SymbolType.None);
-            LineItem myCurveNoSmooth = myPane.AddCurve("No Smooth", _pointThetaNoSmooth, Color.Blue, SymbolType.None);
-
-            LineItem myCurveDebug = myPane.AddCurve("No Smooth", _pointThetaDEBUG, Color.Black, SymbolType.None);
-            LineItem myLine = myPane.AddCurve("", _pointLinea, Color.Blue, SymbolType.None);
             
-            myCurveNoSmooth.IsVisible = _isNonSmoothTheta;
+            //DEGUB
+            LineItem myCurveDebug = myPane.AddCurve("DEBUG", _pointThetaDEBUG, Color.Black, SymbolType.None);
 
             myCurve.Line.Width = 1.0F;
 
@@ -297,16 +283,7 @@ namespace progetto_esame
             zedGraphGiroscopio.Refresh();
         }
 
-        private void SmoothTheta_CheckedChanged(object sender, EventArgs e)
-        {
-            if (_isNonSmoothTheta)
-                _isNonSmoothTheta = false;
-            else
-                _isNonSmoothTheta = true;
-
-            zedGraphOrientamento.GraphPane.CurveList[1].IsVisible = _isNonSmoothTheta;
-            zedGraphOrientamento.Refresh();
-        }
+       
     }
        
 }
