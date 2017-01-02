@@ -41,6 +41,11 @@
             this.LabelPosizione = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.LabelGirata = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.LabelAngolo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureAzione)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -175,6 +180,11 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.LabelAngolo);
+            this.panel1.Controls.Add(this.label5);
+            this.panel1.Controls.Add(this.LabelGirata);
+            this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.pictureAzione);
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.LabelMoto);
@@ -185,6 +195,52 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(217, 211);
             this.panel1.TabIndex = 11;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(10, 160);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(0, 13);
+            this.label4.TabIndex = 12;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(10, 147);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(45, 13);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "Girata:";
+            // 
+            // LabelGirata
+            // 
+            this.LabelGirata.AutoSize = true;
+            this.LabelGirata.Location = new System.Drawing.Point(10, 160);
+            this.LabelGirata.Name = "LabelGirata";
+            this.LabelGirata.Size = new System.Drawing.Size(35, 13);
+            this.LabelGirata.TabIndex = 13;
+            this.LabelGirata.Text = "Girata";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(93, 147);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(50, 13);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "Angolo:";
+            // 
+            // LabelAngolo
+            // 
+            this.LabelAngolo.AutoSize = true;
+            this.LabelAngolo.Location = new System.Drawing.Point(93, 160);
+            this.LabelAngolo.Name = "LabelAngolo";
+            this.LabelAngolo.Size = new System.Drawing.Size(40, 13);
+            this.LabelAngolo.TabIndex = 15;
+            this.LabelAngolo.Text = "Angolo";
             // 
             // Form1
             // 
@@ -224,6 +280,11 @@
         private System.Windows.Forms.Label LabelPosizione;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label LabelGirata;
+        private System.Windows.Forms.Label LabelAngolo;
+        private System.Windows.Forms.Label label5;
     }
 }
 

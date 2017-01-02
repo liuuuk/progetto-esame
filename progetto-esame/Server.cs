@@ -91,10 +91,11 @@ namespace progetto_esame
             Analyzer a = new Analyzer();
 
             //Decommentare quando la classe analyzer è finita
-            // p.FinestraPiena += new WindowEventHandler(a.Run);
+            p.FinestraPiena += new WindowEventHandler(a.Run);
 
             //Sottoscrivo i vari eventi generati dall'analisi dei dati
-            
+            a.GirataDestra += new EventHandler(myForm.GirataDestra);
+            a.GirataSinistra += new EventHandler(myForm.GirataSinistra);
             
 
             //Sottoscrivo l'evento finestra piena del parser al metodo test(che scrive sulle zedgraph)

@@ -13,7 +13,9 @@ namespace progetto_esame
 {
 
 
-    delegate void SetTextCallback(object sender, Window e);
+    delegate void DisegnaGraficiCallback(object sender, Window e);
+
+    delegate void ChangeTextCallback();
 
     public partial class Form1 : Form
     {
@@ -26,12 +28,11 @@ namespace progetto_esame
 
         private bool _isNonSmoothAcc = false;
         private bool _isNonSmoothGiro = false;
-        private bool _isNonSmoothTheta = false;
 
         private PointPairList _pointAcc = new PointPairList(); //per accelerometro
         private PointPairList _pointGiro = new PointPairList(); //per giroscopio
         private PointPairList _pointTheta = new PointPairList(); //per orientamento
-        private PointPairList _pointThetaDEBUG = new PointPairList();
+        //private PointPairList _pointThetaDEBUG = new PointPairList();
 
         //Per non Smooth
         private PointPairList _pointAccNoSmooth = new PointPairList(); //per accelerometro
@@ -50,12 +51,38 @@ namespace progetto_esame
         }
 
 
-        //Per scrivere sulle zedgraph
+        public void GirataDestra()
+        {
+            if (this.LabelGirata.InvokeRequired)
+            {
+                ChangeTextCallback d = new ChangeTextCallback(GirataDestra);
+                this.Invoke(d, new object[] { });
+            }
+            else
+            {
+                LabelGirata.Text = "Destra";
+            }
+        }
+
+        public void GirataSinistra()
+        {
+            if (this.LabelGirata.InvokeRequired)
+            {
+                ChangeTextCallback d = new ChangeTextCallback(GirataSinistra);
+                this.Invoke(d, new object[] {});
+            }
+            else
+            {
+                LabelGirata.Text = "Sinistra";
+            }
+        }
+
         public void DisegnaGrafici(object sender, Window e)
         {
+            //Forse va in or con le altre zedgraph
             if (this.zedGraphAccelerometro.InvokeRequired)
             {
-                SetTextCallback d = new SetTextCallback(DisegnaGrafici);
+                DisegnaGraficiCallback d = new DisegnaGraficiCallback(DisegnaGrafici);
                 this.Invoke(d, new object[] { sender, e });
             }
             else
@@ -76,14 +103,6 @@ namespace progetto_esame
                 z.Add(item[2]);
             }
 
-            List<double> yNoSmooth = new List<double>();
-            List<double> zNoSmooth = new List<double>();
-            foreach (var item in e.GetMagnetometro(e.matrice))
-            {
-                yNoSmooth.Add(item[1]);
-                zNoSmooth.Add(item[2]);
-            }
-
             _time = _pointTheta.Count;
 
 
@@ -99,9 +118,10 @@ namespace progetto_esame
                     value = Math.Atan(y[i] / z[i]);
 
                 double next = Math.Atan(y[i + 1] / z[i + 1]);
+                //solo per debug
+                //_pointThetaDEBUG.Add(2 * _time, value);
 
-                _pointThetaDEBUG.Add(2 * _time, value);
-
+                double myVal = value;
                 if (i == 4)
                 {
                     precedente = next;
@@ -134,10 +154,25 @@ namespace progetto_esame
                 {
                     _isDown = false;
                     _isUp = false;
-                } 
+                }
                 #endregion
 
                 _pointTheta.Add(2 * _time, value);
+
+                //Conversione di un angolo da rad in gradi
+                //(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+                angolo = (myVal - (-1.57)) * (360 - 0) / (1.57 - (-1.57)) + 0;
+
+                //Scrivi su label angolo l'angolo attuale
+                if (Math.Round(angolo) >= 315 && Math.Round(angolo) < 45)
+                    LabelAngolo.Text = Math.Round(angolo).ToString() + " N";
+                else if(Math.Round(angolo) >= 45 && Math.Round(angolo) < 135)
+                    LabelAngolo.Text = Math.Round(angolo).ToString() + " E";
+                else if(Math.Round(angolo) >= 135 && Math.Round(angolo) < 225)
+                    LabelAngolo.Text = Math.Round(angolo).ToString() + " S";
+                else if(Math.Round(angolo) >= 225 && Math.Round(angolo) < 315)
+                    LabelAngolo.Text = Math.Round(angolo).ToString() + " W";
+
             }
             
             zedGraphOrientamento.AxisChange();
@@ -229,7 +264,7 @@ namespace progetto_esame
             LineItem myCurve = myPane.AddCurve("Smooth", _pointTheta, Color.Red, SymbolType.None);
             
             //DEGUB
-            LineItem myCurveDebug = myPane.AddCurve("DEBUG", _pointThetaDEBUG, Color.Black, SymbolType.None);
+            //LineItem myCurveDebug = myPane.AddCurve("DEBUG", _pointThetaDEBUG, Color.Black, SymbolType.None);
 
             myCurve.Line.Width = 1.0F;
 
