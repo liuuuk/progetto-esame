@@ -40,8 +40,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.LabelPosizione = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureAzione)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // zedGraphAccelerometro
@@ -115,7 +117,7 @@
             // 
             this.pictureAzione.BackColor = System.Drawing.SystemColors.Control;
             this.pictureAzione.Image = global::progetto_esame.Properties.Resources.stickman_no_walk;
-            this.pictureAzione.Location = new System.Drawing.Point(762, 365);
+            this.pictureAzione.Location = new System.Drawing.Point(93, 9);
             this.pictureAzione.Name = "pictureAzione";
             this.pictureAzione.Size = new System.Drawing.Size(50, 50);
             this.pictureAzione.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -125,7 +127,7 @@
             // LabelMoto
             // 
             this.LabelMoto.AutoSize = true;
-            this.LabelMoto.Location = new System.Drawing.Point(679, 385);
+            this.LabelMoto.Location = new System.Drawing.Point(10, 23);
             this.LabelMoto.Name = "LabelMoto";
             this.LabelMoto.Size = new System.Drawing.Size(77, 13);
             this.LabelMoto.TabIndex = 6;
@@ -135,7 +137,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(679, 372);
+            this.label1.Location = new System.Drawing.Point(10, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(49, 13);
             this.label1.TabIndex = 7;
@@ -145,7 +147,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(679, 440);
+            this.label2.Location = new System.Drawing.Point(10, 78);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 13);
             this.label2.TabIndex = 8;
@@ -154,7 +156,7 @@
             // LabelPosizione
             // 
             this.LabelPosizione.AutoSize = true;
-            this.LabelPosizione.Location = new System.Drawing.Point(679, 453);
+            this.LabelPosizione.Location = new System.Drawing.Point(10, 91);
             this.LabelPosizione.Name = "LabelPosizione";
             this.LabelPosizione.Size = new System.Drawing.Size(41, 13);
             this.LabelPosizione.TabIndex = 9;
@@ -163,25 +165,33 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::progetto_esame.Properties.Resources.stickman_no_walk;
-            this.pictureBox1.Location = new System.Drawing.Point(762, 440);
+            this.pictureBox1.Location = new System.Drawing.Point(93, 78);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(50, 50);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 10;
             this.pictureBox1.TabStop = false;
-            
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.pictureAzione);
+            this.panel1.Controls.Add(this.pictureBox1);
+            this.panel1.Controls.Add(this.LabelMoto);
+            this.panel1.Controls.Add(this.LabelPosizione);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Location = new System.Drawing.Point(679, 365);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(217, 211);
+            this.panel1.TabIndex = 11;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1344, 717);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.LabelPosizione);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.LabelMoto);
-            this.Controls.Add(this.pictureAzione);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.SmoothGiro);
             this.Controls.Add(this.SmoothAcc);
             this.Controls.Add(this.zedGraphOrientamento);
@@ -193,6 +203,8 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)(this.pictureAzione)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -211,6 +223,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label LabelPosizione;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 
