@@ -291,7 +291,7 @@ namespace progetto_esame
          * Input: Lista di double
          * Output: La media dei valori contenuti nella lista.
          */
-        private double Media(List<double> l)
+        public double Media(List<double> l)
         {
             double sum = 0;
             foreach (double item in l)

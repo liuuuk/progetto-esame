@@ -148,9 +148,30 @@ namespace progetto_esame
 
         private void AnalyzeMoto(Window e)
         {
-            throw new NotImplementedException();
+            List<List<double>> accellerometri = e.GetAccelerometro(e.matriceSmooth);
+            List<double> moduloAcc = e.ModuloAccelerometro(e.matriceSmooth);
+
+            double devstd = DeviazioneStandard(moduloAcc, e.Media(moduloAcc));
+            double valoreMedio = e.Media(moduloAcc);
+
+
         }
 
+        /*
+         * Deviazione standard
+         * Input: Una lista di double
+         * Output: La deviazione standard.
+         */
+        private double DeviazioneStandard(List<double> l, double media)
+        {
+            double sum = 0;
+            foreach (double item in l)
+            {
+                sum += (item - media) * (item - media);
+            }
+            return Math.Sqrt(sum / l.Count);
+        }
         
+
     }
 }
