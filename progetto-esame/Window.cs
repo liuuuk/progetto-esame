@@ -25,7 +25,17 @@ namespace progetto_esame
             
         }
 
-        //Creata da liuuuk per fare la girata
+        
+        public List<List<double>> GetAccelerometro(List<List<double>> m)
+        {//Presa la matrice restituisce la matrice (accx accy accz) x Campioni
+            List<List<double>> result = new List<List<double>>();
+            foreach (var item in m)
+            {
+                result.Add(item.GetRange(0, 3));
+            }
+            return result;
+        }
+
         public List<List<double>> GetMagnetometro(List<List<double>> m)
         {//Presa la matrice restituisce la matrice( magnx magny magnz )x Campioni
             List<List<double>> result = new List<List<double>>();
@@ -36,7 +46,6 @@ namespace progetto_esame
             return result;
         }
 
-        //ATTENZIONE: ALCUNI DEI SEGUENTI METODI VANNO NELLA CLASSE DI ANALISI (ANCORA DA FARE)
         /*
          * FissaSensore: Data una matrice a 3 dimensioni restituisce 
          * la matrice a due dimensioni fissata una colonna (sensore)

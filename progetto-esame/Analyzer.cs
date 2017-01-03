@@ -30,9 +30,9 @@ namespace progetto_esame
         public void Run(object sender, Window e)
         {
             //Nel paramentro e ho i dati di questa finestra da analizzare
-            analyzeGirata(e);
+            AnalyzeGirata(e);
             //AnalyzeMoto(e);
-           // AnalyzePosizionamento(e);//magari cambiamo il nome
+           //AnalyzePosizionamento(e);//magari cambiamo il nome
         }
 
 
@@ -42,7 +42,7 @@ namespace progetto_esame
             throw new NotImplementedException();
         }
 
-        private void analyzeGirata(Window e)
+        private void AnalyzeGirata(Window e)
         {
             List<double> y = new List<double>();
             List<double> z = new List<double>();
