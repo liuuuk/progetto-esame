@@ -83,9 +83,9 @@ namespace progetto_esame.Properties {
         /// <summary>
         ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap stickman_walk {
+        internal static System.Drawing.Bitmap stickman_sitting_down {
             get {
-                object obj = ResourceManager.GetObject("stickman-walk", resourceCulture);
+                object obj = ResourceManager.GetObject("stickman-sitting-down", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

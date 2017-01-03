@@ -34,21 +34,21 @@
             this.zedGraphOrientamento = new ZedGraph.ZedGraphControl();
             this.SmoothAcc = new System.Windows.Forms.CheckBox();
             this.SmoothGiro = new System.Windows.Forms.CheckBox();
-            this.pictureAzione = new System.Windows.Forms.PictureBox();
             this.LabelMoto = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.LabelPosizione = new System.Windows.Forms.Label();
-            this.picturePosizione = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.LabelAngolo = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.LabelGirata = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.pictureAzione = new System.Windows.Forms.PictureBox();
+            this.picturePosizione = new System.Windows.Forms.PictureBox();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureAzione)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picturePosizione)).BeginInit();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // zedGraphAccelerometro
@@ -118,17 +118,6 @@
             this.SmoothGiro.UseVisualStyleBackColor = true;
             this.SmoothGiro.CheckedChanged += new System.EventHandler(this.SmoothGiro_CheckedChanged);
             // 
-            // pictureAzione
-            // 
-            this.pictureAzione.BackColor = System.Drawing.SystemColors.Control;
-            this.pictureAzione.Image = global::progetto_esame.Properties.Resources.stickman_no_walk;
-            this.pictureAzione.Location = new System.Drawing.Point(93, 9);
-            this.pictureAzione.Name = "pictureAzione";
-            this.pictureAzione.Size = new System.Drawing.Size(50, 50);
-            this.pictureAzione.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureAzione.TabIndex = 5;
-            this.pictureAzione.TabStop = false;
-            // 
             // LabelMoto
             // 
             this.LabelMoto.AutoSize = true;
@@ -166,16 +155,6 @@
             this.LabelPosizione.Size = new System.Drawing.Size(41, 13);
             this.LabelPosizione.TabIndex = 9;
             this.LabelPosizione.Text = "In piedi";
-            // 
-            // picturePosizione
-            // 
-            this.picturePosizione.Image = global::progetto_esame.Properties.Resources.stickman_no_walk;
-            this.picturePosizione.Location = new System.Drawing.Point(93, 78);
-            this.picturePosizione.Name = "picturePosizione";
-            this.picturePosizione.Size = new System.Drawing.Size(50, 50);
-            this.picturePosizione.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picturePosizione.TabIndex = 10;
-            this.picturePosizione.TabStop = false;
             // 
             // panel1
             // 
@@ -242,6 +221,25 @@
             this.label3.TabIndex = 11;
             this.label3.Text = "Girata:";
             // 
+            // pictureAzione
+            // 
+            this.pictureAzione.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureAzione.Location = new System.Drawing.Point(93, 9);
+            this.pictureAzione.Name = "pictureAzione";
+            this.pictureAzione.Size = new System.Drawing.Size(50, 50);
+            this.pictureAzione.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureAzione.TabIndex = 5;
+            this.pictureAzione.TabStop = false;
+            // 
+            // picturePosizione
+            // 
+            this.picturePosizione.Location = new System.Drawing.Point(93, 78);
+            this.picturePosizione.Name = "picturePosizione";
+            this.picturePosizione.Size = new System.Drawing.Size(50, 50);
+            this.picturePosizione.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picturePosizione.TabIndex = 10;
+            this.picturePosizione.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -257,10 +255,10 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Progetto";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            ((System.ComponentModel.ISupportInitialize)(this.pictureAzione)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picturePosizione)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureAzione)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picturePosizione)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
