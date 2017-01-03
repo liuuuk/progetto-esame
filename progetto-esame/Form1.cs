@@ -50,12 +50,28 @@ namespace progetto_esame
             zedGraphGiroscopio_Load(this, e);
         }
 
+        public void DisegnaLay()
+        {
 
-        public void GirataDestra()
+        }
+        public void DisegnaSit()
+        {
+
+        }
+        public void DisegnaStand()
+        {
+
+        }
+        public void DisegnaLaySit()
+        {
+
+        }
+
+        public void DisegnaGirataDestra()
         {
             if (this.LabelGirata.InvokeRequired)
             {
-                ChangeTextCallback d = new ChangeTextCallback(GirataDestra);
+                ChangeTextCallback d = new ChangeTextCallback(DisegnaGirataDestra);
                 this.Invoke(d, new object[] { });
             }
             else
@@ -64,11 +80,11 @@ namespace progetto_esame
             }
         }
 
-        public void GirataSinistra()
+        public void DisegnaGirataSinistra()
         {
             if (this.LabelGirata.InvokeRequired)
             {
-                ChangeTextCallback d = new ChangeTextCallback(GirataSinistra);
+                ChangeTextCallback d = new ChangeTextCallback(DisegnaGirataSinistra);
                 this.Invoke(d, new object[] {});
             }
             else
