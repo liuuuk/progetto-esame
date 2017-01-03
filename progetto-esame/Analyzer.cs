@@ -42,7 +42,7 @@ namespace progetto_esame
             //Nel paramentro e ho i dati di questa finestra da analizzare
             AnalyzeGirata(e);
             //AnalyzeMoto(e);
-           //AnalyzePosizionamento(e);//magari cambiamo il nome
+           AnalyzePosizionamento(e);//magari cambiamo il nome
         }
 
 
