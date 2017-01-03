@@ -118,11 +118,11 @@ namespace progetto_esame
                 {
                     delta = next - value;
                 }
-                if (delta >= 2.5)
+                if (delta >= 2.0)
                 {
                     _isUp++;
                 }
-                if (delta <= -2.5)
+                if (delta <= -2.0)
                 {
                     _isDown++;
                 }
@@ -131,7 +131,9 @@ namespace progetto_esame
 
                 if (delta < -0.08) // Girate maggiori di 5 gradi
                 {//sinistra
+
                     OnGirataSinistra(new EventArgs());
+
                 }
                 else if (delta > 0.08) // Girate maggiori di 5 gradi
                 {//destra
