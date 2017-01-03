@@ -50,6 +50,32 @@ namespace progetto_esame
             zedGraphGiroscopio_Load(this, e);
         }
 
+        public void DisegnaStazionamento()
+        {
+            if (this.LabelMoto.InvokeRequired)
+            {
+                ChangeTextCallback d = new ChangeTextCallback(DisegnaStazionamento);
+                this.Invoke(d, new object[] { });
+            }
+            else
+            {
+                LabelMoto.Text = "Stazionamento";
+            }
+        }
+
+        public void DisegnaMoto()
+        {
+            if (this.LabelMoto.InvokeRequired)
+            {
+                ChangeTextCallback d = new ChangeTextCallback(DisegnaMoto);
+                this.Invoke(d, new object[] { });
+            }
+            else
+            {
+                LabelMoto.Text = "Movimento";
+            }
+        }
+
         public void DisegnaLay()
         {
             if (this.LabelPosizione.InvokeRequired)
