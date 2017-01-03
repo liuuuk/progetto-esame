@@ -226,11 +226,11 @@ namespace progetto_esame
                 {
                     value += 3.14;
                 }*/
-                if (delta >= 2.5)
+                if (delta >= 2.0)
                 {
                     _isUp++;
                 }
-                if (delta <= -2.5)
+                if (delta <= -2.0)
                 {
                     _isDown++;
                 }/*
