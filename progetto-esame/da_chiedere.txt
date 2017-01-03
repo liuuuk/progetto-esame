@@ -1,0 +1,2 @@
+- theta se tenere soglia 2 o 2.5
+- dev.std. come funziona moto e se usare finestre (e come)
