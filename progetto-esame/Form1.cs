@@ -23,9 +23,8 @@ namespace progetto_esame
         double angolo = 0.0;
 
         double precedente = 0.0;
-        bool _isUp = false;
-        bool _isDown = false;
-       
+        int _isUp = 0;
+        int _isDown = 0;
 
         private bool _isNonSmoothAcc = false;
         private bool _isNonSmoothGiro = false;
@@ -178,7 +177,7 @@ namespace progetto_esame
 
                 double next = Math.Atan(y[i + 1] / z[i + 1]);
                 //solo per debug
-                _pointThetaDEBUG.Add(2 * _time, value);
+                _pointThetaDEBUG.Add(2 * _time, next);
 
                 double myVal = value;
                 if (i == 4)
@@ -193,33 +192,33 @@ namespace progetto_esame
                 {
                     delta = next - value;
                 }
-                if (_isUp)
+              /*  if (_isUp)
                 {
                     value -= 3.14;
                 }
                 if (_isDown)
                 {
                     value += 3.14;
-                }
+                }*/
                 if (delta >= 2.5)
                 {
-                    _isUp = true;
+                    _isUp++;
                 }
                 if (delta <= -2.5)
                 {
-                    _isDown = true;
-                }
+                    _isDown++;
+                }/*
                 if (_isUp && _isDown)
                 {
                     _isDown = false;
                     _isUp = false;
-                }
+                }*/
                 #endregion
-
-                _pointTheta.Add(2 * _time, value);
+                next = next - (_isUp * 3.14) + (_isDown * 3.14);
+                _pointTheta.Add(2 * _time, next);
 
                 //Conversione di un angolo da rad in gradi
-                         //(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+                //(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
                 angolo = (myVal - (-1.57)) * (360 - 0) / (1.57 - (-1.57)) + 0;
 
                 //Scrivi su label angolo l'angolo attuale
