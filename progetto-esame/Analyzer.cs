@@ -16,6 +16,16 @@ namespace progetto_esame
         protected virtual void OnGirataDestra(EventArgs e) { if (GirataDestra != null) GirataDestra(); }
         protected virtual void OnGirataSinistra(EventArgs e) { if (GirataSinistra != null) GirataSinistra(); }
 
+        public event EventHandler Sit;
+        public event EventHandler Stand;
+        public event EventHandler LaySit;
+        public event EventHandler Lay;
+
+        protected virtual void OnSit(EventArgs e) { if (Sit != null) Sit(); }
+        protected virtual void OnLay(EventArgs e) { if (Lay != null) Lay(); }
+        protected virtual void OnLaySit(EventArgs e) { if (LaySit != null) LaySit(); }
+        protected virtual void OnStand(EventArgs e) { if (Stand != null) Stand(); }
+
 
         private int _time = 0;
         double precedente = 0.0;
@@ -39,7 +49,32 @@ namespace progetto_esame
         //Ognuno dei seguenti metodi secondo la propria logica genera l'evento a lui associato
         private void AnalyzePosizionamento(Window e)
         {
-            throw new NotImplementedException();
+
+            List<double> acc=new List<double>();
+            foreach (var item in  e.GetAccelerometro(e.matriceSmooth))
+            {
+                acc.Add(item[0]);
+            }
+
+            foreach (var item in acc)
+            {
+                if (item < 2.7)
+                {
+                    OnLay(new EventArgs());
+                }
+                else if (item < 3.7) {
+                    OnLaySit(new EventArgs());
+                } 
+                else if (item < 7)
+                {
+                    OnSit(new EventArgs());
+                }
+                else
+                {
+                    OnStand(new EventArgs());
+                }
+            }
+            
         }
 
         private void AnalyzeGirata(Window e)
