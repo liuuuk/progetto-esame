@@ -21,11 +21,15 @@ namespace progetto_esame
         public event EventHandler LaySit;
         public event EventHandler Lay;
 
+        public event EventHandler Stazionamento;
+        public event EventHandler Moto;
+
         protected virtual void OnSit(EventArgs e) { if (Sit != null) Sit(); }
         protected virtual void OnLay(EventArgs e) { if (Lay != null) Lay(); }
         protected virtual void OnLaySit(EventArgs e) { if (LaySit != null) LaySit(); }
         protected virtual void OnStand(EventArgs e) { if (Stand != null) Stand(); }
-
+        protected virtual void OnStazionamento(EventArgs e) { if (Stazionamento != null) Stazionamento(); }
+        protected virtual void OnMoto(EventArgs e) { if (Moto != null) Moto(); }
 
         private int _time = 0;
         double precedente = 0.0;
@@ -154,7 +158,10 @@ namespace progetto_esame
             double devstd = DeviazioneStandard(moduloAcc, e.Media(moduloAcc));
             double valoreMedio = e.Media(moduloAcc);
 
-
+            if (Math.Abs(devstd - valoreMedio) <= 1)
+                OnStazionamento(new EventArgs());
+            else
+                OnMoto(new EventArgs());
         }
 
         /*
