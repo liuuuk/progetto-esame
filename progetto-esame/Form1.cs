@@ -60,7 +60,7 @@ namespace progetto_esame
             else
             {
                 LabelPosizione.Text = "Sdraiato";
-                picturePosizione.Image = Image.FromFile("../Resources/stickman-laying-down.png");
+                picturePosizione.Image = Image.FromFile("../Resources/stickman-laying-down.jpg");
             }
         }
         public void DisegnaSit()
