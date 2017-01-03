@@ -52,19 +52,54 @@ namespace progetto_esame
 
         public void DisegnaLay()
         {
-
+            if (this.LabelPosizione.InvokeRequired)
+            {
+                ChangeTextCallback d = new ChangeTextCallback(DisegnaLay);
+                this.Invoke(d, new object[] { });
+            }
+            else
+            {
+                LabelPosizione.Text = "Sdraiato";
+            }
         }
         public void DisegnaSit()
         {
 
+            if (this.LabelPosizione.InvokeRequired)
+            {
+                ChangeTextCallback d = new ChangeTextCallback(DisegnaSit);
+                this.Invoke(d, new object[] { });
+            }
+            else
+            {
+                LabelPosizione.Text = "Seduto";
+            }
         }
         public void DisegnaStand()
         {
 
+            if (this.LabelPosizione.InvokeRequired)
+            {
+                ChangeTextCallback d = new ChangeTextCallback(DisegnaStand);
+                this.Invoke(d, new object[] { });
+            }
+            else
+            {
+                LabelPosizione.Text = "In Piedi";
+            }
         }
         public void DisegnaLaySit()
         {
 
+            if (this.LabelPosizione.InvokeRequired)
+            {
+                ChangeTextCallback d = new ChangeTextCallback(DisegnaLaySit);
+                this.Invoke(d, new object[] { });
+            }
+            else
+            {
+                LabelPosizione.Text = "Sdraiato/Seduto";
+            }
         }
 
         public void DisegnaGirataDestra()
