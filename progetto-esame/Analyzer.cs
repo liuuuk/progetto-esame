@@ -45,8 +45,8 @@ namespace progetto_esame
         {
             //Nel paramentro e ho i dati di questa finestra da analizzare
             AnalyzeGirata(e);
-            //AnalyzeMoto(e);
-           AnalyzePosizionamento(e);//magari cambiamo il nome
+            AnalyzeMoto(e);
+            AnalyzePosizionamento(e);//magari cambiamo il nome
         }
 
 
@@ -150,6 +150,21 @@ namespace progetto_esame
             }
         }
 
+        //private void AnalyzeMoto(Window e)
+        //{
+        //    List<List<double>> accellerometri = e.GetAccelerometro(e.matriceSmooth);
+        //    List<double> moduloAcc = e.ModuloAccelerometro(e.matriceSmooth);
+        //    List<double> devstd = e.DeviazioneStandard(moduloAcc);
+        //    foreach (double item in devstd)
+        //    {
+        //        Console.WriteLine("valore devstd: " + item);
+        //        if (item <= 1)
+        //            OnStazionamento(new EventArgs());
+        //        else
+        //            OnMoto(new EventArgs());
+        //    }
+        //}
+
         private void AnalyzeMoto(Window e)
         {
             List<List<double>> accellerometri = e.GetAccelerometro(e.matriceSmooth);
@@ -157,8 +172,11 @@ namespace progetto_esame
 
             double devstd = DeviazioneStandard(moduloAcc, e.Media(moduloAcc));
             double valoreMedio = e.Media(moduloAcc);
+            double diff = Math.Abs((Math.Abs(devstd - valoreMedio) - 9.81));
 
-            if (Math.Abs(devstd - valoreMedio) <= 1)
+            Console.WriteLine(diff);
+
+            if (diff < 0.8)
                 OnStazionamento(new EventArgs());
             else
                 OnMoto(new EventArgs());

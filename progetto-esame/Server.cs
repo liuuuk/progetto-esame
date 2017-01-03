@@ -102,7 +102,8 @@ namespace progetto_esame
             a.Stand += new EventHandler(myForm.DisegnaStand);
             a.Sit += new EventHandler(myForm.DisegnaSit);
 
-            
+            a.Moto += new EventHandler(myForm.DisegnaMoto);
+            a.Stazionamento += new EventHandler(myForm.DisegnaStazionamento);
 
             //Sottoscrivo l'evento finestra piena del parser al metodo test(che scrive sulle zedgraph)
             p.FinestraPiena += new WindowEventHandler(myForm.DisegnaGrafici);

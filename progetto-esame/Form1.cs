@@ -32,7 +32,7 @@ namespace progetto_esame
         private PointPairList _pointAcc = new PointPairList(); //per accelerometro
         private PointPairList _pointGiro = new PointPairList(); //per giroscopio
         private PointPairList _pointTheta = new PointPairList(); //per orientamento
-        //private PointPairList _pointThetaDEBUG = new PointPairList();
+        private PointPairList _pointThetaDEBUG = new PointPairList();
 
         //Per non Smooth
         private PointPairList _pointAccNoSmooth = new PointPairList(); //per accelerometro
@@ -50,6 +50,32 @@ namespace progetto_esame
             zedGraphGiroscopio_Load(this, e);
         }
 
+        public void DisegnaStazionamento()
+        {
+            if (this.LabelMoto.InvokeRequired)
+            {
+                ChangeTextCallback d = new ChangeTextCallback(DisegnaStazionamento);
+                this.Invoke(d, new object[] { });
+            }
+            else
+            {
+                LabelMoto.Text = "Stazionamento";
+            }
+        }
+
+        public void DisegnaMoto()
+        {
+            if (this.LabelMoto.InvokeRequired)
+            {
+                ChangeTextCallback d = new ChangeTextCallback(DisegnaMoto);
+                this.Invoke(d, new object[] { });
+            }
+            else
+            {
+                LabelMoto.Text = "Movimento";
+            }
+        }
+
         public void DisegnaLay()
         {
             if (this.LabelPosizione.InvokeRequired)
@@ -60,7 +86,7 @@ namespace progetto_esame
             else
             {
                 LabelPosizione.Text = "Sdraiato";
-                picturePosizione.Image = Image.FromFile("../../Resources/stickman-laying-down.jpg");
+                picturePosizione.Image = Image.FromFile("../../Resources/stickman-laying-down.png");
             }
         }
         public void DisegnaSit()
@@ -74,7 +100,7 @@ namespace progetto_esame
             else
             {
                 LabelPosizione.Text = "Seduto";
-                picturePosizione.Image = Image.FromFile("../../Resources/stickman-sitting-down.jpg");
+                picturePosizione.Image = Image.FromFile("../../Resources/stickman-sitting-down.png");
 
             }
         }
@@ -89,7 +115,7 @@ namespace progetto_esame
             else
             {
                 LabelPosizione.Text = "In Piedi";
-                picturePosizione.Image = Image.FromFile("../../Resources/stickman-no-walk.jpg");
+                picturePosizione.Image = Image.FromFile("../../Resources/stickman-no-walk.png");
 
             }
         }
@@ -104,7 +130,7 @@ namespace progetto_esame
             else
             {
                 LabelPosizione.Text = "Sdraiato/Seduto";
-                picturePosizione.Image = Image.FromFile("../Resources/stickman-sitting-down.jpg");
+                picturePosizione.Image = Image.FromFile("../../Resources/stickman-sitting-down.png");
 
             }
         }
@@ -177,7 +203,7 @@ namespace progetto_esame
 
                 double next = Math.Atan(y[i + 1] / z[i + 1]);
                 //solo per debug
-                //_pointThetaDEBUG.Add(2 * _time, value);
+                _pointThetaDEBUG.Add(2 * _time, value);
 
                 double myVal = value;
                 if (i == 4)
@@ -322,7 +348,7 @@ namespace progetto_esame
             LineItem myCurve = myPane.AddCurve("Smooth", _pointTheta, Color.Red, SymbolType.None);
             
             //DEGUB
-            //LineItem myCurveDebug = myPane.AddCurve("DEBUG", _pointThetaDEBUG, Color.Black, SymbolType.None);
+            LineItem myCurveDebug = myPane.AddCurve("DEBUG", _pointThetaDEBUG, Color.Black, SymbolType.None);
 
             myCurve.Line.Width = 1.0F;
 
