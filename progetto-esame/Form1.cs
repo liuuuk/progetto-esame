@@ -60,7 +60,7 @@ namespace progetto_esame
             else
             {
                 LabelPosizione.Text = "Sdraiato";
-                picturePosizione.Image = Image.FromFile("../../Resources/stickman-laying-down.png");
+                picturePosizione.Image = Image.FromFile("../../Resources/stickman-laying-down.jpg");
             }
         }
         public void DisegnaSit()
@@ -74,6 +74,8 @@ namespace progetto_esame
             else
             {
                 LabelPosizione.Text = "Seduto";
+                picturePosizione.Image = Image.FromFile("../../Resources/stickman-sitting-down.jpg");
+
             }
         }
         public void DisegnaStand()
@@ -87,6 +89,8 @@ namespace progetto_esame
             else
             {
                 LabelPosizione.Text = "In Piedi";
+                picturePosizione.Image = Image.FromFile("../../Resources/stickman-no-walk.jpg");
+
             }
         }
         public void DisegnaLaySit()
@@ -100,6 +104,8 @@ namespace progetto_esame
             else
             {
                 LabelPosizione.Text = "Sdraiato/Seduto";
+                picturePosizione.Image = Image.FromFile("../Resources/stickman-sitting-down.jpg");
+
             }
         }
 
