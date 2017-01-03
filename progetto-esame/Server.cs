@@ -94,8 +94,14 @@ namespace progetto_esame
             p.FinestraPiena += new WindowEventHandler(a.Run);
 
             //Sottoscrivo i vari eventi generati dall'analisi dei dati
-            a.GirataDestra += new EventHandler(myForm.GirataDestra);
-            a.GirataSinistra += new EventHandler(myForm.GirataSinistra);
+            a.GirataDestra += new EventHandler(myForm.DisegnaGirataDestra);
+            a.GirataSinistra += new EventHandler(myForm.DisegnaGirataSinistra);
+
+            a.Lay += new EventHandler(myForm.DisegnaLay);
+            a.LaySit += new EventHandler(myForm.DisegnaLaySit);
+            a.Stand += new EventHandler(myForm.DisegnaStand);
+            a.Sit += new EventHandler(myForm.DisegnaSit);
+
             
 
             //Sottoscrivo l'evento finestra piena del parser al metodo test(che scrive sulle zedgraph)
