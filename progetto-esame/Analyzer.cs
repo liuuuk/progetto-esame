@@ -33,8 +33,8 @@ namespace progetto_esame
 
         private int _time = 0;
         double precedente = 0.0;
-        bool _isUp = false;
-        bool _isDown = false;
+        int _isUp = 0;
+        int _isDown = 0;
 
         public Analyzer()
         {
@@ -103,7 +103,9 @@ namespace progetto_esame
                     value = Math.Atan(y[i] / z[i]);
 
                 double next = Math.Atan(y[i + 1] / z[i + 1]);
+                
 
+                double myVal = value;
                 if (i == 4)
                 {
                     precedente = next;
@@ -116,29 +118,17 @@ namespace progetto_esame
                 {
                     delta = next - value;
                 }
-                if (_isUp)
-                {
-                    value -= 3.14;
-                }
-                if (_isDown)
-                {
-                    value += 3.14;
-                }
                 if (delta >= 2.5)
                 {
-                    _isUp = true;
+                    _isUp++;
                 }
                 if (delta <= -2.5)
                 {
-                    _isDown = true;
-                }
-                if (_isUp && _isDown)
-                {
-                    _isDown = false;
-                    _isUp = false;
+                    _isDown++;
                 }
                 #endregion
-                
+                next = next - (_isUp * 3.14) + (_isDown * 3.14);
+
                 if (delta < -0.08) // Girate maggiori di 5 gradi
                 {//sinistra
                     OnGirataSinistra(new EventArgs());
