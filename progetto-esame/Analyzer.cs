@@ -164,11 +164,11 @@ namespace progetto_esame
 
             double devstd = DeviazioneStandard(moduloAcc, e.Media(moduloAcc));
             double valoreMedio = e.Media(moduloAcc);
-            double diff = Math.Abs((Math.Abs(devstd - valoreMedio) - 9.81));
+            double diff = Math.Abs(Math.Abs(devstd - valoreMedio) - 9.81);
 
-            Console.WriteLine(diff);
+            //Console.WriteLine(diff);
 
-            if (diff < 0.8)
+            if (diff < 0.1)
                 OnStazionamento(new EventArgs());
             else
                 OnMoto(new EventArgs());
