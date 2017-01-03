@@ -25,6 +25,7 @@ namespace progetto_esame
         double precedente = 0.0;
         bool _isUp = false;
         bool _isDown = false;
+       
 
         private bool _isNonSmoothAcc = false;
         private bool _isNonSmoothGiro = false;
@@ -218,7 +219,7 @@ namespace progetto_esame
                 _pointTheta.Add(2 * _time, value);
 
                 //Conversione di un angolo da rad in gradi
-                //(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+                         //(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
                 angolo = (myVal - (-1.57)) * (360 - 0) / (1.57 - (-1.57)) + 0;
 
                 //Scrivi su label angolo l'angolo attuale
