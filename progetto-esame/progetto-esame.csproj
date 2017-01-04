@@ -89,13 +89,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\stickman-laying-down.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\stickman-no-walk.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\stickman-sitting-down.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\stickman-laying-down.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\stickman-walk.png" />

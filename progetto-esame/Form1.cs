@@ -60,6 +60,7 @@ namespace progetto_esame
             else
             {
                 LabelMoto.Text = "Stazionamento";
+                pictureAzione.Image = Image.FromFile("../../Resources/stickman-no-walk.png");
             }
         }
 
@@ -73,6 +74,7 @@ namespace progetto_esame
             else
             {
                 LabelMoto.Text = "Movimento";
+                pictureAzione.Image = Image.FromFile("../../Resources/stickman-walk.png");
             }
         }
 

@@ -65,7 +65,7 @@ namespace progetto_esame.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap stickman_laying_down {
             get {
-                object obj = ResourceManager.GetObject("stickman-laying-down", resourceCulture);
+                object obj = ResourceManager.GetObject("stickman_laying_down", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -75,7 +75,7 @@ namespace progetto_esame.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap stickman_no_walk {
             get {
-                object obj = ResourceManager.GetObject("stickman-no-walk", resourceCulture);
+                object obj = ResourceManager.GetObject("stickman_no_walk", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -85,7 +85,7 @@ namespace progetto_esame.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap stickman_sitting_down {
             get {
-                object obj = ResourceManager.GetObject("stickman-sitting-down", resourceCulture);
+                object obj = ResourceManager.GetObject("stickman_sitting_down", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -190,9 +190,9 @@
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(93, 147);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(50, 13);
+            this.label5.Size = new System.Drawing.Size(86, 13);
             this.label5.TabIndex = 14;
-            this.label5.Text = "Angolo:";
+            this.label5.Text = "Orientamento:";
             // 
             // LabelGirata
             // 
