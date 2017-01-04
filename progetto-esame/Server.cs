@@ -90,8 +90,8 @@ namespace progetto_esame
             //Creo un oggetto Analisi
             Analyzer a = new Analyzer();
 
-            //Decommentare quando la classe analyzer è finita
             p.FinestraPiena += new WindowEventHandler(a.Run);
+            p.TempoPrimaAcquisizione += new InizioEventHandler(a.SetStart);
 
             //Sottoscrivo i vari eventi generati dall'analisi dei dati
             a.GirataDestra += new EventHandler(myForm.DisegnaGirataDestra);

@@ -8,15 +8,11 @@ namespace progetto_esame
 {
     public class Window : EventArgs
     {
-        /*
-         * Questa classe è stata creata per risolvere il problema degli eventi.
-         * Cosi posso sollevare un evento dalla classe parser nel memento in cui
-         * La finestra raggiunge le dimensioni adatte. Di conseguenza questa è la 
-         * Classe che Davide chiama Acquisizione. (Cambiare il nome se si vuole)
-         * Da capire se è giusto lasciare i metodi i questa classe.
-         */
         public List<List<double>> matrice;
         public List<List<double>> matriceSmooth;
+
+        //Magari da fare un set/get
+        public int Dimensione = 25;
 
         public Window(List<List<List<double>>> m, int sensore)
         {

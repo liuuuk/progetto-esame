@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace progetto_esame
 {
     public delegate void WindowEventHandler(object sender, Window e);
-
+    public delegate void InizioEventHandler(object sender, DateTime d);
     class Parser
     {
 
@@ -18,17 +18,20 @@ namespace progetto_esame
         List<List<List<double>>> mat;
         int dimensioneFinestra;
         public event WindowEventHandler FinestraPiena;
+        public event InizioEventHandler TempoPrimaAcquisizione;
+
+        private bool primaFinestra = true;
 
         public Parser()
         {
             maxSensori = 10;
-            dimensioneFinestra = 25; // 500 da specifiche di progetto
+            dimensioneFinestra = 25;
 
             array = new List<List<double>>(); // Del prof
             mat = new List<List<List<double>>>(); // Aggiunto
         }
 
-        
+        protected virtual void OnTempoPrimaAcquisizione(DateTime d) { if (TempoPrimaAcquisizione != null) TempoPrimaAcquisizione(this, d); }
         protected virtual void OnFinestraPiena(Window e) { if (FinestraPiena != null) FinestraPiena(this, e); }
 
         public void Parse(BinaryReader bin)
@@ -176,9 +179,12 @@ namespace progetto_esame
                 n++; //incremento per il numero di campioni
                 if (n > dimensioneFinestra)
                 {
-                    
-                    //Console.WriteLine("Evento"); //Debug
 
+                    if (primaFinestra)
+                    {
+                        OnTempoPrimaAcquisizione(DateTime.Now);
+                        primaFinestra = false;
+                    }
 
                     OnFinestraPiena(new Window(mat, 0)); //Lancia l'evento
 
@@ -194,22 +200,7 @@ namespace progetto_esame
 
 
             #endregion
-            //QUESTA PARTE DI CODICE NON SERVE PIU' IN QUESTO PUNTO
-            //Chiama funzioni passando la mat
-            //List<List<double>> primoSensore = FissaSensore(mat, 0); //Fisso il sensore 0
-
-            /* Testato 
-            Console.WriteLine("Visualizzazione primo sensore.");
-            Visualizza(primoSensore);
-            */
-            /* Testato 
-            Console.WriteLine("Visualizzazione media primo sensore");
-            Visualizza(Media(primoSensore));
-            */
-            /* Testato
-            Console.WriteLine("Visualizzazione smooth su primo sensore");
-            Visualizza(Smooth(primoSensore));
-            */
+         
         }
 
         //I SEGUENTI METODI SONO STATI SPOSTATI NELLA CLASSE MatriceEventArgs.cs 
