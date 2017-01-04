@@ -19,12 +19,14 @@ namespace progetto_esame
 
     public partial class Form1 : Form
     {
+        // Soglia delta per discontinuità
+        private const double SOGLIA = 2.0;
+        private const double PI = Math.PI;
 
-        double angolo = 0.0;
-
-        double precedente = 0.0;
-        int _isUp = 0;
-        int _isDown = 0;
+        private double _angolo;
+        private double _precedente;
+        private int _isUp;
+        private int _isDown;
 
         private bool _isNonSmoothAcc = false;
         private bool _isNonSmoothGiro = false;
@@ -32,7 +34,7 @@ namespace progetto_esame
         private PointPairList _pointAcc = new PointPairList(); //per accelerometro
         private PointPairList _pointGiro = new PointPairList(); //per giroscopio
         private PointPairList _pointTheta = new PointPairList(); //per orientamento
-        private PointPairList _pointThetaDEBUG = new PointPairList();
+        //private PointPairList _pointThetaDEBUG = new PointPairList();
 
         //Per non Smooth
         private PointPairList _pointAccNoSmooth = new PointPairList(); //per accelerometro
@@ -45,6 +47,10 @@ namespace progetto_esame
             InitializeComponent();
             EventArgs e = new EventArgs();
             _time = 0;
+            _angolo = 0.0;
+            _precedente = 0.0;
+            _isDown = 0;
+            _isUp = 0;
             zedGraphAccelerometro_Load(this, e);
             zedGraphOrientamento_Load(this, e);
             zedGraphGiroscopio_Load(this, e);
@@ -91,9 +97,9 @@ namespace progetto_esame
                 picturePosizione.Image = Image.FromFile("../../Resources/stickman-laying-down.png");
             }
         }
+
         public void DisegnaSit()
         {
-
             if (this.LabelPosizione.InvokeRequired)
             {
                 ChangeTextCallback d = new ChangeTextCallback(DisegnaSit);
@@ -106,9 +112,9 @@ namespace progetto_esame
 
             }
         }
+
         public void DisegnaStand()
         {
-
             if (this.LabelPosizione.InvokeRequired)
             {
                 ChangeTextCallback d = new ChangeTextCallback(DisegnaStand);
@@ -121,9 +127,9 @@ namespace progetto_esame
 
             }
         }
+
         public void DisegnaLaySit()
         {
-
             if (this.LabelPosizione.InvokeRequired)
             {
                 ChangeTextCallback d = new ChangeTextCallback(DisegnaLaySit);
@@ -199,65 +205,54 @@ namespace progetto_esame
                 #region Rimuovi-Discontinuita'
                 double value = 0.0;
                 if (i == -1)
-                    value = precedente;
+                    value = _precedente;
                 else
                     value = Math.Atan(y[i] / z[i]);
 
                 double next = Math.Atan(y[i + 1] / z[i + 1]);
+
                 //solo per debug
-                _pointThetaDEBUG.Add(2 * _time, next);
+                //_pointThetaDEBUG.Add(2 * _time, next);
 
                 double myVal = value;
                 if (i == 4)
                 {
-                    precedente = next;
+                    _precedente = next;
                 }
                 if (i == -1)
                 {
-                    delta = next - precedente;
+                    delta = next - _precedente;
                 }
                 else
                 {
                     delta = next - value;
                 }
-              /*  if (_isUp)
-                {
-                    value -= 3.14;
-                }
-                if (_isDown)
-                {
-                    value += 3.14;
-                }*/
-                if (delta >= 2.0)
+                if (delta >= SOGLIA)
                 {
                     _isUp++;
                 }
-                if (delta <= -2.0)
+                if (delta <= -SOGLIA)
                 {
                     _isDown++;
-                }/*
-                if (_isUp && _isDown)
-                {
-                    _isDown = false;
-                    _isUp = false;
-                }*/
+                }
+
                 #endregion
-                next = next - (_isUp * 3.14) + (_isDown * 3.14);
+                next = next - (_isUp * PI) + (_isDown * PI);
                 _pointTheta.Add(2 * _time, next);
 
                 //Conversione di un angolo da rad in gradi
                 //(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
-                angolo = (myVal - (-1.57)) * (360 - 0) / (1.57 - (-1.57)) + 0;
+                _angolo = (myVal - (-1.57)) * (360 - 0) / (1.57 - (-1.57)) + 0;
 
                 //Scrivi su label angolo l'angolo attuale
-                if (Math.Round(angolo) >= 315 && Math.Round(angolo) < 45)
-                    LabelAngolo.Text = Math.Round(angolo).ToString() + " N";
-                else if(Math.Round(angolo) >= 45 && Math.Round(angolo) < 135)
-                    LabelAngolo.Text = Math.Round(angolo).ToString() + " E";
-                else if(Math.Round(angolo) >= 135 && Math.Round(angolo) < 225)
-                    LabelAngolo.Text = Math.Round(angolo).ToString() + " S";
-                else if(Math.Round(angolo) >= 225 && Math.Round(angolo) < 315)
-                    LabelAngolo.Text = Math.Round(angolo).ToString() + " W";
+                if (Math.Round(_angolo) >= 315 && Math.Round(_angolo) < 45)
+                    LabelAngolo.Text = Math.Round(_angolo).ToString() + " N";
+                else if(Math.Round(_angolo) >= 45 && Math.Round(_angolo) < 135)
+                    LabelAngolo.Text = Math.Round(_angolo).ToString() + " E";
+                else if(Math.Round(_angolo) >= 135 && Math.Round(_angolo) < 225)
+                    LabelAngolo.Text = Math.Round(_angolo).ToString() + " S";
+                else if(Math.Round(_angolo) >= 225 && Math.Round(_angolo) < 315)
+                    LabelAngolo.Text = Math.Round(_angolo).ToString() + " W";
 
             }
             
@@ -350,7 +345,7 @@ namespace progetto_esame
             LineItem myCurve = myPane.AddCurve("Smooth", _pointTheta, Color.Red, SymbolType.None);
             
             //DEGUB
-            LineItem myCurveDebug = myPane.AddCurve("DEBUG", _pointThetaDEBUG, Color.Black, SymbolType.None);
+            //LineItem myCurveDebug = myPane.AddCurve("DEBUG", _pointThetaDEBUG, Color.Black, SymbolType.None);
 
             myCurve.Line.Width = 1.0F;
 

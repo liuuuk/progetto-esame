@@ -24,7 +24,6 @@ namespace progetto_esame
             matriceSmooth = Smooth(matrice);//AGGIUNTO
             
         }
-
         
         public List<List<double>> GetAccelerometro(List<List<double>> m)
         {//Presa la matrice restituisce la matrice (accx accy accz) x Campioni

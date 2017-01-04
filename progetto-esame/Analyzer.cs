@@ -9,51 +9,47 @@ namespace progetto_esame
     public delegate void EventHandler();
     class Analyzer
     {
-        //Da decidere bene quali eventi esporre
+        // Soglia sopra la quale riconoscere le girate, sia dx che sx
+        // 0.08 rad = 5 gradi
+        private const double ANGOLO_GIRATA = 0.08;
+  
+        // Soglia delta per discontinuità
+        private const double SOGLIA = 2.0;
+        private const double PI = Math.PI;
+
+        #region Eventi
         public event EventHandler GirataDestra;
         public event EventHandler GirataSinistra;
-
-        protected virtual void OnGirataDestra(EventArgs e) { if (GirataDestra != null) GirataDestra(); }
-        protected virtual void OnGirataSinistra(EventArgs e) { if (GirataSinistra != null) GirataSinistra(); }
-
         public event EventHandler Sit;
         public event EventHandler Stand;
         public event EventHandler LaySit;
         public event EventHandler Lay;
-
         public event EventHandler Stazionamento;
         public event EventHandler Moto;
+        #endregion
 
-        protected virtual void OnSit(EventArgs e) { if (Sit != null) Sit(); }
-        protected virtual void OnLay(EventArgs e) { if (Lay != null) Lay(); }
-        protected virtual void OnLaySit(EventArgs e) { if (LaySit != null) LaySit(); }
-        protected virtual void OnStand(EventArgs e) { if (Stand != null) Stand(); }
-        protected virtual void OnStazionamento(EventArgs e) { if (Stazionamento != null) Stazionamento(); }
-        protected virtual void OnMoto(EventArgs e) { if (Moto != null) Moto(); }
-
-        private int _time = 0;
-        double precedente = 0.0;
-        int _isUp = 0;
-        int _isDown = 0;
+        private int _time;
+        private double _precedente;
+        private int _isUp;
+        private int _isDown;
 
         public Analyzer()
         {
-
+            _time = 0;
+            _precedente = 0.0;
+            _isUp = 0;
+            _isDown = 0;
         }
-        //Questo metodo viene eseguito quando c'è una nuova finestra da alizzare
+
         public void Run(object sender, Window e)
         {
-            //Nel paramentro e ho i dati di questa finestra da analizzare
             AnalyzeGirata(e);
             AnalyzeMoto(e);
-            AnalyzePosizionamento(e);//magari cambiamo il nome
+            AnalyzePosizionamento(e);
         }
 
-
-        //Ognuno dei seguenti metodi secondo la propria logica genera l'evento a lui associato
         private void AnalyzePosizionamento(Window e)
         {
-
             List<double> acc=new List<double>();
             foreach (var item in  e.GetAccelerometro(e.matriceSmooth))
             {
@@ -98,44 +94,42 @@ namespace progetto_esame
                 #region Rimuovi-Discontinuita'
                 double value = 0.0;
                 if (i == -1)
-                    value = precedente;
+                    value = _precedente;
                 else
                     value = Math.Atan(y[i] / z[i]);
 
                 double next = Math.Atan(y[i + 1] / z[i + 1]);
-                
 
-                double myVal = value;
                 if (i == 4)
                 {
-                    precedente = next;
+                    _precedente = next;
                 }
                 if (i == -1)
                 {
-                    delta = next - precedente;
+                    delta = next - _precedente;
                 }
                 else
                 {
                     delta = next - value;
                 }
-                if (delta >= 2.0)
+                if (delta >= SOGLIA)
                 {
                     _isUp++;
                 }
-                if (delta <= -2.0)
+                if (delta <= -SOGLIA)
                 {
                     _isDown++;
                 }
                 #endregion
-                next = next - (_isUp * 3.14) + (_isDown * 3.14);
+                next = next - (_isUp * PI) + (_isDown * PI);
 
-                if (delta < -0.08) // Girate maggiori di 5 gradi
+                if (delta < -ANGOLO_GIRATA) // Girate maggiori di 5 gradi
                 {//sinistra
 
                     OnGirataSinistra(new EventArgs());
 
                 }
-                else if (delta > 0.08) // Girate maggiori di 5 gradi
+                else if (delta > ANGOLO_GIRATA) // Girate maggiori di 5 gradi
                 {//destra
                     OnGirataDestra(new EventArgs());
                 }
@@ -188,7 +182,16 @@ namespace progetto_esame
             }
             return Math.Sqrt(sum / l.Count);
         }
-        
 
+        #region Metodi-Eventi
+        protected virtual void OnGirataDestra(EventArgs e) { if (GirataDestra != null) GirataDestra(); }
+        protected virtual void OnGirataSinistra(EventArgs e) { if (GirataSinistra != null) GirataSinistra(); }
+        protected virtual void OnSit(EventArgs e) { if (Sit != null) Sit(); }
+        protected virtual void OnLay(EventArgs e) { if (Lay != null) Lay(); }
+        protected virtual void OnLaySit(EventArgs e) { if (LaySit != null) LaySit(); }
+        protected virtual void OnStand(EventArgs e) { if (Stand != null) Stand(); }
+        protected virtual void OnStazionamento(EventArgs e) { if (Stazionamento != null) Stazionamento(); }
+        protected virtual void OnMoto(EventArgs e) { if (Moto != null) Moto(); }
+        #endregion
     }
 }
