@@ -116,7 +116,7 @@ namespace progetto_esame
             List<double> appoggio;
             int t = 10; // dimensione finestra
             int s = 0, e = 0;
-            double sum = 0, media = 0;
+            double sum = 0, media = 9.81;
 
             for (int i = 0; i < l.Count(); i++)
             {
@@ -131,7 +131,7 @@ namespace progetto_esame
 
                 for (int j = 0; j < appoggio.Count(); j++)
                 {
-                    media = Media(appoggio);
+                    //media = Media(appoggio);
                     sum += (appoggio[j] - media) * (appoggio[j] - media);
                 }
 

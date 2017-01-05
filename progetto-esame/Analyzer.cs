@@ -188,58 +188,58 @@ namespace progetto_esame
             }
         }
 
-        //private void AnalyzeMoto(Window e)
-        //{
-        //    List<List<double>> accelerometri = e.GetAccelerometro(e.matriceSmooth);
-        //    List<double> moduloAcc = e.ModuloAccelerometro(e.matriceSmooth);
-        //    List<double> devstd = e.DeviazioneStandard(moduloAcc);
-        //    foreach (double item in devstd)
-        //    {
-        //        Console.WriteLine("valore devstd: " + item);
-        //        if (item <= 1)
-        //            OnStazionamento(new EventArgs());
-        //        else
-        //            OnMoto(new EventArgs());
-        //    }
-        //}
-
         private void AnalyzeMoto(Window e)
         {
             List<List<double>> accelerometri = e.GetAccelerometro(e.matriceSmooth);
             List<double> moduloAcc = e.ModuloAccelerometro(e.matriceSmooth);
-            /*
-             * Stavo dando un occhiata a questo codice per aggiungere la scrittura su file e mi e venuto un dubbio.
-             * Come mai non ci sono cicli? 
-             * Mi spiego in accelerometri hai una matrice che è fatta (ax ay az) x Campioni
-             * dove i campioni sono nel tempo. Secondo me la differenza tra devstd e media va calcolata nel tempo.
-             * Del resto sia la girata (mia) che la posizione (di pane) trattano una matrice bidimensionale come la tua,
-             * con la differenza che al posto dei dati dell'accelerometro io ho i magnetometri.
-             * 
-             * Quindi secondo me è giusta la devstd che avevo prima che restituisce una lista, perchè poi tu la differenza la dovresti
-             * calcolare punto per punto nel tempo. 
-             * 
-             * (Come il metodo che c'e sopra)
-             * 
-             * Luca
-             * 
-             */
-            double devstd = DeviazioneStandard(moduloAcc, e.Media(moduloAcc));
-            double valoreMedio = e.Media(moduloAcc);
-            double diff = Math.Abs(Math.Abs(devstd - valoreMedio) - 9.81);
-
-            //Console.WriteLine(diff);
-            
-            if (diff < 0.1)
+            List<double> devstd = e.DeviazioneStandard(moduloAcc);
+            foreach (double item in devstd)
             {
-
-                OnStazionamento(new EventArgs());
+                Console.WriteLine("valore devstd: " + item);
+                if (item < 1)
+                    OnStazionamento(new EventArgs());
+                else
+                    OnMoto(new EventArgs());
             }
-            else
-            {
-                OnMoto(new EventArgs());
-            }
-                
         }
+
+        //private void AnalyzeMoto(Window e)
+        //{
+        //    List<List<double>> accelerometri = e.GetAccelerometro(e.matriceSmooth);
+        //    List<double> moduloAcc = e.ModuloAccelerometro(e.matriceSmooth);
+        //    /*
+        //     * Stavo dando un occhiata a questo codice per aggiungere la scrittura su file e mi e venuto un dubbio.
+        //     * Come mai non ci sono cicli? 
+        //     * Mi spiego in accelerometri hai una matrice che è fatta (ax ay az) x Campioni
+        //     * dove i campioni sono nel tempo. Secondo me la differenza tra devstd e media va calcolata nel tempo.
+        //     * Del resto sia la girata (mia) che la posizione (di pane) trattano una matrice bidimensionale come la tua,
+        //     * con la differenza che al posto dei dati dell'accelerometro io ho i magnetometri.
+        //     * 
+        //     * Quindi secondo me è giusta la devstd che avevo prima che restituisce una lista, perchè poi tu la differenza la dovresti
+        //     * calcolare punto per punto nel tempo. 
+        //     * 
+        //     * (Come il metodo che c'e sopra)
+        //     * 
+        //     * Luca
+        //     * 
+        //     */
+        //    double devstd = DeviazioneStandard(moduloAcc, e.Media(moduloAcc));
+        //    double valoreMedio = e.Media(moduloAcc);
+        //    double diff = Math.Abs(Math.Abs(devstd - valoreMedio) - 9.81);
+
+        //    //Console.WriteLine(diff);
+
+        //    if (diff < 0.1)
+        //    {
+
+        //        OnStazionamento(new EventArgs());
+        //    }
+        //    else
+        //    {
+        //        OnMoto(new EventArgs());
+        //    }
+
+        //}
 
         /*
          * Deviazione standard
