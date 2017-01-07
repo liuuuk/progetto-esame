@@ -156,6 +156,9 @@ namespace progetto_esame
                     value = Math.Atan(y[i] / z[i]);
 
                 double myVal = value;
+                
+                
+
                 double next = Math.Atan(y[i + 1] / z[i + 1]);
 
                 if (i == 4)
@@ -170,6 +173,8 @@ namespace progetto_esame
                 {
                     delta = next - value;
                 }
+                
+
                 if (delta >= SOGLIA)
                 {
                     _isUp++;
@@ -180,27 +185,30 @@ namespace progetto_esame
                 }
                 #endregion
                 next = next - (_isUp * PI) + (_isDown * PI);
+                
+
+                
 
                 if (delta < -ANGOLO_GIRATA)
                 {//sinistra
+                    
                     girata = "Girata a Sinistra";
                     OnGirataSinistra(new EventArgs());
                 }
                 else if (delta > ANGOLO_GIRATA)
                 {//destra
+                    
                     girata = "Girata a Destra";
                     OnGirataDestra(new EventArgs());
                 }
                 if (girata != girata_prec && !primo)
                 {
-                    //Conversione di un angolo da rad in gradi
-                    //(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
-                    double _angolo = (myVal - (-1.57)) * (360 - 0) / (1.57 - (-1.57)) + 0;
 
                     
+
                     DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
                     // Al posto della WriteLine si scrive su file
-                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata + " " + Math.Round(_angolo) + " Gradi";
+                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata + " ";
                     StreamWriter file = new StreamWriter(mypath + @"\Acquisizione.txt", true);
                     Console.WriteLine(str);
                     file.WriteLine(str);
