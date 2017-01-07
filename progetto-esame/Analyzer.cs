@@ -54,6 +54,7 @@ namespace progetto_esame
 
         string movimento = "";
         string movimento_prec = "";
+        private bool primo = true;
 
         public Analyzer()
         {
@@ -178,13 +179,17 @@ namespace progetto_esame
                     girata = "Girata a Destra";
                     OnGirataDestra(new EventArgs());
                 }
-                if (girata != girata_prec)
+                if (girata != girata_prec && !primo)
                 {
                     DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
                     // Al posto della WriteLine si scrive su file
                     Console.WriteLine(istante.ToString() + " - " + fine.ToString() + " " + girata);
                 }
-
+                if (primo)
+                {
+                    primo = !primo;
+                    girata = "";
+                }
             }
         }
 
