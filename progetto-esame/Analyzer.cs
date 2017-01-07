@@ -55,6 +55,7 @@ namespace progetto_esame
 
         string movimento = "";
         string movimento_prec = "";
+        private bool primo = true;
 
         string mypath;
 
@@ -190,7 +191,7 @@ namespace progetto_esame
                     girata = "Girata a Destra";
                     OnGirataDestra(new EventArgs());
                 }
-                if (girata != girata_prec)
+                if (girata != girata_prec && !primo)
                 {
                     //Conversione di un angolo da rad in gradi
                     //(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
@@ -205,7 +206,11 @@ namespace progetto_esame
                     file.WriteLine(str);
                     file.Close();
                 }
-
+                if (primo)
+                {
+                    primo = !primo;
+                    girata = "";
+                }
             }
         }
 

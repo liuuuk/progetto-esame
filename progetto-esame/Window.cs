@@ -116,25 +116,16 @@ namespace progetto_esame
 
             List<double> appoggio;
             int t = 10; // dimensione finestra
-            int s = 0, e = 0;
-            double sum = 0, media = 9.81;
+            double sum = 0, media = 0;//media = 9.81;
 
-            for (int i = 0; i < l.Count(); i++)
+            for (int i = t; i < l.Count()-t; i++)
             {
                 sum = 0;
-                s = i - t;
-                if (s < 0)
-                    s = 0;
-                e = i + t;
-                if (e >= l.Count())
-                    e = l.Count() - 1;
-                appoggio = l.GetRange(s, e);
-
-                for (int j = 0; j < appoggio.Count(); j++)
-                {
-                    //media = Media(appoggio);
-                    sum += (appoggio[j] - media) * (appoggio[j] - media);
-                }
+                
+                appoggio = l.GetRange(i-t, 2*t);
+                media = Media(appoggio);
+                sum += (l[i] - media) * (l[i] - media);
+                
 
                 result.Add(Math.Sqrt(sum / l.Count));
             }
@@ -227,11 +218,8 @@ namespace progetto_esame
             /*Smooth su una finestra più piccola(da k a nRighe-k)
             *Idea di aggiornare la finestra di continuo
             */
-            int i;/*
-            for ( i = 0; i < k; i++)
-            {
-                result.Add(m[i]);
-            }*/
+            int i;
+            
             
             for ( i = k; i < nRighe-k; i++)
             {
@@ -239,11 +227,7 @@ namespace progetto_esame
                 //aggiungi il vettore media in posizione i
                 result.Add(media);
             }
-            /*
-            for (; i < nRighe; i++)
-            {
-                result.Add(m[i]);
-            }*/
+            
             return result;
         }
 
