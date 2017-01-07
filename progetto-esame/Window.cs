@@ -123,7 +123,7 @@ namespace progetto_esame
                 
                 appoggio = l.GetRange(i-t, 2*t);
                 media = Media(appoggio);
-                sum += (appoggio[i] - media) * (appoggio[i] - media);
+                sum += (l[i] - media) * (l[i] - media);
                 
 
                 result.Add(Math.Sqrt(sum / l.Count));
