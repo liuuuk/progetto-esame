@@ -113,6 +113,7 @@ namespace progetto_esame
         public List<double> DeviazioneStandard(List<double> l)
         {
             List<double> result = new List<double>();
+
             List<double> appoggio;
             int t = 10; // dimensione finestra
             int s = 0, e = 0;

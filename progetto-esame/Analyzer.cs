@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,12 +56,18 @@ namespace progetto_esame
         string movimento = "";
         string movimento_prec = "";
 
+        string mypath;
+
         public Analyzer()
         {
+            mypath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            Console.WriteLine(mypath);
             _precedente = 0.0;
             _isUp = 0;
             _isDown = 0;
         }
+
+
 
         public void SetStart(object sender, DateTime d)
         {
@@ -111,7 +118,11 @@ namespace progetto_esame
                 {
                     DateTime fine = istante.AddSeconds(campionePosizione * FREQ);
                     // Al posto della WriteLine si scrive su file
-                    Console.WriteLine(istante.ToString() + " - " + fine.ToString() + " " + posizione);
+                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + posizione;
+                    Console.WriteLine(str);
+                    StreamWriter file = new StreamWriter(mypath + @"\Acquisizione.txt", true);
+                    file.WriteLine(str);
+                    file.Close();
                 }
                     
             }
@@ -143,6 +154,7 @@ namespace progetto_esame
                 else
                     value = Math.Atan(y[i] / z[i]);
 
+                double myVal = value;
                 double next = Math.Atan(y[i + 1] / z[i + 1]);
 
                 if (i == 4)
@@ -180,9 +192,18 @@ namespace progetto_esame
                 }
                 if (girata != girata_prec)
                 {
+                    //Conversione di un angolo da rad in gradi
+                    //(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+                    double _angolo = (myVal - (-1.57)) * (360 - 0) / (1.57 - (-1.57)) + 0;
+
+                    
                     DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
                     // Al posto della WriteLine si scrive su file
-                    Console.WriteLine(istante.ToString() + " - " + fine.ToString() + " " + girata);
+                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata + " " + Math.Round(_angolo) + " Gradi";
+                    StreamWriter file = new StreamWriter(mypath + @"\Acquisizione.txt", true);
+                    Console.WriteLine(str);
+                    file.WriteLine(str);
+                    file.Close();
                 }
 
             }
@@ -190,16 +211,40 @@ namespace progetto_esame
 
         private void AnalyzeMoto(Window e)
         {
+            
+
+            //Serve?
             List<List<double>> accelerometri = e.GetAccelerometro(e.matriceSmooth);
+
             List<double> moduloAcc = e.ModuloAccelerometro(e.matriceSmooth);
             List<double> devstd = e.DeviazioneStandard(moduloAcc);
             foreach (double item in devstd)
             {
-                Console.WriteLine("valore devstd: " + item);
+                campioneMovimento++;
+                DateTime istante = start.AddSeconds(campioneMovimento * FREQ);
+                movimento_prec = movimento;
+
                 if (item < 1)
+                {
+                    movimento = "Stazionamento";
                     OnStazionamento(new EventArgs());
+                }
                 else
+                {
+                    movimento = "Moto";
                     OnMoto(new EventArgs());
+                }
+
+                if (movimento != movimento_prec)
+                {
+                    DateTime fine = istante.AddSeconds(campioneMovimento * FREQ);
+                    // Al posto della WriteLine si scrive su file
+                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + movimento;
+                    Console.WriteLine(str);
+                    StreamWriter file = new StreamWriter(mypath + @"\Acquisizione.txt", true);
+                    file.WriteLine(str);
+                    file.Close();
+                }
             }
         }
 

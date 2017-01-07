@@ -123,9 +123,9 @@
             this.LabelMoto.AutoSize = true;
             this.LabelMoto.Location = new System.Drawing.Point(10, 23);
             this.LabelMoto.Name = "LabelMoto";
-            this.LabelMoto.Size = new System.Drawing.Size(77, 13);
+            this.LabelMoto.Size = new System.Drawing.Size(39, 13);
             this.LabelMoto.TabIndex = 6;
-            this.LabelMoto.Text = "Stazionamento";
+            this.LabelMoto.Text = "Azione";
             // 
             // label1
             // 
@@ -152,9 +152,9 @@
             this.LabelPosizione.AutoSize = true;
             this.LabelPosizione.Location = new System.Drawing.Point(10, 91);
             this.LabelPosizione.Name = "LabelPosizione";
-            this.LabelPosizione.Size = new System.Drawing.Size(41, 13);
+            this.LabelPosizione.Size = new System.Drawing.Size(52, 13);
             this.LabelPosizione.TabIndex = 9;
-            this.LabelPosizione.Text = "In piedi";
+            this.LabelPosizione.Text = "Posizione";
             // 
             // panel1
             // 
