@@ -110,22 +110,30 @@ namespace progetto_esame
          * Input: Una lista di double
          * Output: una lista di double in cui in ogni posizione c'è la dev.std. dell' i-esimo intorno
          */
-        public List<double> DeviazioneStandard(List<double> l)
+          public List<double> DeviazioneStandard(List<double> l)
         {
             List<double> result = new List<double>();
-
             List<double> appoggio;
             int t = 10; // dimensione finestra
-            double sum = 0, media = 0;//media = 9.81;
+            int s = 0, e = 0;
+            double sum = 0, media = 0;
 
-            for (int i = t; i < l.Count()-t; i++)
+            for (int i = 0; i < l.Count(); i++)
             {
                 sum = 0;
-                
-                appoggio = l.GetRange(i-t, 2*t);
-                media = Media(appoggio);
-                sum += (l[i] - media) * (l[i] - media);
-                
+                s = i - t;
+                if (s < 0)
+                    s = 0;
+                e = i + t;
+                if (e >= l.Count())
+                    e = l.Count() - 1;
+                appoggio = l.GetRange(s, e);
+
+                for (int j = 0; j < appoggio.Count(); j++)
+                {
+                    media = Media(appoggio);
+                    sum += (appoggio[j] - media) * (appoggio[j] - media);
+                }
 
                 result.Add(Math.Sqrt(sum / l.Count));
             }

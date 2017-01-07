@@ -216,7 +216,7 @@ namespace progetto_esame
 
         private void AnalyzeMoto(Window e)
         {
-            
+
 
             //Serve?
             List<List<double>> accelerometri = e.GetAccelerometro(e.matriceSmooth);
