@@ -35,8 +35,7 @@ namespace progetto_esame
         private PointPairList _pointGiro = new PointPairList(); //per giroscopio
         private PointPairList _pointTheta = new PointPairList(); //per orientamento
         private PointPairList _pointThetaDEBUG = new PointPairList();
-
-        RollingPointPairList list = new RollingPointPairList(12000);
+        
 
         //Per non Smooth
         private PointPairList _pointAccNoSmooth = new PointPairList(); //per accelerometro
