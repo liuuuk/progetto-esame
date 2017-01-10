@@ -19,7 +19,7 @@ namespace progetto_esame
 
     public partial class Form1 : Form
     {
-        // Soglia delta per discontinuità
+        // Soglia delta per discontinuità di theta
         private const double SOGLIA = 2.0;
         private const double PI = Math.PI;
 

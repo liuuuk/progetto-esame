@@ -15,7 +15,7 @@ namespace progetto_esame
         //0,174533 rad = 10 gradi
         private const double ANGOLO_GIRATA = 0.174533;
 
-        // Soglia delta per discontinuità
+        // Soglia delta per discontinuità di theta
         private const double SOGLIA = 2.0;
         private const double PI = Math.PI;
         // Campioni ogni 0.02 secondi
@@ -68,13 +68,12 @@ namespace progetto_esame
             _isDown = 0;
         }
 
-
-
         public void SetStart(object sender, DateTime d)
         {
             start = d;
             Console.WriteLine("Inizio " + start.ToString());
         }
+
         public void Run(object sender, Window e)
         {
             AnalyzeGirata(e);
@@ -120,7 +119,7 @@ namespace progetto_esame
                     DateTime fine = istante.AddSeconds(campionePosizione * FREQ);
                     // Al posto della WriteLine si scrive su file
                     string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + posizione;
-                    Console.WriteLine(str);
+                    //Console.WriteLine(str);
                     StreamWriter file = new StreamWriter(mypath + @"\Acquisizione.txt", true);
                     file.WriteLine(str);
                     file.Close();
@@ -156,8 +155,6 @@ namespace progetto_esame
                     value = Math.Atan(y[i] / z[i]);
 
                 double myVal = value;
-                
-                
 
                 double next = Math.Atan(y[i + 1] / z[i + 1]);
 
@@ -186,46 +183,36 @@ namespace progetto_esame
                 #endregion
                 next = next - (_isUp * PI) + (_isDown * PI);
                 
-
-                
-
                 if (delta < -ANGOLO_GIRATA)
                 {//sinistra
-                    
                     girata = "Girata a Sinistra";
                     OnGirataSinistra(new EventArgs());
                 }
                 else if (delta > ANGOLO_GIRATA)
                 {//destra
-                    
                     girata = "Girata a Destra";
                     OnGirataDestra(new EventArgs());
                 }
                 if (girata != girata_prec && !primo)
                 {
-
-                    
-
                     DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
                     // Al posto della WriteLine si scrive su file
                     string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata + " ";
                     StreamWriter file = new StreamWriter(mypath + @"\Acquisizione.txt", true);
-                    Console.WriteLine(str);
+                    //Console.WriteLine(str);
                     file.WriteLine(str);
                     file.Close();
                 }
-                if (primo)
+                if (primo) //Per rimuovere il problema del primo valore = 0
                 {
                     primo = !primo;
                     girata = "";
                 }
             }
         }
-
+        /*
         private void AnalyzeMoto(Window e)
         {
-
-
             //Serve?
             List<List<double>> accelerometri = e.GetAccelerometro(e.matriceSmooth);
 
@@ -236,7 +223,7 @@ namespace progetto_esame
                 campioneMovimento++;
                 DateTime istante = start.AddSeconds(campioneMovimento * FREQ);
                 movimento_prec = movimento;
-
+                Console.WriteLine(item);
                 if (item < 1)
                 {
                     movimento = "Stazionamento";
@@ -253,51 +240,35 @@ namespace progetto_esame
                     DateTime fine = istante.AddSeconds(campioneMovimento * FREQ);
                     // Al posto della WriteLine si scrive su file
                     string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + movimento;
-                    Console.WriteLine(str);
+                    //Console.WriteLine(str);
                     StreamWriter file = new StreamWriter(mypath + @"\Acquisizione.txt", true);
                     file.WriteLine(str);
                     file.Close();
                 }
             }
         }
+        */
+        private void AnalyzeMoto(Window e)
+        {
+            List<List<double>> accelerometri = e.GetAccelerometro(e.matriceSmooth);
+            List<double> moduloAcc = e.ModuloAccelerometro(e.matriceSmooth);
+            double devstd = DeviazioneStandard(moduloAcc, e.Media(moduloAcc));
+            double valoreMedio = e.Media(moduloAcc);
+            double diff = Math.Abs(Math.Abs(devstd - valoreMedio) - 9.81);
 
-        //private void AnalyzeMoto(Window e)
-        //{
-        //    List<List<double>> accelerometri = e.GetAccelerometro(e.matriceSmooth);
-        //    List<double> moduloAcc = e.ModuloAccelerometro(e.matriceSmooth);
-        //    /*
-        //     * Stavo dando un occhiata a questo codice per aggiungere la scrittura su file e mi e venuto un dubbio.
-        //     * Come mai non ci sono cicli? 
-        //     * Mi spiego in accelerometri hai una matrice che è fatta (ax ay az) x Campioni
-        //     * dove i campioni sono nel tempo. Secondo me la differenza tra devstd e media va calcolata nel tempo.
-        //     * Del resto sia la girata (mia) che la posizione (di pane) trattano una matrice bidimensionale come la tua,
-        //     * con la differenza che al posto dei dati dell'accelerometro io ho i magnetometri.
-        //     * 
-        //     * Quindi secondo me è giusta la devstd che avevo prima che restituisce una lista, perchè poi tu la differenza la dovresti
-        //     * calcolare punto per punto nel tempo. 
-        //     * 
-        //     * (Come il metodo che c'e sopra)
-        //     * 
-        //     * Luca
-        //     * 
-        //     */
-        //    double devstd = DeviazioneStandard(moduloAcc, e.Media(moduloAcc));
-        //    double valoreMedio = e.Media(moduloAcc);
-        //    double diff = Math.Abs(Math.Abs(devstd - valoreMedio) - 9.81);
+            Console.WriteLine(diff);
 
-        //    //Console.WriteLine(diff);
+            if (diff < 0.1)
+            {
 
-        //    if (diff < 0.1)
-        //    {
+                OnStazionamento(new EventArgs());
+            }
+            else
+            {
+                OnMoto(new EventArgs());
+            }
 
-        //        OnStazionamento(new EventArgs());
-        //    }
-        //    else
-        //    {
-        //        OnMoto(new EventArgs());
-        //    }
-
-        //}
+        }
 
         /*
          * Deviazione standard

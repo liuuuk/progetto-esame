@@ -25,7 +25,7 @@ namespace progetto_esame
         public Parser()
         {
             maxSensori = 10;
-            dimensioneFinestra = 25;
+            dimensioneFinestra = 50;
 
             array = new List<List<double>>(); // Del prof
             mat = new List<List<List<double>>>(); // Aggiunto
@@ -177,7 +177,7 @@ namespace progetto_esame
                 #endregion
 
                 n++; //incremento per il numero di campioni
-                if (n > dimensioneFinestra)
+                if (n >= dimensioneFinestra)
                 {
 
                     if (primaFinestra)

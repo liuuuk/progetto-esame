@@ -11,8 +11,7 @@ namespace progetto_esame
         public List<List<double>> matrice;
         public List<List<double>> matriceSmooth;
 
-        //Magari da fare un set/get
-        public int Dimensione = 25;
+        public int Dimensione = 50;
 
         public Window(List<List<List<double>>> m, int sensore)
         {
@@ -92,7 +91,7 @@ namespace progetto_esame
          * Output: La deviazione standard.
          */
 
-        /*
+        /*Deviazione standard originale
         private double DeviazioneStandard(List<double> l)
         {
             double media = Media(l);
@@ -106,7 +105,7 @@ namespace progetto_esame
         */
 
         /*
-         * Deviazione standard
+         * Deviazione standard (Su finestra)
          * Input: Una lista di double
          * Output: una lista di double in cui in ogni posizione c'è la dev.std. dell' i-esimo intorno
          */
@@ -229,7 +228,7 @@ namespace progetto_esame
             int i;
             
             
-            for ( i = k; i < nRighe-k; i++)
+            for ( i = k; i < nRighe/2 +k; i++)
             {
                 List<double> media = Media(m.GetRange(i-k, 2*k));
                 //aggiungi il vettore media in posizione i
