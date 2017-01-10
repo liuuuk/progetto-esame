@@ -20,7 +20,7 @@ namespace progetto_esame
     public partial class Form1 : Form
     {
         // Soglia delta per discontinuità di theta
-        private const double SOGLIA = 2.0;
+        private const double SOGLIA = 2.5;
         private const double PI = Math.PI;
 
         private double _angolo;
@@ -34,7 +34,9 @@ namespace progetto_esame
         private PointPairList _pointAcc = new PointPairList(); //per accelerometro
         private PointPairList _pointGiro = new PointPairList(); //per giroscopio
         private PointPairList _pointTheta = new PointPairList(); //per orientamento
-        //private PointPairList _pointThetaDEBUG = new PointPairList();
+        private PointPairList _pointThetaDEBUG = new PointPairList();
+
+        RollingPointPairList list = new RollingPointPairList(12000);
 
         //Per non Smooth
         private PointPairList _pointAccNoSmooth = new PointPairList(); //per accelerometro
@@ -215,7 +217,7 @@ namespace progetto_esame
                 //_pointThetaDEBUG.Add(2 * _time, next);
 
                 double myVal = value;
-                if (i == 4)
+                if (i == y.Count-1)
                 {
                     _precedente = next;
                 }
@@ -238,6 +240,7 @@ namespace progetto_esame
 
                 #endregion
                 next = next - (_isUp * PI) + (_isDown * PI);
+                
                 _pointTheta.Add(2 * _time, next);
 
                 //Conversione di un angolo da rad in gradi
@@ -259,7 +262,7 @@ namespace progetto_esame
             zedGraphOrientamento.AxisChange();
             zedGraphOrientamento.Refresh();
             zedGraphOrientamento.Invalidate();
-
+            
         }
 
         private void DisegnaModuloAcc(Window e)
@@ -343,9 +346,11 @@ namespace progetto_esame
             // Add curves to myPane object
             
             LineItem myCurve = myPane.AddCurve("Smooth", _pointTheta, Color.Red, SymbolType.None);
+
+
             
             //DEGUB
-            //LineItem myCurveDebug = myPane.AddCurve("DEBUG", _pointThetaDEBUG, Color.Black, SymbolType.None);
+            LineItem myCurveDebug = myPane.AddCurve("DEBUG", _pointThetaDEBUG, Color.Black, SymbolType.None);
 
             myCurve.Line.Width = 1.0F;
 

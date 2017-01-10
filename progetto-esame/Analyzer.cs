@@ -55,6 +55,7 @@ namespace progetto_esame
 
         string movimento = "";
         string movimento_prec = "";
+
         private bool primo = true;
 
         string mypath;
@@ -158,7 +159,7 @@ namespace progetto_esame
 
                 double next = Math.Atan(y[i + 1] / z[i + 1]);
 
-                if (i == 4)
+                if (i == y.Count-1)
                 {
                     _precedente = next;
                 }
