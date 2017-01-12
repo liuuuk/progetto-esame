@@ -63,7 +63,11 @@ namespace progetto_esame
         public Analyzer()
         {
             mypath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            Console.WriteLine(mypath);
+            StreamWriter file = new StreamWriter(mypath + @"\Acquisizione.txt", true);
+            var newLine = Environment.NewLine;
+            file.WriteLine(newLine + newLine + DateTime.Now.ToString() + " nuova acquisizione:" + newLine);
+            file.Close();
+            //Console.WriteLine(mypath);
             _precedente = 0.0;
             _isUp = 0;
             _isDown = 0;
@@ -251,14 +255,40 @@ namespace progetto_esame
         */
         private void AnalyzeMoto(Window e)
         {
-            List<List<double>> accelerometri = e.GetAccelerometro(e.matriceSmooth);
+            //List<List<double>> accelerometri = e.GetAccelerometro(e.matriceSmooth);
             List<double> moduloAcc = e.ModuloAccelerometro(e.matriceSmooth);
-            double devstd = DeviazioneStandard(moduloAcc, e.Media(moduloAcc));
-            double valoreMedio = e.Media(moduloAcc);
-            double diff = Math.Abs(Math.Abs(devstd - valoreMedio) - 9.81);
+            List<double> devstd = DeviazioneStandard(moduloAcc);
+           // double valoreMedio = e.Media(moduloAcc);
+            //double diff = Math.Abs(Math.Abs(devstd - valoreMedio) - 9.81);
 
-            Console.WriteLine(diff);
+            //Console.WriteLine(diff);
+            foreach (var item in devstd)
+            {
+                campioneMovimento++;
+                DateTime istante = start.AddSeconds(campioneMovimento * FREQ);
+                movimento_prec = movimento;
+                if (item > 0.3)
+                {
+                    movimento = "Moto";
+                    OnMoto(new EventArgs());
+                }
+                else
+                {
+                    movimento = "Stazionamento";
+                    OnStazionamento(new EventArgs());
+                }
 
+                if (movimento != movimento_prec)
+                {
+                    DateTime fine = istante.AddSeconds(campioneMovimento * FREQ);
+                    // Al posto della WriteLine si scrive su file
+                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + movimento;
+                    //Console.WriteLine(str);
+                    StreamWriter file = new StreamWriter(mypath + @"\Acquisizione.txt", true);
+                    file.WriteLine(str);
+                    file.Close();
+                }
+            }/*
             if (diff < 0.1)
             {
 
@@ -268,14 +298,14 @@ namespace progetto_esame
             {
                 OnMoto(new EventArgs());
             }
-
+            */
         }
-
+        
         /*
          * Deviazione standard
          * Input: Una lista di double
          * Output: La deviazione standard.
-         */
+         
         private double DeviazioneStandard(List<double> l, double media)
         {
             double sum = 0;
@@ -284,6 +314,52 @@ namespace progetto_esame
                 sum += (item - media) * (item - media);
             }
             return Math.Sqrt(sum / l.Count);
+        }
+        */
+        /*
+         * Deviazione standard(Su finestra)
+         * Input: Una lista di double
+         * Output: una lista di double in cui in ogni posizione c'è la dev.std. dell' i-esimo intorno
+         */
+          public List<double> DeviazioneStandard(List<double> l)
+        {
+            List<double> result = new List<double>();
+            List<double> appoggio;
+            int t = 5; // dimensione finestra
+            
+            double sum = 0, media = 0;
+
+            for (int i = t; i < (l.Count()/2)+t; i++)
+            {
+                sum = 0;
+              
+                appoggio = l.GetRange(i-t, 2*t);
+
+                for (int j = 0; j < appoggio.Count(); j++)
+                {
+                    media = Media(appoggio);
+                    sum += (appoggio[j] - media) * (appoggio[j] - media);
+                }
+
+                result.Add(Math.Sqrt(sum/l.Count ));
+            }
+
+            return result;
+        }
+
+        /*
+         * Media
+         * Input: Lista di double
+         * Output: La media dei valori contenuti nella lista.
+         */
+        public double Media(List<double> l)
+        {
+            double sum = 0;
+            foreach (double item in l)
+            {
+                sum += item;
+            }
+            return sum / l.Count;
         }
 
         #region Metodi-Eventi

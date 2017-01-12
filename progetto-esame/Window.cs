@@ -126,7 +126,7 @@ namespace progetto_esame
                 e = i + t;
                 if (e >= l.Count())
                     e = l.Count() - 1;
-                appoggio = l.GetRange(s, e);
+                appoggio = l.GetRange(s, e-s);
 
                 for (int j = 0; j < appoggio.Count(); j++)
                 {

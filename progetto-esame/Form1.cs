@@ -35,7 +35,8 @@ namespace progetto_esame
         private PointPairList _pointGiro = new PointPairList(); //per giroscopio
         private PointPairList _pointTheta = new PointPairList(); //per orientamento
         private PointPairList _pointThetaDEBUG = new PointPairList();
-        
+        //debug
+        private PointPairList _devstd = new PointPairList();
 
         //Per non Smooth
         private PointPairList _pointAccNoSmooth = new PointPairList(); //per accelerometro
@@ -55,6 +56,7 @@ namespace progetto_esame
             zedGraphAccelerometro_Load(this, e);
             zedGraphOrientamento_Load(this, e);
             zedGraphGiroscopio_Load(this, e);
+            zedGraphControl1_Load(this, e);
         }
 
         public void DisegnaStazionamento()
@@ -183,6 +185,7 @@ namespace progetto_esame
                 DisegnaModuloAcc(e);
                 DisegnaModuloGiro(e);
                 DisegnaModuloTheta(e);
+                DisegnaDevStd(e);
             }
         }
 
@@ -276,7 +279,7 @@ namespace progetto_esame
             for (int i = 0; i < modacc.Count; i++, _time++)
             {
                 _pointAcc.Add(2 * _time, modacc[i]);
-                _pointAccNoSmooth.Add(2 * _time, modaccNoSmooth[i]); //Dati Smoothati
+                _pointAccNoSmooth.Add((2 * _time), modaccNoSmooth[i]); //Dati Smoothati
             }
 
 
@@ -298,13 +301,13 @@ namespace progetto_esame
             for (int i = 0; i < modgir.Count; i++, _time++)
             {
                 _pointGiro.Add(2 * _time, modgir[i]);
-                _pointGiroNoSmooth.Add(2 * _time, modgirNoSmooth[i]); //Dati Smoothati
+                _pointGiroNoSmooth.Add((2 * _time ), modgirNoSmooth[i]); //Dati Smoothati
             }
 
 
 
             zedGraphGiroscopio.AxisChange();
-            zedGraphAccelerometro.Refresh();
+            zedGraphGiroscopio.Refresh();
             zedGraphGiroscopio.Invalidate();
         }
 
@@ -340,6 +343,7 @@ namespace progetto_esame
             myPane.XAxis.Title.Text = "Time(ms)";
             myPane.YAxis.Title.Text = "Degree";
 
+           
            
 
             // Add curves to myPane object
@@ -403,7 +407,44 @@ namespace progetto_esame
             zedGraphGiroscopio.Refresh();
         }
 
-       
+
+        //DEBUG - devstd
+        private void DisegnaDevStd(Window e)
+        {
+            List<double> devstd = new List<double>();
+
+            List<double> a = e.ModuloAccelerometro(e.matriceSmooth);
+            _time = _devstd.Count;
+            foreach (var item in e.DeviazioneStandard(a))
+            {
+                _devstd.Add(2 * _time, item);
+                _time++;
+            }
+            zedGraphControl1.AxisChange();
+            zedGraphControl1.Refresh();
+            zedGraphControl1.Invalidate();
+        }
+
+        private void zedGraphControl1_Load(object sender, EventArgs e)
+        {
+            zedGraphControl1.GraphPane.CurveList.Clear();
+            // GraphPane object holds one or more Curve objects (or plots)
+            GraphPane myPane = zedGraphControl1.GraphPane;
+            myPane.Title.Text = "DEVSTD";
+            
+
+            // Add curves to myPane object
+            LineItem myCurve = myPane.AddCurve("Smooth", _devstd, Color.Red, SymbolType.None);
+            
+          
+
+            myCurve.Line.Width = 1.0F;
+
+            // I add all three functions just to be sure it refeshes the plot. 
+            zedGraphControl1.AxisChange();
+            zedGraphControl1.Refresh();
+            zedGraphControl1.Invalidate();
+        }
     }
        
 }

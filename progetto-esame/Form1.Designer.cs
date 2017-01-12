@@ -46,6 +46,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.pictureAzione = new System.Windows.Forms.PictureBox();
             this.picturePosizione = new System.Windows.Forms.PictureBox();
+            this.zedGraphControl1 = new ZedGraph.ZedGraphControl();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureAzione)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picturePosizione)).BeginInit();
@@ -240,11 +241,27 @@
             this.picturePosizione.TabIndex = 10;
             this.picturePosizione.TabStop = false;
             // 
+            // zedGraphControl1
+            // 
+            this.zedGraphControl1.Location = new System.Drawing.Point(903, 365);
+            this.zedGraphControl1.Name = "zedGraphControl1";
+            this.zedGraphControl1.ScrollGrace = 0D;
+            this.zedGraphControl1.ScrollMaxX = 0D;
+            this.zedGraphControl1.ScrollMaxY = 0D;
+            this.zedGraphControl1.ScrollMaxY2 = 0D;
+            this.zedGraphControl1.ScrollMinX = 0D;
+            this.zedGraphControl1.ScrollMinY = 0D;
+            this.zedGraphControl1.ScrollMinY2 = 0D;
+            this.zedGraphControl1.Size = new System.Drawing.Size(429, 211);
+            this.zedGraphControl1.TabIndex = 12;
+            this.zedGraphControl1.Load += new System.EventHandler(this.zedGraphControl1_Load);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1344, 717);
+            this.Controls.Add(this.zedGraphControl1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.SmoothGiro);
             this.Controls.Add(this.SmoothAcc);
@@ -283,6 +300,7 @@
         private System.Windows.Forms.Label LabelGirata;
         private System.Windows.Forms.Label LabelAngolo;
         private System.Windows.Forms.Label label5;
+        private ZedGraph.ZedGraphControl zedGraphControl1;
     }
 }
 
