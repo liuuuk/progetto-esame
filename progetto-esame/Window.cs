@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace progetto_esame
 {
+    const int T = 10;
     public class Window : EventArgs
     {
         public List<List<double>> matrice;
@@ -221,7 +222,7 @@ namespace progetto_esame
             List<List<double>> result = new List<List<double>>();
             int nRighe = m.Count;
            
-            int k = 10; // Da specifiche di progetto k=10
+            int k = 5; // Da specifiche di progetto k=10
             /*Smooth su una finestra più piccola(da k a nRighe-k)
             *Idea di aggiornare la finestra di continuo
             */

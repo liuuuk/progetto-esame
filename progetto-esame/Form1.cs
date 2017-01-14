@@ -37,6 +37,8 @@ namespace progetto_esame
         private PointPairList _pointThetaDEBUG = new PointPairList();
         //debug
         private PointPairList _devstd = new PointPairList();
+        private PointPairList _accX = new PointPairList();
+        private PointPairList _girata = new PointPairList();
 
         //Per non Smooth
         private PointPairList _pointAccNoSmooth = new PointPairList(); //per accelerometro
@@ -57,6 +59,7 @@ namespace progetto_esame
             zedGraphOrientamento_Load(this, e);
             zedGraphGiroscopio_Load(this, e);
             zedGraphControl1_Load(this, e);
+            zedGraphControl2_Load(this, e);
         }
 
         public void DisegnaStazionamento()
@@ -186,7 +189,29 @@ namespace progetto_esame
                 DisegnaModuloGiro(e);
                 DisegnaModuloTheta(e);
                 DisegnaDevStd(e);
+                DisegnaAccX(e);
+                
             }
+        }
+
+        
+
+        private void DisegnaAccX(Window e)
+        {
+            List<double> acc = new List<double>();
+            foreach (var item in e.GetAccelerometro(e.matriceSmooth))
+            {
+                acc.Add(item[0]);
+            }
+            _time = _accX.Count;
+            foreach (var item in acc)
+            {
+                _accX.Add(2 * _time, item);
+                _time++;
+            }
+            zedGraphControl2.AxisChange();
+            zedGraphControl2.Refresh();
+            zedGraphControl2.Invalidate();
         }
 
         private void DisegnaModuloTheta(Window e)
@@ -216,10 +241,10 @@ namespace progetto_esame
                 double next = Math.Atan(y[i + 1] / z[i + 1]);
 
                 //solo per debug
-                //_pointThetaDEBUG.Add(2 * _time, next);
-
+                _pointThetaDEBUG.Add(2 * _time, next);
+                
                 double myVal = value;
-                if (i == y.Count-1)
+                if (i == y.Count-2)
                 {
                     _precedente = next;
                 }
@@ -445,6 +470,28 @@ namespace progetto_esame
             zedGraphControl1.Refresh();
             zedGraphControl1.Invalidate();
         }
+
+        private void zedGraphControl2_Load(object sender, EventArgs e)
+        {
+            zedGraphControl2.GraphPane.CurveList.Clear();
+            // GraphPane object holds one or more Curve objects (or plots)
+            GraphPane myPane = zedGraphControl2.GraphPane;
+            myPane.Title.Text = "Acc";
+
+
+            // Add curves to myPane object
+            LineItem myCurve = myPane.AddCurve("Smooth", _accX, Color.Red, SymbolType.None);
+
+
+
+            myCurve.Line.Width = 1.0F;
+
+            // I add all three functions just to be sure it refeshes the plot. 
+            zedGraphControl2.AxisChange();
+            zedGraphControl2.Refresh();
+            zedGraphControl2.Invalidate();
+        }
+        
     }
        
 }

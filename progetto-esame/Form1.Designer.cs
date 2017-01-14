@@ -47,6 +47,7 @@
             this.pictureAzione = new System.Windows.Forms.PictureBox();
             this.picturePosizione = new System.Windows.Forms.PictureBox();
             this.zedGraphControl1 = new ZedGraph.ZedGraphControl();
+            this.zedGraphControl2 = new ZedGraph.ZedGraphControl();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureAzione)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picturePosizione)).BeginInit();
@@ -256,11 +257,27 @@
             this.zedGraphControl1.TabIndex = 12;
             this.zedGraphControl1.Load += new System.EventHandler(this.zedGraphControl1_Load);
             // 
+            // zedGraphControl2
+            // 
+            this.zedGraphControl2.Location = new System.Drawing.Point(679, 583);
+            this.zedGraphControl2.Name = "zedGraphControl2";
+            this.zedGraphControl2.ScrollGrace = 0D;
+            this.zedGraphControl2.ScrollMaxX = 0D;
+            this.zedGraphControl2.ScrollMaxY = 0D;
+            this.zedGraphControl2.ScrollMaxY2 = 0D;
+            this.zedGraphControl2.ScrollMinX = 0D;
+            this.zedGraphControl2.ScrollMinY = 0D;
+            this.zedGraphControl2.ScrollMinY2 = 0D;
+            this.zedGraphControl2.Size = new System.Drawing.Size(319, 161);
+            this.zedGraphControl2.TabIndex = 13;
+            this.zedGraphControl2.Load += new System.EventHandler(this.zedGraphControl2_Load);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1344, 717);
+            this.ClientSize = new System.Drawing.Size(1344, 756);
+            this.Controls.Add(this.zedGraphControl2);
             this.Controls.Add(this.zedGraphControl1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.SmoothGiro);
@@ -301,6 +318,7 @@
         private System.Windows.Forms.Label LabelAngolo;
         private System.Windows.Forms.Label label5;
         private ZedGraph.ZedGraphControl zedGraphControl1;
+        private ZedGraph.ZedGraphControl zedGraphControl2;
     }
 }
 

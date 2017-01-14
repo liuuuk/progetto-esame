@@ -25,7 +25,7 @@ namespace progetto_esame
         public Parser()
         {
             maxSensori = 10;
-            dimensioneFinestra = 50;
+            dimensioneFinestra = 20;
 
             array = new List<List<double>>(); // Del prof
             mat = new List<List<List<double>>>(); // Aggiunto

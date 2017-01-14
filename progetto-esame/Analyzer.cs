@@ -32,7 +32,10 @@ namespace progetto_esame
         public event EventHandler Moto;
         #endregion
 
-       
+        // prova
+        int count_picchi = 0;
+
+
         private double _precedente;
         private int _isUp;
         private int _isDown;
@@ -174,8 +177,7 @@ namespace progetto_esame
                 else
                 {
                     delta = next - value;
-                }
-                
+                }  
 
                 if (delta >= SOGLIA)
                 {
@@ -187,13 +189,22 @@ namespace progetto_esame
                 }
                 #endregion
                 next = next - (_isUp * PI) + (_isDown * PI);
-                
-                if (delta < -ANGOLO_GIRATA)
+
+                double newDelta = 0.0;
+                if (i == -1)
+                {
+                    newDelta = next - _precedente;
+                }
+                else
+                {
+                    newDelta = next - value;
+                }
+                if (newDelta < -ANGOLO_GIRATA)
                 {//sinistra
                     girata = "Girata a Sinistra";
                     OnGirataSinistra(new EventArgs());
                 }
-                else if (delta > ANGOLO_GIRATA)
+                else if (newDelta > ANGOLO_GIRATA)
                 {//destra
                     girata = "Girata a Destra";
                     OnGirataDestra(new EventArgs());
@@ -215,53 +226,13 @@ namespace progetto_esame
                 }
             }
         }
-        /*
+        
         private void AnalyzeMoto(Window e)
         {
-            //Serve?
-            List<List<double>> accelerometri = e.GetAccelerometro(e.matriceSmooth);
-
-            List<double> moduloAcc = e.ModuloAccelerometro(e.matriceSmooth);
-            List<double> devstd = e.DeviazioneStandard(moduloAcc);
-            foreach (double item in devstd)
-            {
-                campioneMovimento++;
-                DateTime istante = start.AddSeconds(campioneMovimento * FREQ);
-                movimento_prec = movimento;
-                Console.WriteLine(item);
-                if (item < 1)
-                {
-                    movimento = "Stazionamento";
-                    OnStazionamento(new EventArgs());
-                }
-                else
-                {
-                    movimento = "Moto";
-                    OnMoto(new EventArgs());
-                }
-
-                if (movimento != movimento_prec)
-                {
-                    DateTime fine = istante.AddSeconds(campioneMovimento * FREQ);
-                    // Al posto della WriteLine si scrive su file
-                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + movimento;
-                    //Console.WriteLine(str);
-                    StreamWriter file = new StreamWriter(mypath + @"\Acquisizione.txt", true);
-                    file.WriteLine(str);
-                    file.Close();
-                }
-            }
-        }
-        */
-        private void AnalyzeMoto(Window e)
-        {
-            //List<List<double>> accelerometri = e.GetAccelerometro(e.matriceSmooth);
+            
             List<double> moduloAcc = e.ModuloAccelerometro(e.matriceSmooth);
             List<double> devstd = DeviazioneStandard(moduloAcc);
-           // double valoreMedio = e.Media(moduloAcc);
-            //double diff = Math.Abs(Math.Abs(devstd - valoreMedio) - 9.81);
-
-            //Console.WriteLine(diff);
+            
             foreach (var item in devstd)
             {
                 campioneMovimento++;
@@ -269,15 +240,21 @@ namespace progetto_esame
                 movimento_prec = movimento;
                 if (item > 0.3)
                 {
+                    count_picchi = 0;
                     movimento = "Moto";
                     OnMoto(new EventArgs());
                 }
                 else
                 {
-                    movimento = "Stazionamento";
-                    OnStazionamento(new EventArgs());
+                    count_picchi++;
+                    if (count_picchi >= 40)
+                    {
+                        count_picchi = 0;
+                        movimento = "Stazionamento";
+                        OnStazionamento(new EventArgs());
+                    }
                 }
-
+                //Console.WriteLine("Count: " + count_picchi + " Campione #" + campioneMovimento*FREQ);
                 if (movimento != movimento_prec)
                 {
                     DateTime fine = istante.AddSeconds(campioneMovimento * FREQ);
@@ -288,65 +265,22 @@ namespace progetto_esame
                     file.WriteLine(str);
                     file.Close();
                 }
-            }/*
-            if (diff < 0.1)
-            {
-
-                OnStazionamento(new EventArgs());
             }
-            else
-            {
-                OnMoto(new EventArgs());
-            }
-            */
         }
-        
-        /*
-         * Deviazione standard
-         * Input: Una lista di double
-         * Output: La deviazione standard.
-         
-        private double DeviazioneStandard(List<double> l, double media)
+
+        private List<double> DeviazioneStandard(List<double> l)
         {
+            List<double> result = new List<double>();
+            double media = Media(l);
             double sum = 0;
             foreach (double item in l)
             {
-                sum += (item - media) * (item - media);
+                sum = (item - media) * (item - media);
+                result.Add(Math.Sqrt(sum / l.Count));
             }
-            return Math.Sqrt(sum / l.Count);
-        }
-        */
-        /*
-         * Deviazione standard(Su finestra)
-         * Input: Una lista di double
-         * Output: una lista di double in cui in ogni posizione c'è la dev.std. dell' i-esimo intorno
-         */
-          public List<double> DeviazioneStandard(List<double> l)
-        {
-            List<double> result = new List<double>();
-            List<double> appoggio;
-            int t = 5; // dimensione finestra
-            
-            double sum = 0, media = 0;
-
-            for (int i = t; i < (l.Count()/2)+t; i++)
-            {
-                sum = 0;
-              
-                appoggio = l.GetRange(i-t, 2*t);
-
-                for (int j = 0; j < appoggio.Count(); j++)
-                {
-                    media = Media(appoggio);
-                    sum += (appoggio[j] - media) * (appoggio[j] - media);
-                }
-
-                result.Add(Math.Sqrt(sum/l.Count ));
-            }
-
             return result;
         }
-
+        
         /*
          * Media
          * Input: Lista di double
