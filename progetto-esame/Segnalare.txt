@@ -1,0 +1,1 @@
+- possibile errore nel file per analisi 'in piedi-seduto' con picco in basso che non dovrebbe esserci

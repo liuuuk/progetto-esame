@@ -1,0 +1,3 @@
+- smooth disegnato 'valore-finestra' dopo perchè perde i primi 'valore-finestra' dati
+- come sottrarre tempo quando trovo 'n' valori di stazionamento in AnalyzeMoto
+- debug nero di theta è sfasato di 'k' valori
