@@ -8,6 +8,29 @@ using System.Threading.Tasks;
 namespace progetto_esame
 {
     public delegate void EventHandler();
+    public delegate void InfoEventHandler(object sender, InfoEventArgs e);
+
+    public class InfoEventArgs : EventArgs
+    {
+        private string _text;
+        private bool _isDebug;
+
+        public InfoEventArgs(string t, bool d)
+        {
+            _text = t;
+            _isDebug = d;
+        }
+
+        public string Text
+        {
+            get { return _text; }
+        }
+        public bool IsDebug
+        {
+            get { return _isDebug; }
+        }
+    }
+
     class Analyzer
     {
         // Soglia sopra la quale riconoscere le girate, sia dx che sx
@@ -30,6 +53,8 @@ namespace progetto_esame
         public event EventHandler Lay;
         public event EventHandler Stazionamento;
         public event EventHandler Moto;
+
+        public event InfoEventHandler Info;
         #endregion
 
         // prova
@@ -43,9 +68,6 @@ namespace progetto_esame
         private int campionePosizione = 0;
         private int campioneGirata = 0;
         private int campioneMovimento = 0;
-
-        // Conta quante finestre sono state inviate finora
-        private int nFinestra;
 
         // Tempo della prima acquisizione
         DateTime start;
@@ -62,24 +84,31 @@ namespace progetto_esame
         private bool primo = true;
 
         string mypath;
+        string myFilename;
 
-        public Analyzer()
+        public Analyzer(string filename)
         {
-            mypath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            StreamWriter file = new StreamWriter(mypath + @"\Acquisizione.txt", true);
-            var newLine = Environment.NewLine;
-            file.WriteLine(newLine + newLine + DateTime.Now.ToString() + " nuova acquisizione:" + newLine);
-            file.Close();
-            //Console.WriteLine(mypath);
+            myFilename = @"\" + filename;
             _precedente = 0.0;
             _isUp = 0;
             _isDown = 0;
         }
 
+        private void PrepareFile()
+        {
+            var newLine = Environment.NewLine;
+            mypath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            
+            string t = newLine + "Pronto a scrivere sul file: " + newLine + mypath + myFilename + newLine;
+            t += "********************************************";
+            
+            OnInfo(new InfoEventArgs(t, false));
+        }
+
         public void SetStart(object sender, DateTime d)
         {
             start = d;
-            Console.WriteLine("Inizio " + start.ToString());
+            PrepareFile();
         }
 
         public void Run(object sender, Window e)
@@ -128,9 +157,10 @@ namespace progetto_esame
                     // Al posto della WriteLine si scrive su file
                     string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + posizione;
                     //Console.WriteLine(str);
-                    StreamWriter file = new StreamWriter(mypath + @"\Acquisizione.txt", true);
+                    StreamWriter file = new StreamWriter(mypath + myFilename, true);
                     file.WriteLine(str);
                     file.Close();
+                    OnInfo(new InfoEventArgs(str, false));
                 }
                     
             }
@@ -214,8 +244,8 @@ namespace progetto_esame
                     DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
                     // Al posto della WriteLine si scrive su file
                     string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata + " ";
-                    StreamWriter file = new StreamWriter(mypath + @"\Acquisizione.txt", true);
-                    //Console.WriteLine(str);
+                    StreamWriter file = new StreamWriter(mypath + myFilename, true);
+                    OnInfo(new InfoEventArgs(str, false));
                     file.WriteLine(str);
                     file.Close();
                 }
@@ -261,9 +291,10 @@ namespace progetto_esame
                     // Al posto della WriteLine si scrive su file
                     string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + movimento;
                     //Console.WriteLine(str);
-                    StreamWriter file = new StreamWriter(mypath + @"\Acquisizione.txt", true);
+                    StreamWriter file = new StreamWriter(mypath + myFilename, true);
                     file.WriteLine(str);
                     file.Close();
+                    OnInfo(new InfoEventArgs(str, false));
                 }
             }
         }
@@ -305,6 +336,8 @@ namespace progetto_esame
         protected virtual void OnStand(EventArgs e) { if (Stand != null) Stand(); }
         protected virtual void OnStazionamento(EventArgs e) { if (Stazionamento != null) Stazionamento(); }
         protected virtual void OnMoto(EventArgs e) { if (Moto != null) Moto(); }
+
+        protected virtual void OnInfo(InfoEventArgs e) { if (Info != null) Info(this, e); }
         #endregion
     }
 }

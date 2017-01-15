@@ -85,13 +85,14 @@ namespace progetto_esame
             Application.SetCompatibleTextRenderingDefault(false);
             Form1 myForm = new Form1();
 
-            //Credo che vada fatto qui dentro perchè ho bisogno dell oggetto myForm
+            string fileName = "LOG_" + DateTime.Now.ToString().Replace(":", "_").Replace("/", "-") + ".txt";
 
             //Creo un oggetto Analisi
-            Analyzer a = new Analyzer();
+            Analyzer a = new Analyzer(fileName);
 
             p.FinestraPiena += new WindowEventHandler(a.Run);
             p.TempoPrimaAcquisizione += new InizioEventHandler(a.SetStart);
+            p.Info += new InfoEventHandler(myForm.TextLog);
 
             //Sottoscrivo i vari eventi generati dall'analisi dei dati
             a.GirataDestra += new EventHandler(myForm.DisegnaGirataDestra);
@@ -104,6 +105,8 @@ namespace progetto_esame
 
             a.Moto += new EventHandler(myForm.DisegnaMoto);
             a.Stazionamento += new EventHandler(myForm.DisegnaStazionamento);
+
+            a.Info += new InfoEventHandler(myForm.TextLog);
 
             //Sottoscrivo l'evento finestra piena del parser al metodo test(che scrive sulle zedgraph)
             p.FinestraPiena += new WindowEventHandler(myForm.DisegnaGrafici);

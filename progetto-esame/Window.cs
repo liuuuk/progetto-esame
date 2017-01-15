@@ -6,18 +6,16 @@ using System.Threading.Tasks;
 
 namespace progetto_esame
 {
-    const int T = 10;
+    
     public class Window : EventArgs
     {
         public List<List<double>> matrice;
         public List<List<double>> matriceSmooth;
 
-        public int Dimensione = 50;
-
         public Window(List<List<List<double>>> m, int sensore)
         {
             matrice = FissaSensore(m, sensore);
-            matriceSmooth = Smooth(matrice);//AGGIUNTO
+            matriceSmooth = Smooth(matrice);
             
         }
         
@@ -221,15 +219,10 @@ namespace progetto_esame
         {
             List<List<double>> result = new List<List<double>>();
             int nRighe = m.Count;
-           
-            int k = 5; // Da specifiche di progetto k=10
-            /*Smooth su una finestra più piccola(da k a nRighe-k)
-            *Idea di aggiornare la finestra di continuo
-            */
+            int k = Globals.kSmooth;
             int i;
             
-            
-            for ( i = k; i < nRighe/2 +k; i++)
+            for ( i = k; i < nRighe/2 + k; i++)
             {
                 List<double> media = Media(m.GetRange(i-k, 2*k));
                 //aggiungi il vettore media in posizione i

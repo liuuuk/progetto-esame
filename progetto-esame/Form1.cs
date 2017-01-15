@@ -14,7 +14,7 @@ namespace progetto_esame
 
 
     delegate void DisegnaGraficiCallback(object sender, Window e);
-
+    delegate void TextLogCallback(object sender, InfoEventArgs e);
     delegate void ChangeTextCallback();
 
     public partial class Form1 : Form
@@ -30,6 +30,7 @@ namespace progetto_esame
 
         private bool _isNonSmoothAcc = false;
         private bool _isNonSmoothGiro = false;
+        private bool _isDebug = false;
 
         private PointPairList _pointAcc = new PointPairList(); //per accelerometro
         private PointPairList _pointGiro = new PointPairList(); //per giroscopio
@@ -38,7 +39,7 @@ namespace progetto_esame
         //debug
         private PointPairList _devstd = new PointPairList();
         private PointPairList _accX = new PointPairList();
-        private PointPairList _girata = new PointPairList();
+        
 
         //Per non Smooth
         private PointPairList _pointAccNoSmooth = new PointPairList(); //per accelerometro
@@ -55,11 +56,14 @@ namespace progetto_esame
             _precedente = 0.0;
             _isDown = 0;
             _isUp = 0;
+
             zedGraphAccelerometro_Load(this, e);
             zedGraphOrientamento_Load(this, e);
             zedGraphGiroscopio_Load(this, e);
             zedGraphControl1_Load(this, e);
             zedGraphControl2_Load(this, e);
+
+            panelDebug.Hide();
         }
 
         public void DisegnaStazionamento()
@@ -194,7 +198,31 @@ namespace progetto_esame
             }
         }
 
-        
+        public void TextLog(object sender, InfoEventArgs e)
+        {
+            if (this.textView.InvokeRequired)
+            {
+                TextLogCallback c = new TextLogCallback(TextLog);
+                this.Invoke(c, new object[] { sender, e});
+            }
+            else
+            {
+                /*
+                 * InfoDebug | ModDebug
+                 * T    |   T   -> !(T AND !T) -> T
+                 * T    |   F   -> !(T AND !F) -> F = Non scrivere se è un messaggio di debug ma il programma non è in mod debug
+                 * F    |   T   -> !(F AND !T) -> T
+                 * F    |   F   -> !(F AND !F) -> T
+                 */
+                if (! (e.IsDebug && !_isDebug))
+                {
+                    var newLine = Environment.NewLine;
+                    textView.AppendText(e.Text + newLine);
+                }
+                
+            }
+
+        }
 
         private void DisegnaAccX(Window e)
         {
@@ -304,7 +332,9 @@ namespace progetto_esame
             for (int i = 0; i < modacc.Count; i++, _time++)
             {
                 _pointAcc.Add(2 * _time, modacc[i]);
-                _pointAccNoSmooth.Add((2 * _time), modaccNoSmooth[i]); //Dati Smoothati
+                if((2 * _time) - Globals.kSmooth * 2 >= 0)
+                    _pointAccNoSmooth.Add((2 * _time) - Globals.kSmooth*2, modaccNoSmooth[i]); //Dati non Smoothati
+               
             }
 
 
@@ -326,7 +356,9 @@ namespace progetto_esame
             for (int i = 0; i < modgir.Count; i++, _time++)
             {
                 _pointGiro.Add(2 * _time, modgir[i]);
-                _pointGiroNoSmooth.Add((2 * _time ), modgirNoSmooth[i]); //Dati Smoothati
+                if((2 * _time) - Globals.kSmooth * 2 >= 0)
+                    _pointGiroNoSmooth.Add((2 * _time ) - Globals.kSmooth * 2, modgirNoSmooth[i]); //Dati non Smoothati
+
             }
 
 
@@ -368,17 +400,12 @@ namespace progetto_esame
             myPane.XAxis.Title.Text = "Time(ms)";
             myPane.YAxis.Title.Text = "Degree";
 
-           
-           
-
             // Add curves to myPane object
             
             LineItem myCurve = myPane.AddCurve("Smooth", _pointTheta, Color.Red, SymbolType.None);
-
-
-            
             //DEGUB
             LineItem myCurveDebug = myPane.AddCurve("DEBUG", _pointThetaDEBUG, Color.Black, SymbolType.None);
+            myCurveDebug.IsVisible = _isDebug;
 
             myCurve.Line.Width = 1.0F;
 
@@ -432,6 +459,25 @@ namespace progetto_esame
             zedGraphGiroscopio.Refresh();
         }
 
+        private void checkDebug_CheckedChanged(object sender, EventArgs e)
+        {//parte false
+            if (_isDebug)
+            {
+                _isDebug = false;
+                panelDebug.Hide();
+            }
+            else
+            {
+                _isDebug = true;
+                panelDebug.Show();
+            }
+                
+
+            //Grafico nero su girata, mostra discontinuità
+            zedGraphOrientamento.GraphPane.CurveList[1].IsVisible = _isDebug;
+            zedGraphOrientamento.Refresh();
+   
+        }
 
         //DEBUG - devstd
         private void DisegnaDevStd(Window e)
@@ -455,12 +501,12 @@ namespace progetto_esame
             zedGraphControl1.GraphPane.CurveList.Clear();
             // GraphPane object holds one or more Curve objects (or plots)
             GraphPane myPane = zedGraphControl1.GraphPane;
-            myPane.Title.Text = "DEVSTD";
+            myPane.Title.Text = "Deviazione standard";
             
 
             // Add curves to myPane object
-            LineItem myCurve = myPane.AddCurve("Smooth", _devstd, Color.Red, SymbolType.None);
-            
+            LineItem myCurve = myPane.AddCurve("DEVSTD", _devstd, Color.Red, SymbolType.None);
+           
           
 
             myCurve.Line.Width = 1.0F;
@@ -480,9 +526,7 @@ namespace progetto_esame
 
 
             // Add curves to myPane object
-            LineItem myCurve = myPane.AddCurve("Smooth", _accX, Color.Red, SymbolType.None);
-
-
+            LineItem myCurve = myPane.AddCurve("ACC", _accX, Color.Red, SymbolType.None);
 
             myCurve.Line.Width = 1.0F;
 
@@ -491,7 +535,6 @@ namespace progetto_esame
             zedGraphControl2.Refresh();
             zedGraphControl2.Invalidate();
         }
-        
     }
        
 }

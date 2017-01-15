@@ -95,10 +95,10 @@
     <None Include="Resources\stickman-no-walk.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\stickman-sitting-down.png" />
+    <None Include="Resources\stickman-walk.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\stickman-walk.png" />
+    <None Include="Resources\stickman-sitting-down.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
