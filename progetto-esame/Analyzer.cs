@@ -167,6 +167,8 @@ namespace progetto_esame
             
         }
 
+        bool sD = false, eD = false, sS = false, eS = false;
+        double acc_delta = 0.0;
         private void AnalyzeGirata(Window e)
         {
             List<double> y = new List<double>();
@@ -185,6 +187,8 @@ namespace progetto_esame
                 DateTime istante = start.AddSeconds(campionePosizione * FREQ);
                 girata_prec = girata;
 
+                #region vecchio
+                /*
                 #region Rimuovi-Discontinuita'
                 double value = 0.0;
                 if (i == -1)
@@ -192,14 +196,14 @@ namespace progetto_esame
                 else
                     value = Math.Atan(y[i] / z[i]);
 
+                if (_isUp != 0 || _isDown != 0)
+                    isdisc = true;
+
                 double myVal = value;
 
                 double next = Math.Atan(y[i + 1] / z[i + 1]);
 
-                if (i == y.Count-1)
-                {
-                    _precedente = next;
-                }
+                
                 if (i == -1)
                 {
                     delta = next - _precedente;
@@ -212,6 +216,7 @@ namespace progetto_esame
                 if (delta >= SOGLIA)
                 {
                     _isUp++;
+                    
                 }
                 if (delta <= -SOGLIA)
                 {
@@ -219,8 +224,16 @@ namespace progetto_esame
                 }
                 #endregion
                 next = next - (_isUp * PI) + (_isDown * PI);
+                if(isdisc)
+                    value = value - (_isUp * PI) + (_isDown * PI);
+
+                if (i == y.Count - 2)
+                {
+                    _precedente = next;
+                }
 
                 double newDelta = 0.0;
+            
                 if (i == -1)
                 {
                     newDelta = next - _precedente;
@@ -231,24 +244,132 @@ namespace progetto_esame
                 }
                 if (newDelta < -ANGOLO_GIRATA)
                 {//sinistra
+                    Console.WriteLine("newDelta " + newDelta);
                     girata = "Girata a Sinistra";
+                    acc_delta += newDelta;
                     OnGirataSinistra(new EventArgs());
                 }
                 else if (newDelta > ANGOLO_GIRATA)
                 {//destra
+                    Console.WriteLine("newDelta " + newDelta);
                     girata = "Girata a Destra";
+                    acc_delta += newDelta;
                     OnGirataDestra(new EventArgs());
                 }
+                
                 if (girata != girata_prec && !primo)
                 {
+                    acc_delta -= newDelta;
+
+                    double gradi = acc_delta * 180 / PI;
+                    
+
                     DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
                     // Al posto della WriteLine si scrive su file
-                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata + " ";
+                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata + " gradi: " + gradi;
                     StreamWriter file = new StreamWriter(mypath + myFilename, true);
                     OnInfo(new InfoEventArgs(str, false));
                     file.WriteLine(str);
                     file.Close();
+
+                    acc_delta = newDelta;
                 }
+                */
+                #endregion
+
+                double value = 0.0;
+                if (i == -1)
+                    value = _precedente;
+                else
+                    value = Math.Atan(y[i] / z[i]);
+
+                double next = Math.Atan(y[i + 1] / z[i + 1]);
+
+               
+
+                double myVal = value;
+                if (i == y.Count - 2)
+                {
+                    _precedente = next;
+                }
+                if (i == -1)
+                {
+                    delta = next - _precedente;
+                }
+                else
+                {
+                    delta = next - value;
+                }
+                if (delta >= SOGLIA)
+                {
+                    _isUp++;
+                }
+                if (delta <= -SOGLIA)
+                {
+                    _isDown++;
+                }
+
+                next = next - (_isUp * PI) + (_isDown * PI);
+
+                if (next - value < -ANGOLO_GIRATA)
+                {
+                   
+                    sS = true;
+                    if(sD)
+                        eD = true;
+                    
+                    acc_delta += next - value;
+                    OnGirataSinistra(new EventArgs());
+                }
+                else if (next - value > ANGOLO_GIRATA)
+                {
+                    
+                    sD = true;
+                    if (sS)
+                        eS = true;
+                    
+                    acc_delta += next - value;
+                    OnGirataDestra(new EventArgs());
+                }
+                else
+                {
+                    if (sS)
+                        eS = true;
+                    if (sD)
+                        eD = true;
+                }
+                if (eS || eD && !primo)
+                {
+
+                    acc_delta -= (next - value);
+
+                    double gradi = acc_delta * 180 / PI;
+
+
+                    DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
+                    // Al posto della WriteLine si scrive su file
+                    if (eD)
+                    {
+                        girata = "Girata a Destra";
+                        eD = sD = false;
+                    }
+                    else
+                    {
+                        girata = "Girata a Sinistra";
+                        eS = sS = false;
+                    }
+                        
+
+                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata + " gradi: " + gradi;
+
+                    StreamWriter file = new StreamWriter(mypath + myFilename, true);
+                    OnInfo(new InfoEventArgs(str, false));
+                    file.WriteLine(str);
+                    file.Close();
+
+                    acc_delta = next - value;
+                }
+
                 if (primo) //Per rimuovere il problema del primo valore = 0
                 {
                     primo = !primo;
