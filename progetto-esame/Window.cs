@@ -108,37 +108,34 @@ namespace progetto_esame
          * Input: Una lista di double
          * Output: una lista di double in cui in ogni posizione c'è la dev.std. dell' i-esimo intorno
          */
-          public List<double> DeviazioneStandard(List<double> l)
+          private double Devstd(List<double> l)
         {
             List<double> result = new List<double>();
-            List<double> appoggio;
-            int t = 10; // dimensione finestra
-            int s = 0, e = 0;
-            double sum = 0, media = 0;
-
-            for (int i = 0; i < l.Count(); i++)
+            double media = Media(l);
+            double sum = 0;
+            foreach (double item in l)
             {
-                sum = 0;
-                s = i - t;
-                if (s < 0)
-                    s = 0;
-                e = i + t;
-                if (e >= l.Count())
-                    e = l.Count() - 1;
-                appoggio = l.GetRange(s, e-s);
-
-                for (int j = 0; j < appoggio.Count(); j++)
-                {
-                    media = Media(appoggio);
-                    sum += (appoggio[j] - media) * (appoggio[j] - media);
-                }
-
-                result.Add(Math.Sqrt(sum / l.Count));
+                sum += (item - media) * (item - media);
+                 // il problema è qua
             }
-
-            return result;
+            return Math.Sqrt(sum / l.Count); //double o list<double>
         }
 
+        public List<double> DeviazioneStandard(List<double> l)
+        {
+            List<double> result = new List<double>();
+            int nRighe = l.Count;
+            int k = Globals.kSmooth;
+            int i;
+
+            for (i = k; i < nRighe / 2 + k; i++)
+            {
+                double d = Devstd(l.GetRange(i - k, 2 * k));
+                //aggiungi il vettore media in posizione i
+                result.Add(d);
+            }
+            return result;
+        }
         /*
          * RIFunc (Rapporto incrementale)
          * Input: Una lista di double.

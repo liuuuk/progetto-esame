@@ -57,9 +57,10 @@ namespace progetto_esame
         public event InfoEventHandler Info;
         #endregion
 
-        // prova
-        int count_picchi = 0;
-
+        // count non 
+        int count_picchi_moto = 0;
+        int count_picchi_posizione = 0;
+        int count_picchi_girata = 0;
 
         private double _precedente;
         private int _isUp;
@@ -133,21 +134,28 @@ namespace progetto_esame
                 posizione_prec = posizione;
                 if (item < 2.7)
                 {
-                    posizione = "Straiato";
+                    count_picchi_posizione = 0;
+                    posizione = "Sdraiato";
                     OnLay(new EventArgs());
                 }
                 else if (item < 3.7)
                 {
+                    count_picchi_posizione = 0;
                     posizione = "Seduto/Sdraiato";
                     OnLaySit(new EventArgs());
                 } 
                 else if (item < 7)
                 {
-                    posizione = "Seduto";
-                    OnSit(new EventArgs());
+                    count_picchi_posizione++;
+                    if (count_picchi_posizione >= 30)
+                    {
+                        posizione = "Seduto";
+                        OnSit(new EventArgs());
+                    }
                 }
                 else
                 {
+                    count_picchi_posizione = 0;
                     posizione = "In Piedi";
                     OnStand(new EventArgs());
                 }
@@ -313,7 +321,7 @@ namespace progetto_esame
 
                 if (next - value < -ANGOLO_GIRATA)
                 {
-                   
+                    count_picchi_girata = 0;
                     sS = true;
                     if(sD)
                         eD = true;
@@ -323,7 +331,7 @@ namespace progetto_esame
                 }
                 else if (next - value > ANGOLO_GIRATA)
                 {
-                    
+                    count_picchi_girata = 0;
                     sD = true;
                     if (sS)
                         eS = true;
@@ -333,17 +341,19 @@ namespace progetto_esame
                 }
                 else
                 {
+                    count_picchi_girata++;
                     if (sS)
-                        eS = true;
+                    { 
+                        if(count_picchi_girata >= 30)
+                            eS = true;
+                    }
                     if (sD)
-                        eD = true;
+                        if (count_picchi_girata >= 30)
+                            eD = true;
                 }
                 if (eS || eD && !primo)
                 {
 
-                    acc_delta -= (next - value);
-
-                    double gradi = acc_delta * 180 / PI;
 
 
                     DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
@@ -360,7 +370,7 @@ namespace progetto_esame
                     }
                         
 
-                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata + " gradi: " + gradi;
+                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata;
 
                     StreamWriter file = new StreamWriter(mypath + myFilename, true);
                     OnInfo(new InfoEventArgs(str, false));
@@ -381,8 +391,8 @@ namespace progetto_esame
         private void AnalyzeMoto(Window e)
         {
             
-            List<double> moduloAcc = e.ModuloAccelerometro(e.matriceSmooth);
-            List<double> devstd = DeviazioneStandard(moduloAcc);
+            List<double> moduloAcc = e.ModuloAccelerometro(e.matrice);
+            List <double> devstd = e.DeviazioneStandard(moduloAcc);
             
             foreach (var item in devstd)
             {
@@ -391,16 +401,16 @@ namespace progetto_esame
                 movimento_prec = movimento;
                 if (item > 0.3)
                 {
-                    count_picchi = 0;
+                    count_picchi_moto = 0;
                     movimento = "Moto";
                     OnMoto(new EventArgs());
                 }
                 else
                 {
-                    count_picchi++;
-                    if (count_picchi >= 40)
+                    count_picchi_moto++;
+                    if (count_picchi_moto >= 40)
                     {
-                        count_picchi = 0;
+                        count_picchi_moto = 0;
                         movimento = "Stazionamento";
                         OnStazionamento(new EventArgs());
                     }
@@ -420,19 +430,6 @@ namespace progetto_esame
             }
         }
 
-        private List<double> DeviazioneStandard(List<double> l)
-        {
-            List<double> result = new List<double>();
-            double media = Media(l);
-            double sum = 0;
-            foreach (double item in l)
-            {
-                sum = (item - media) * (item - media);
-                result.Add(Math.Sqrt(sum / l.Count));
-            }
-            return result;
-        }
-        
         /*
          * Media
          * Input: Lista di double

@@ -484,7 +484,7 @@ namespace progetto_esame
         {
             List<double> devstd = new List<double>();
 
-            List<double> a = e.ModuloAccelerometro(e.matriceSmooth);
+            List<double> a = e.ModuloAccelerometro(e.matrice);
             _time = _devstd.Count;
             foreach (var item in e.DeviazioneStandard(a))
             {
