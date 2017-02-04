@@ -36,8 +36,8 @@ namespace progetto_esame
         // Soglia sopra la quale riconoscere le girate, sia dx che sx
         // 0.08 rad = 5 gradi
         //0,174533 rad = 10 gradi
-        private const double ANGOLO_GIRATA = 0.174533;
-
+        private const double ANGOLO_GIRATA_LOCALE = 0.17;
+        private const double ANGOLO_GIRATA_TOTALE = 0.53;
         // Soglia delta per discontinuità di theta
         private const double SOGLIA = 2.0;
         private const double PI = Math.PI;
@@ -60,11 +60,14 @@ namespace progetto_esame
         // count non 
         int count_picchi_moto = 0;
         int count_picchi_posizione = 0;
-        int count_picchi_girata = 0;
+        double count_picchi_girata_sx = 0.0;
+        double count_picchi_girata_dx = 0.0;
+        int count = 0;
 
         private double _precedente;
         private int _isUp;
         private int _isDown;
+        bool isdisc = false;
 
         private int campionePosizione = 0;
         private int campioneGirata = 0;
@@ -115,8 +118,9 @@ namespace progetto_esame
         public void Run(object sender, Window e)
         {
             AnalyzeGirata(e);
-            AnalyzeMoto(e);
             AnalyzePosizionamento(e);
+            AnalyzeMoto(e);
+            
         }
 
         private void AnalyzePosizionamento(Window e)
@@ -126,7 +130,7 @@ namespace progetto_esame
             {
                 acc.Add(item[0]);
             }
-           
+            
             foreach (var item in acc)
             {
                 campionePosizione++;
@@ -138,16 +142,16 @@ namespace progetto_esame
                     posizione = "Sdraiato";
                     OnLay(new EventArgs());
                 }
-                else if (item < 3.7)
+                else if (item < 3.65)
                 {
                     count_picchi_posizione = 0;
                     posizione = "Seduto/Sdraiato";
                     OnLaySit(new EventArgs());
                 } 
-                else if (item < 7)
+                else if (item < 7.5)
                 {
                     count_picchi_posizione++;
-                    if (count_picchi_posizione >= 30)
+                    if ((count_picchi_posizione >= 35 && posizione == "In Piedi") || posizione != "In Piedi")
                     {
                         posizione = "Seduto";
                         OnSit(new EventArgs());
@@ -174,7 +178,95 @@ namespace progetto_esame
             }
             
         }
+        private void AnalyzeGirata(Window e)
+        {
+            List<double> y = new List<double>();
+            List<double> z = new List<double>();
+            foreach (var item in e.GetMagnetometro(e.matriceSmooth))
+            {
+                y.Add(item[1]);
+                z.Add(item[2]);
+            }
 
+            double delta = 0.0;
+            List<double> theta = new List<double>();
+            for (int i = -1; i < y.Count - 1; i++)
+            {
+                #region Rimuovi-Discontinuita'
+                double value = 0.0;
+                if (i == -1)
+                    value = _precedente;
+                else
+                    value = Math.Atan(y[i] / z[i]);
+
+                double next = Math.Atan(y[i + 1] / z[i + 1]);
+
+                double myVal = value;
+                if (i == y.Count - 2)
+                {
+                    _precedente = next;
+                }
+                if (i == -1)
+                {
+                    delta = next - _precedente;
+                }
+                else
+                {
+                    delta = next - value;
+                }
+                if (delta >= SOGLIA)
+                {
+                    _isUp++;
+                }
+                if (delta <= -SOGLIA)
+                {
+                    _isDown++;
+                }
+
+                #endregion
+                next = next - (_isUp * PI) + (_isDown * PI);
+
+                theta.Add(next);
+            }
+            List<double> tan = RIFunc(theta);
+            double m = Media(tan);
+            if ( Math.Abs(m) > 0.1 )
+            {
+                //DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
+                // Al posto della WriteLine si scrive su file
+                //string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata_prec;
+                string str;
+                if (m > 0)
+                    str = "Girata Sinistra " +  m;
+                else
+                    str = "Girata Destra " + m;
+                StreamWriter file = new StreamWriter(mypath + myFilename, true);
+                OnInfo(new InfoEventArgs(str, false));
+                file.WriteLine(str);
+                file.Close();
+            }
+            
+             
+        }
+
+
+        /*
+         * RIFunc (Rapporto incrementale)
+         * Input: Una lista di double.
+         * Output: Una lista di n-1 double. Fissato di default h = 1.
+         */
+        private List<double> RIFunc(List<double> l)
+        {
+            List<double> result = new List<double>();
+            int nElementi = l.Count;
+            int h = 1;
+            for (int i = 0; i < nElementi - 1; i++)
+            {
+                result.Add((l[i + h] - l[i]) / h);
+            }
+            return result;
+        }
+        /*
         bool sD = false, eD = false, sS = false, eS = false;
         double acc_delta = 0.0;
         private void AnalyzeGirata(Window e)
@@ -196,7 +288,7 @@ namespace progetto_esame
                 girata_prec = girata;
 
                 #region vecchio
-                /*
+                
                 #region Rimuovi-Discontinuita'
                 double value = 0.0;
                 if (i == -1)
@@ -250,22 +342,36 @@ namespace progetto_esame
                 {
                     newDelta = next - value;
                 }
-                if (newDelta < -ANGOLO_GIRATA)
+                
+                if (newDelta < -ANGOLO_GIRATA_LOCALE)
                 {//sinistra
-                    Console.WriteLine("newDelta " + newDelta);
-                    girata = "Girata a Sinistra";
-                    acc_delta += newDelta;
-                    OnGirataSinistra(new EventArgs());
+                    
+                    count_picchi_girata_sx -= newDelta;
+                    if(count_picchi_girata_sx >= ANGOLO_GIRATA_TOTALE)
+                    {
+                        count_picchi_girata_dx = 0;
+                        //Console.WriteLine("newDelta " + newDelta);
+                        girata = "Girata a Sinistra";
+                        acc_delta += newDelta;
+                        OnGirataSinistra(new EventArgs());
+                    }
                 }
-                else if (newDelta > ANGOLO_GIRATA)
+                else if (newDelta > ANGOLO_GIRATA_LOCALE)
                 {//destra
-                    Console.WriteLine("newDelta " + newDelta);
-                    girata = "Girata a Destra";
-                    acc_delta += newDelta;
-                    OnGirataDestra(new EventArgs());
+                    
+                    count_picchi_girata_dx += newDelta;
+                    if(count_picchi_girata_dx >= ANGOLO_GIRATA_TOTALE)
+                    {
+                        count_picchi_girata_sx = 0;
+                        //Console.WriteLine("newDelta " + newDelta);
+                        girata = "Girata a Destra";
+                        acc_delta += newDelta;
+                        OnGirataDestra(new EventArgs());
+                    }
+                   
                 }
                 
-                if (girata != girata_prec && !primo)
+                if (girata != girata_prec && !primo && girata_prec != "")
                 {
                     acc_delta -= newDelta;
 
@@ -274,7 +380,7 @@ namespace progetto_esame
 
                     DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
                     // Al posto della WriteLine si scrive su file
-                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata + " gradi: " + gradi;
+                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata_prec ;
                     StreamWriter file = new StreamWriter(mypath + myFilename, true);
                     OnInfo(new InfoEventArgs(str, false));
                     file.WriteLine(str);
@@ -282,103 +388,8 @@ namespace progetto_esame
 
                     acc_delta = newDelta;
                 }
-                */
+                
                 #endregion
-
-                double value = 0.0;
-                if (i == -1)
-                    value = _precedente;
-                else
-                    value = Math.Atan(y[i] / z[i]);
-
-                double next = Math.Atan(y[i + 1] / z[i + 1]);
-
-               
-
-                double myVal = value;
-                if (i == y.Count - 2)
-                {
-                    _precedente = next;
-                }
-                if (i == -1)
-                {
-                    delta = next - _precedente;
-                }
-                else
-                {
-                    delta = next - value;
-                }
-                if (delta >= SOGLIA)
-                {
-                    _isUp++;
-                }
-                if (delta <= -SOGLIA)
-                {
-                    _isDown++;
-                }
-
-                next = next - (_isUp * PI) + (_isDown * PI);
-
-                if (next - value < -ANGOLO_GIRATA)
-                {
-                    count_picchi_girata = 0;
-                    sS = true;
-                    if(sD)
-                        eD = true;
-                    
-                    acc_delta += next - value;
-                    OnGirataSinistra(new EventArgs());
-                }
-                else if (next - value > ANGOLO_GIRATA)
-                {
-                    count_picchi_girata = 0;
-                    sD = true;
-                    if (sS)
-                        eS = true;
-                    
-                    acc_delta += next - value;
-                    OnGirataDestra(new EventArgs());
-                }
-                else
-                {
-                    count_picchi_girata++;
-                    if (sS)
-                    { 
-                        if(count_picchi_girata >= 30)
-                            eS = true;
-                    }
-                    if (sD)
-                        if (count_picchi_girata >= 30)
-                            eD = true;
-                }
-                if (eS || eD && !primo)
-                {
-
-
-
-                    DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
-                    // Al posto della WriteLine si scrive su file
-                    if (eD)
-                    {
-                        girata = "Girata a Destra";
-                        eD = sD = false;
-                    }
-                    else
-                    {
-                        girata = "Girata a Sinistra";
-                        eS = sS = false;
-                    }
-                        
-
-                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata;
-
-                    StreamWriter file = new StreamWriter(mypath + myFilename, true);
-                    OnInfo(new InfoEventArgs(str, false));
-                    file.WriteLine(str);
-                    file.Close();
-
-                    acc_delta = next - value;
-                }
 
                 if (primo) //Per rimuovere il problema del primo valore = 0
                 {
@@ -387,7 +398,7 @@ namespace progetto_esame
                 }
             }
         }
-        
+        */
         private void AnalyzeMoto(Window e)
         {
             

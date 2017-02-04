@@ -136,22 +136,7 @@ namespace progetto_esame
             }
             return result;
         }
-        /*
-         * RIFunc (Rapporto incrementale)
-         * Input: Una lista di double.
-         * Output: Una lista di n-1 double. Fissato di default h = 1.
-         */
-        private List<double> RIFunc(List<double> l)
-        {
-            List<double> result = new List<double>();
-            int nElementi = l.Count;
-            int h = 1;
-            for (int i = 0; i < nElementi - 1; i++)
-            {
-                result.Add((l[i + h] - l[i]) / h);
-            }
-            return result;
-        }
+        
 
         /*
          * Modulo
