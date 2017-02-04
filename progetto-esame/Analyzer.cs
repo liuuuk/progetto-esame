@@ -180,6 +180,7 @@ namespace progetto_esame
         }
         private void AnalyzeGirata(Window e)
         {
+            
             List<double> y = new List<double>();
             List<double> z = new List<double>();
             foreach (var item in e.GetMagnetometro(e.matriceSmooth))
@@ -229,6 +230,30 @@ namespace progetto_esame
                 theta.Add(next);
             }
             List<double> tan = RIFunc(theta);
+            /*
+            foreach (var item in tan)
+            {
+                girata_prec = girata;
+                if (item > 0.1)
+                    girata = "Girata Sinistra " + item;
+                else if(item < -0.1)
+                    girata = "Girata Destra " + item;
+
+                if(girata != girata_prec)
+                {
+                    //DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
+                    // Al posto della WriteLine si scrive su file
+                    //string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata_prec;
+
+                    StreamWriter file = new StreamWriter(mypath + myFilename, true);
+                    OnInfo(new InfoEventArgs(girata, false));
+                    file.WriteLine(girata);
+                    file.Close();
+                }
+
+                
+            }
+            */
             double m = Media(tan);
             if ( Math.Abs(m) > 0.1 )
             {
