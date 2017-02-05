@@ -33,6 +33,7 @@ namespace progetto_esame
         private bool _isDebug = false;
 
         int x = 0;
+        int xdev = 0;
 
         private PointPairList _pointAcc = new PointPairList(); //per accelerometro
         private PointPairList _pointGiro = new PointPairList(); //per giroscopio
@@ -43,6 +44,7 @@ namespace progetto_esame
         private PointPairList _devstd = new PointPairList();
         private PointPairList _accX = new PointPairList();
         private PointPairList _pointRapInc = new PointPairList();
+        private PointPairList _devstd2 = new PointPairList();
 
         //Per non Smooth
         private PointPairList _pointAccNoSmooth = new PointPairList(); //per accelerometro
@@ -260,6 +262,8 @@ namespace progetto_esame
 
             double delta = 0.0;
             List<double> rap = new List<double>();
+            List<double> dev = new List<double>();
+
             for (int i = -1; i < y.Count-1; i++, _time++)
             {
                 #region Rimuovi-Discontinuita'
@@ -301,7 +305,7 @@ namespace progetto_esame
                 
                 _pointTheta.Add(2 * _time, next);
                 rap.Add(next);
-
+                dev.Add(next);
                 //Conversione di un angolo da rad in gradi
                 //(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
                 _angolo = (myVal - (-1.57)) * (360 - 0) / (1.57 - (-1.57)) + 0;
@@ -319,6 +323,7 @@ namespace progetto_esame
             }
 
             List<double> myrapvero = RIFunc(rap);
+            
             double ultimo = 0.0;
             foreach (var item in myrapvero)
             {
@@ -326,6 +331,9 @@ namespace progetto_esame
                 x++;
                 ultimo = item;
             }
+           
+
+
             int h = 1;
             for (int i = 0; i < h; i++)
             {
@@ -340,6 +348,7 @@ namespace progetto_esame
             zedGraphOrientamento.Invalidate();
             
         }
+        
 
         private List<double> RIFunc(List<double> l)
         {
@@ -437,13 +446,19 @@ namespace progetto_esame
             
             LineItem myCurve = myPane.AddCurve("Smooth", _pointTheta, Color.Red, SymbolType.None);
             //DEGUB
-            LineItem myCurveDebug = myPane.AddCurve("DEBUG", _pointThetaDEBUG, Color.Black, SymbolType.None);
-            myCurveDebug.IsVisible = _isDebug;
+            //LineItem myCurveDebug = myPane.AddCurve("DEBUG", _pointThetaDEBUG, Color.Black, SymbolType.None);
+            //myCurveDebug.IsVisible = _isDebug;
 
             LineItem myCurveRapInc = myPane.AddCurve("Rap Inc", _pointRapInc, Color.Green, SymbolType.None);
             myCurveRapInc.IsVisible = _isDebug;
 
+            LineItem myCurveDev = myPane.AddCurve("Dev", _devstd2, Color.Blue, SymbolType.None);
+            myCurveDev.IsVisible = _isDebug;
+
             myCurve.Line.Width = 1.0F;
+
+            myCurveRapInc.Line.Width = 2.0F;
+            myCurveDev.Line.Width = 2.0F;
 
             // I add all three functions just to be sure it refeshes the plot. 
             zedGraphOrientamento.AxisChange();
@@ -512,6 +527,7 @@ namespace progetto_esame
             //Grafico nero su girata, mostra discontinuità
             zedGraphOrientamento.GraphPane.CurveList[1].IsVisible = _isDebug;
             zedGraphOrientamento.GraphPane.CurveList[2].IsVisible = _isDebug;
+            //zedGraphOrientamento.GraphPane.CurveList[3].IsVisible = _isDebug;
             zedGraphOrientamento.Refresh();
    
         }

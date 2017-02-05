@@ -39,7 +39,7 @@ namespace progetto_esame
         private const double ANGOLO_GIRATA_LOCALE = 0.17;
         private const double ANGOLO_GIRATA_TOTALE = 0.53;
         // Soglia delta per discontinuità di theta
-        private const double SOGLIA = 2.0;
+        private const double SOGLIA = 2.5;
         private const double PI = Math.PI;
         // Campioni ogni 0.02 secondi
         private const double FREQ = 0.02;
@@ -230,30 +230,8 @@ namespace progetto_esame
                 theta.Add(next);
             }
             List<double> tan = RIFunc(theta);
+            
             /*
-            foreach (var item in tan)
-            {
-                girata_prec = girata;
-                if (item > 0.1)
-                    girata = "Girata Sinistra " + item;
-                else if(item < -0.1)
-                    girata = "Girata Destra " + item;
-
-                if(girata != girata_prec)
-                {
-                    //DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
-                    // Al posto della WriteLine si scrive su file
-                    //string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata_prec;
-
-                    StreamWriter file = new StreamWriter(mypath + myFilename, true);
-                    OnInfo(new InfoEventArgs(girata, false));
-                    file.WriteLine(girata);
-                    file.Close();
-                }
-
-                
-            }
-            */
             double m = Media(tan);
             if ( Math.Abs(m) > 0.1 )
             {
@@ -270,7 +248,49 @@ namespace progetto_esame
                 file.WriteLine(str);
                 file.Close();
             }
-            
+            */
+
+            foreach (var item in tan)
+            {
+                double max = 0.0;
+                girata_prec = girata;
+                if(item > 0)
+                {
+                      
+                    count_picchi_girata_dx = 0;
+                    count_picchi_girata_sx+=item;
+                    Console.WriteLine("Sx " + count_picchi_girata_sx);
+                    if(count_picchi_girata_sx >= 1.3) //inizio girata a sx
+                    {
+                        if (count_picchi_girata_sx > max)
+                            max = count_picchi_girata_sx;
+                        //count_picchi_girata_sx = 0;
+                        OnGirataSinistra(new EventArgs());
+                        girata = "Sx " + count_picchi_girata_sx.ToString();
+                    }
+                    
+                else if(item < 0)
+                {
+                    
+                    count_picchi_girata_sx = 0;
+                    count_picchi_girata_dx+=item;
+                    Console.WriteLine("Dx " + count_picchi_girata_dx);
+                    if (count_picchi_girata_dx <= -1.3)
+                    {
+                        //count_picchi_girata_dx = 0;
+                        OnGirataDestra(new EventArgs());
+                        girata = "Dx " + count_picchi_girata_dx.ToString();
+                    }
+                }
+                if(girata != girata_prec)
+                {
+
+                    StreamWriter file = new StreamWriter(mypath + myFilename, true);
+                    OnInfo(new InfoEventArgs(girata, false));
+                    file.WriteLine(girata);
+                    file.Close();
+                }
+            }
              
         }
 
@@ -285,7 +305,7 @@ namespace progetto_esame
             List<double> result = new List<double>();
             int nElementi = l.Count;
             int h = 1;
-            for (int i = 0; i < nElementi - 1; i++)
+            for (int i = 0; i < nElementi - h; i++)
             {
                 result.Add((l[i + h] - l[i]) / h);
             }
