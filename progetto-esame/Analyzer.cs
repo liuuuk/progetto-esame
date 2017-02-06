@@ -230,7 +230,7 @@ namespace progetto_esame
                 theta.Add(next);
             }
             List<double> tan = RIFunc(theta);
-            
+
             /*
             double m = Media(tan);
             if ( Math.Abs(m) > 0.1 )
@@ -249,45 +249,59 @@ namespace progetto_esame
                 file.Close();
             }
             */
-
+            double gradi = 0.0;
             foreach (var item in tan)
             {
-                double max = 0.0;
+                campioneGirata++;
+                DateTime istante = start.AddSeconds(campioneGirata * FREQ);
                 girata_prec = girata;
-                if(item > 0)
+                if (item > 0)
                 {
-                      
-                    count_picchi_girata_dx = 0;
-                    count_picchi_girata_sx+=item;
-                    Console.WriteLine("Sx " + count_picchi_girata_sx);
-                    if(count_picchi_girata_sx >= 1.3) //inizio girata a sx
-                    {
-                        if (count_picchi_girata_sx > max)
-                            max = count_picchi_girata_sx;
-                        //count_picchi_girata_sx = 0;
-                        OnGirataSinistra(new EventArgs());
-                        girata = "Sx " + count_picchi_girata_sx.ToString();
-                    }
-                    
-                else if(item < 0)
-                {
-                    
-                    count_picchi_girata_sx = 0;
-                    count_picchi_girata_dx+=item;
-                    Console.WriteLine("Dx " + count_picchi_girata_dx);
+                    OnGirataSinistra(new EventArgs());
                     if (count_picchi_girata_dx <= -1.3)
                     {
-                        //count_picchi_girata_dx = 0;
-                        OnGirataDestra(new EventArgs());
-                        girata = "Dx " + count_picchi_girata_dx.ToString();
+                        girata = "Dx ";
+                        gradi = count_picchi_girata_dx;
                     }
+                    count_picchi_girata_dx = 0;
+                    count_picchi_girata_sx += item;
+                    //Console.WriteLine("Sx " + count_picchi_girata_sx);
+                    
                 }
+                else if (item < 0)
+                {
+                    OnGirataDestra(new EventArgs());
+                    if (count_picchi_girata_sx >= 1.3)
+                    {
+                        girata = "Sx ";
+                        gradi = count_picchi_girata_sx;
+                    }
+                    count_picchi_girata_sx = 0;
+                    count_picchi_girata_dx += item;
+                    //Console.WriteLine("Dx " + count_picchi_girata_dx);
+                    
+                }
+               
                 if(girata != girata_prec)
                 {
+                    Console.WriteLine("Girata " + girata + " " + gradi);
+                    gradi = Math.Abs(gradi);
+                    string angolo = "";
+                    if (gradi > 2.6)
+                        angolo = ">180";
+                    else if (gradi <= 2.6 && gradi >= 2.4)
+                        angolo = "180";
+                    else if (gradi >= 1.3 && gradi <= 1.7)
+                        angolo = "90";
+                    else
+                        angolo = "???";
 
+                    DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
+                    // Al posto della WriteLine si scrive su file
+                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata + " " + angolo;
                     StreamWriter file = new StreamWriter(mypath + myFilename, true);
-                    OnInfo(new InfoEventArgs(girata, false));
-                    file.WriteLine(girata);
+                    OnInfo(new InfoEventArgs(str, false));
+                    file.WriteLine(str);
                     file.Close();
                 }
             }
