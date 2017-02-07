@@ -62,12 +62,12 @@ namespace progetto_esame
         int count_picchi_posizione = 0;
         double count_picchi_girata_sx = 0.0;
         double count_picchi_girata_dx = 0.0;
-        int count = 0;
+        int count_sx = 0;
+        int count_dx = 0;
 
         private double _precedente;
         private int _isUp;
         private int _isDown;
-        bool isdisc = false;
 
         private int campionePosizione = 0;
         private int campioneGirata = 0;
@@ -231,24 +231,7 @@ namespace progetto_esame
             }
             List<double> tan = RIFunc(theta);
 
-            /*
-            double m = Media(tan);
-            if ( Math.Abs(m) > 0.1 )
-            {
-                //DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
-                // Al posto della WriteLine si scrive su file
-                //string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata_prec;
-                string str;
-                if (m > 0)
-                    str = "Girata Sinistra " +  m;
-                else
-                    str = "Girata Destra " + m;
-                StreamWriter file = new StreamWriter(mypath + myFilename, true);
-                OnInfo(new InfoEventArgs(str, false));
-                file.WriteLine(str);
-                file.Close();
-            }
-            */
+           
             double gradi = 0.0;
             foreach (var item in tan)
             {
@@ -257,12 +240,15 @@ namespace progetto_esame
                 girata_prec = girata;
                 if (item > 0)
                 {
+                    count_sx++;
                     OnGirataSinistra(new EventArgs());
-                    if (count_picchi_girata_dx <= -1.3)
+                    if (count_picchi_girata_dx <= -1.3 && count_dx < 35)
                     {
+                        Console.WriteLine("Count :" + count_dx);
                         girata = "Dx ";
                         gradi = count_picchi_girata_dx;
                     }
+                    count_dx = 0;
                     count_picchi_girata_dx = 0;
                     count_picchi_girata_sx += item;
                     //Console.WriteLine("Sx " + count_picchi_girata_sx);
@@ -270,12 +256,15 @@ namespace progetto_esame
                 }
                 else if (item < 0)
                 {
+                    count_dx++;
                     OnGirataDestra(new EventArgs());
-                    if (count_picchi_girata_sx >= 1.3)
+                    if (count_picchi_girata_sx >= 1.3 && count_sx < 35)
                     {
+                        Console.WriteLine("Count :" + count_sx);
                         girata = "Sx ";
                         gradi = count_picchi_girata_sx;
                     }
+                    count_sx = 0;
                     count_picchi_girata_sx = 0;
                     count_picchi_girata_dx += item;
                     //Console.WriteLine("Dx " + count_picchi_girata_dx);
@@ -289,9 +278,9 @@ namespace progetto_esame
                     string angolo = "";
                     if (gradi > 2.6)
                         angolo = ">180";
-                    else if (gradi <= 2.6 && gradi >= 2.4)
+                    else if (gradi <= 2.6 && gradi > 1.65)
                         angolo = "180";
-                    else if (gradi >= 1.3 && gradi <= 1.7)
+                    else if (gradi >= 1.3 && gradi <= 1.65) // 1.6 per il file camm semp 2 - 1.65 per file camm svolta 2
                         angolo = "90";
                     else
                         angolo = "???";
