@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace progetto_esame
 {
-    public delegate void EventHandler();
+    
     public delegate void InfoEventHandler(object sender, InfoEventArgs e);
 
     public class InfoEventArgs : EventArgs
@@ -74,7 +74,12 @@ namespace progetto_esame
         private int campioneMovimento = 0;
 
         // Tempo della prima acquisizione
+        DateTime startPos;
+        DateTime startMot;
+        DateTime startGir;
+
         DateTime start;
+        DateTime istante = DateTime.Now;
 
         string posizione = "";
         string posizione_prec = "";
@@ -112,6 +117,9 @@ namespace progetto_esame
         public void SetStart(object sender, DateTime d)
         {
             start = d;
+            startPos = d;
+            startMot = d;
+            startGir = d;
             PrepareFile();
         }
 
@@ -120,9 +128,43 @@ namespace progetto_esame
             AnalyzeGirata(e);
             AnalyzePosizionamento(e);
             AnalyzeMoto(e);
-            
+
         }
 
+        public void Stop()
+        {
+
+            //Posizionamento
+            istante = startPos.AddSeconds(campionePosizione * FREQ);
+
+            // Al posto della WriteLine si scrive su file
+            string str = startPos.ToLongTimeString() + " - " + istante.ToLongTimeString() + " " + posizione_prec;
+            //Console.WriteLine(str);
+            StreamWriter file = new StreamWriter(mypath + myFilename, true);
+            file.WriteLine(str);
+            file.Close();
+            OnInfo(new InfoEventArgs(str, false));
+
+            startPos = istante;
+
+            //Movimento
+            istante = startMot.AddSeconds(campioneMovimento * FREQ);
+
+            // Al posto della WriteLine si scrive su file
+            str = startMot.ToLongTimeString() + " - " + istante.ToLongTimeString() + " " + movimento_prec;
+            //Console.WriteLine(str);
+            file = new StreamWriter(mypath + myFilename, true);
+            file.WriteLine(str);
+            file.Close();
+            OnInfo(new InfoEventArgs(str, false));
+
+            startMot = istante;
+
+
+
+        }
+        
+       
         private void AnalyzePosizionamento(Window e)
         {
             List<double> acc=new List<double>();
@@ -134,7 +176,6 @@ namespace progetto_esame
             foreach (var item in acc)
             {
                 campionePosizione++;
-                DateTime istante = start.AddSeconds(campionePosizione * FREQ);
                 posizione_prec = posizione;
                 if (item < 2.7)
                 {
@@ -163,20 +204,23 @@ namespace progetto_esame
                     posizione = "In Piedi";
                     OnStand(new EventArgs());
                 }
-                if(posizione != posizione_prec)
+                if(posizione != posizione_prec && posizione_prec != "")
                 {
-                    DateTime fine = istante.AddSeconds(campionePosizione * FREQ);
+                    istante = startPos.AddSeconds(campionePosizione * FREQ);
+
                     // Al posto della WriteLine si scrive su file
-                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + posizione;
+                    string str = startPos.ToLongTimeString() + " - " + istante.ToLongTimeString() + " " + posizione_prec;
                     //Console.WriteLine(str);
                     StreamWriter file = new StreamWriter(mypath + myFilename, true);
                     file.WriteLine(str);
                     file.Close();
                     OnInfo(new InfoEventArgs(str, false));
+
+                    startPos = istante;
                 }
                     
             }
-            
+
         }
         private void AnalyzeGirata(Window e)
         {
@@ -231,23 +275,27 @@ namespace progetto_esame
             }
             List<double> tan = RIFunc(theta);
 
-           
+        
             double gradi = 0.0;
             foreach (var item in tan)
             {
                 campioneGirata++;
-                DateTime istante = start.AddSeconds(campioneGirata * FREQ);
+                //istante = start.AddSeconds(campioneGirata * FREQ);
+                DateTime fine = istante;
                 girata_prec = girata;
                 if (item > 0)
                 {
+                    startGir = istante;
+                    //Girata a sx
                     count_sx++;
                     OnGirataSinistra(new EventArgs());
                     if (count_picchi_girata_dx <= -1.3 && count_dx < 35)
                     {
-                        Console.WriteLine("Count :" + count_dx);
+                        istante = startGir.AddSeconds(campioneGirata * FREQ);
                         girata = "Dx ";
                         gradi = count_picchi_girata_dx;
                     }
+                    
                     count_dx = 0;
                     count_picchi_girata_dx = 0;
                     count_picchi_girata_sx += item;
@@ -256,14 +304,17 @@ namespace progetto_esame
                 }
                 else if (item < 0)
                 {
+                    startGir = istante;
+                    //Destra
                     count_dx++;
                     OnGirataDestra(new EventArgs());
                     if (count_picchi_girata_sx >= 1.3 && count_sx < 35)
                     {
-                        Console.WriteLine("Count :" + count_sx);
+                        istante = startGir.AddSeconds(campioneGirata * FREQ);
                         girata = "Sx ";
                         gradi = count_picchi_girata_sx;
                     }
+                    
                     count_sx = 0;
                     count_picchi_girata_sx = 0;
                     count_picchi_girata_dx += item;
@@ -275,23 +326,28 @@ namespace progetto_esame
                 {
                     Console.WriteLine("Girata " + girata + " " + gradi);
                     gradi = Math.Abs(gradi);
+                    //Da vedere
                     string angolo = "";
                     if (gradi > 2.6)
                         angolo = ">180";
                     else if (gradi <= 2.6 && gradi > 1.65)
                         angolo = "180";
-                    else if (gradi >= 1.3 && gradi <= 1.65) // 1.6 per il file camm semp 2 - 1.65 per file camm svolta 2
+                    else if (gradi >= 1.3 && gradi <= 1.65) // 1.6 per il file camm semp 2 - 1.65 per file camm 
                         angolo = "90";
                     else
                         angolo = "???";
 
-                    DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
+                    
+
                     // Al posto della WriteLine si scrive su file
-                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata + " " + angolo;
+                    string str = startGir.ToLongTimeString() + " - " + istante.ToLongTimeString() + " " + girata + " " + angolo;
+                    //Console.WriteLine(str);
                     StreamWriter file = new StreamWriter(mypath + myFilename, true);
-                    OnInfo(new InfoEventArgs(str, false));
                     file.WriteLine(str);
                     file.Close();
+                    OnInfo(new InfoEventArgs(str, false));
+
+                    
                 }
             }
              
@@ -314,139 +370,7 @@ namespace progetto_esame
             }
             return result;
         }
-        /*
-        bool sD = false, eD = false, sS = false, eS = false;
-        double acc_delta = 0.0;
-        private void AnalyzeGirata(Window e)
-        {
-            List<double> y = new List<double>();
-            List<double> z = new List<double>();
-            foreach (var item in e.GetMagnetometro(e.matriceSmooth))
-            {
-                y.Add(item[1]);
-                z.Add(item[2]);
-            }
-
-            double delta = 0.0;
-
-            for (int i = -1; i < y.Count - 1; i++)
-            {
-                campioneGirata++;
-                DateTime istante = start.AddSeconds(campionePosizione * FREQ);
-                girata_prec = girata;
-
-                #region vecchio
-                
-                #region Rimuovi-Discontinuita'
-                double value = 0.0;
-                if (i == -1)
-                    value = _precedente;
-                else
-                    value = Math.Atan(y[i] / z[i]);
-
-                if (_isUp != 0 || _isDown != 0)
-                    isdisc = true;
-
-                double myVal = value;
-
-                double next = Math.Atan(y[i + 1] / z[i + 1]);
-
-                
-                if (i == -1)
-                {
-                    delta = next - _precedente;
-                }
-                else
-                {
-                    delta = next - value;
-                }  
-
-                if (delta >= SOGLIA)
-                {
-                    _isUp++;
-                    
-                }
-                if (delta <= -SOGLIA)
-                {
-                    _isDown++;
-                }
-                #endregion
-                next = next - (_isUp * PI) + (_isDown * PI);
-                if(isdisc)
-                    value = value - (_isUp * PI) + (_isDown * PI);
-
-                if (i == y.Count - 2)
-                {
-                    _precedente = next;
-                }
-
-                double newDelta = 0.0;
-            
-                if (i == -1)
-                {
-                    newDelta = next - _precedente;
-                }
-                else
-                {
-                    newDelta = next - value;
-                }
-                
-                if (newDelta < -ANGOLO_GIRATA_LOCALE)
-                {//sinistra
-                    
-                    count_picchi_girata_sx -= newDelta;
-                    if(count_picchi_girata_sx >= ANGOLO_GIRATA_TOTALE)
-                    {
-                        count_picchi_girata_dx = 0;
-                        //Console.WriteLine("newDelta " + newDelta);
-                        girata = "Girata a Sinistra";
-                        acc_delta += newDelta;
-                        OnGirataSinistra(new EventArgs());
-                    }
-                }
-                else if (newDelta > ANGOLO_GIRATA_LOCALE)
-                {//destra
-                    
-                    count_picchi_girata_dx += newDelta;
-                    if(count_picchi_girata_dx >= ANGOLO_GIRATA_TOTALE)
-                    {
-                        count_picchi_girata_sx = 0;
-                        //Console.WriteLine("newDelta " + newDelta);
-                        girata = "Girata a Destra";
-                        acc_delta += newDelta;
-                        OnGirataDestra(new EventArgs());
-                    }
-                   
-                }
-                
-                if (girata != girata_prec && !primo && girata_prec != "")
-                {
-                    acc_delta -= newDelta;
-
-                    double gradi = acc_delta * 180 / PI;
-                    
-
-                    DateTime fine = istante.AddSeconds(campioneGirata * FREQ);
-                    // Al posto della WriteLine si scrive su file
-                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + girata_prec ;
-                    StreamWriter file = new StreamWriter(mypath + myFilename, true);
-                    OnInfo(new InfoEventArgs(str, false));
-                    file.WriteLine(str);
-                    file.Close();
-
-                    acc_delta = newDelta;
-                }
-                
-                #endregion
-
-                if (primo) //Per rimuovere il problema del primo valore = 0
-                {
-                    primo = !primo;
-                    girata = "";
-                }
-            }
-        }
-        */
+        
         private void AnalyzeMoto(Window e)
         {
             
@@ -456,7 +380,7 @@ namespace progetto_esame
             foreach (var item in devstd)
             {
                 campioneMovimento++;
-                DateTime istante = start.AddSeconds(campioneMovimento * FREQ);
+                istante = start.AddSeconds(campioneMovimento * FREQ);
                 movimento_prec = movimento;
                 if (item > 0.3)
                 {
@@ -475,16 +399,19 @@ namespace progetto_esame
                     }
                 }
                 //Console.WriteLine("Count: " + count_picchi + " Campione #" + campioneMovimento*FREQ);
-                if (movimento != movimento_prec)
+                if (movimento != movimento_prec && movimento_prec != "")
                 {
-                    DateTime fine = istante.AddSeconds(campioneMovimento * FREQ);
+                    istante = startMot.AddSeconds(campioneMovimento * FREQ);
+
                     // Al posto della WriteLine si scrive su file
-                    string str = istante.ToLongTimeString() + " - " + fine.ToLongTimeString() + " " + movimento;
+                    string str = startMot.ToLongTimeString() + " - " + istante.ToLongTimeString() + " " + movimento_prec;
                     //Console.WriteLine(str);
                     StreamWriter file = new StreamWriter(mypath + myFilename, true);
                     file.WriteLine(str);
                     file.Close();
                     OnInfo(new InfoEventArgs(str, false));
+
+                    startMot = istante;
                 }
             }
         }

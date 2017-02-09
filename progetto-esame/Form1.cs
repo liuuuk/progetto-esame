@@ -307,7 +307,7 @@ namespace progetto_esame
                 rap.Add(next);
                 dev.Add(next);
                 //Conversione di un angolo da rad in gradi
-                //(x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
+                //          (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
                 _angolo = (myVal - (-1.57)) * (360 - 0) / (1.57 - (-1.57)) + 0;
 
                 //Scrivi su label angolo l'angolo attuale

@@ -58,8 +58,8 @@ namespace progetto_esame
                     tForm.Start(p); //new Form passando il parser
 
                     //Creo un thread per la connessione (PARSING)
-                    Thread tConnect = new Thread(new ParameterizedThreadStart(Connect));
-                    tConnect.Start(p); //New connection passando il parser
+                    Thread tParse = new Thread(new ParameterizedThreadStart(Parse));
+                    tParse.Start(p); //New connection passando il parser
                     
                     //Creo un thread per l'analisi
                     //Codice...
@@ -93,6 +93,7 @@ namespace progetto_esame
             p.FinestraPiena += new WindowEventHandler(a.Run);
             p.TempoPrimaAcquisizione += new InizioEventHandler(a.SetStart);
             p.Info += new InfoEventHandler(myForm.TextLog);
+            p.FineStream += new EventHandler(a.Stop);
 
             //Sottoscrivo i vari eventi generati dall'analisi dei dati
             a.GirataDestra += new EventHandler(myForm.DisegnaGirataDestra);
@@ -118,7 +119,7 @@ namespace progetto_esame
         /*
          * Connect è il thread responsabile del parsing dei dati.
          */
-        public void Connect(object sender)
+        public void Parse(object sender)
         {
             Parser p = (Parser)sender;
 

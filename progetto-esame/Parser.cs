@@ -10,6 +10,7 @@ namespace progetto_esame
 {
     public delegate void WindowEventHandler(object sender, Window e);
     public delegate void InizioEventHandler(object sender, DateTime d);
+    public delegate void EventHandler();
     //Classe globale per avere variabili globali
     static class Globals
     {
@@ -25,6 +26,8 @@ namespace progetto_esame
         public event WindowEventHandler FinestraPiena;
         public event InizioEventHandler TempoPrimaAcquisizione;
 
+        public event EventHandler FineStream;
+
         public event InfoEventHandler Info;
 
         private bool primaFinestra = true;
@@ -39,7 +42,7 @@ namespace progetto_esame
 
         protected virtual void OnTempoPrimaAcquisizione(DateTime d) { if (TempoPrimaAcquisizione != null) TempoPrimaAcquisizione(this, d); }
         protected virtual void OnFinestraPiena(Window e) { if (FinestraPiena != null) FinestraPiena(this, e); }
-
+        protected virtual void OnFineStream(EventArgs e) { if (FineStream != null) FineStream(); }
         protected virtual void OnInfo(InfoEventArgs e) { if (Info != null) Info(this, e); }
 
         public void Parse(BinaryReader bin)
@@ -206,7 +209,9 @@ namespace progetto_esame
                 }
                    
             }
-            
+
+            //Evento di fine stream
+            OnFineStream(new EventArgs());
 
 
             #endregion
