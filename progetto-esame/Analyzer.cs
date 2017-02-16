@@ -80,6 +80,10 @@ namespace progetto_esame
 
         DateTime start;
         DateTime istante = DateTime.Now;
+        DateTime inizio;
+
+        bool primaSx = true;
+        bool primaDx = true;
 
         string posizione = "";
         string posizione_prec = "";
@@ -281,21 +285,27 @@ namespace progetto_esame
             {
                 campioneGirata++;
                 //istante = start.AddSeconds(campioneGirata * FREQ);
-                DateTime fine = istante;
+                //DateTime fine = istante;
                 girata_prec = girata;
                 if (item > 0)
                 {
-                    startGir = istante;
+                    
                     //Girata a sx
                     count_sx++;
                     OnGirataSinistra(new EventArgs());
                     if (count_picchi_girata_dx <= -1.3 && count_dx < 35)
                     {
+                        inizio = startGir;
                         istante = startGir.AddSeconds(campioneGirata * FREQ);
                         girata = "Dx ";
                         gradi = count_picchi_girata_dx;
                     }
-                    
+                    if (primaSx)
+                    {
+                        startGir = istante;
+                        primaSx = false;
+                    }
+                    primaDx = true;
                     count_dx = 0;
                     count_picchi_girata_dx = 0;
                     count_picchi_girata_sx += item;
@@ -304,17 +314,24 @@ namespace progetto_esame
                 }
                 else if (item < 0)
                 {
-                    startGir = istante;
+                    
                     //Destra
                     count_dx++;
                     OnGirataDestra(new EventArgs());
                     if (count_picchi_girata_sx >= 1.3 && count_sx < 35)
                     {
+                        inizio = startGir;
                         istante = startGir.AddSeconds(campioneGirata * FREQ);
                         girata = "Sx ";
                         gradi = count_picchi_girata_sx;
                     }
-                    
+                    if (primaDx)
+                    {
+                        startGir = istante;
+                        primaDx = false;
+                    }
+                    primaSx = true;
+
                     count_sx = 0;
                     count_picchi_girata_sx = 0;
                     count_picchi_girata_dx += item;
@@ -340,7 +357,7 @@ namespace progetto_esame
                     
 
                     // Al posto della WriteLine si scrive su file
-                    string str = startGir.ToLongTimeString() + " - " + istante.ToLongTimeString() + " " + girata + " " + angolo;
+                    string str = inizio.ToLongTimeString() + " - " + istante.ToLongTimeString() + " " + girata + " " + angolo;
                     //Console.WriteLine(str);
                     StreamWriter file = new StreamWriter(mypath + myFilename, true);
                     file.WriteLine(str);

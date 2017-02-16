@@ -446,19 +446,16 @@ namespace progetto_esame
             
             LineItem myCurve = myPane.AddCurve("Smooth", _pointTheta, Color.Red, SymbolType.None);
             //DEGUB
-            //LineItem myCurveDebug = myPane.AddCurve("DEBUG", _pointThetaDEBUG, Color.Black, SymbolType.None);
-            //myCurveDebug.IsVisible = _isDebug;
+            LineItem myCurveDebug = myPane.AddCurve("DEBUG", _pointThetaDEBUG, Color.Black, SymbolType.None);
+            myCurveDebug.IsVisible = _isDebug;
 
-            LineItem myCurveRapInc = myPane.AddCurve("Rap Inc", _pointRapInc, Color.Green, SymbolType.None);
-            myCurveRapInc.IsVisible = _isDebug;
+            //LineItem myCurveRapInc = myPane.AddCurve("Rap Inc", _pointRapInc, Color.Green, SymbolType.None);
+            //myCurveRapInc.IsVisible = _isDebug;
 
-            LineItem myCurveDev = myPane.AddCurve("Dev", _devstd2, Color.Blue, SymbolType.None);
-            myCurveDev.IsVisible = _isDebug;
 
             myCurve.Line.Width = 1.0F;
 
-            myCurveRapInc.Line.Width = 2.0F;
-            myCurveDev.Line.Width = 2.0F;
+            //myCurveRapInc.Line.Width = 2.0F;
 
             // I add all three functions just to be sure it refeshes the plot. 
             zedGraphOrientamento.AxisChange();
@@ -526,7 +523,7 @@ namespace progetto_esame
 
             //Grafico nero su girata, mostra discontinuità
             zedGraphOrientamento.GraphPane.CurveList[1].IsVisible = _isDebug;
-            zedGraphOrientamento.GraphPane.CurveList[2].IsVisible = _isDebug;
+            //zedGraphOrientamento.GraphPane.CurveList[2].IsVisible = _isDebug;
             //zedGraphOrientamento.GraphPane.CurveList[3].IsVisible = _isDebug;
             zedGraphOrientamento.Refresh();
    
